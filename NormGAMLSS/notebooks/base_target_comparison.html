@@ -1,0 +1,1207 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Base vs Target Model Comparison &#8212; NormGAMLSS Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=04637fd3" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/base_target_comparison';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Visualization of Effective Results" href="base_target_visualization.html" />
+    <link rel="prev" title="Multiple Formula Model Comparison" href="multiple_formula_comparison.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="NormGAMLSS Documentation - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="NormGAMLSS Documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Setup and Preprocessing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="setup_imports.html">Setup and Imports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_and_setup_theory.html">Understanding R Integration and External Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structuring_data.html">Structuring Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_preprocessing.html">Data Preprocessing</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Specification and Fitting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../gamlss_theory.html">GAMLSS Theory and Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formulas_and_syntax.html">GAMLSS Formula Reference and Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fitting_models.html">Fitting GAMLSS Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="saving_loading_models.html">Saving and Loading Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deleting_model.html">Deleting Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_diagnostics.html">Model Diagnostics and Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diagnostics_summary.html">Comprehensive Model Diagnostics Interpretation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diagnostic_plot_summary.html">Diagnostic Plots Interpretation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Evaluation and Predictions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="model_predictions.html">Model Predictions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_evaluation.html">Model Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="z_score_calculation.html">Z-Score Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="z_score_plotting.html">Z-Score Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="centiles_calculation.html">Centiles Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="centiles_plotting.html">Centiles Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="continuous_centiles.html">Continuous Centiles with Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="centile_positions.html">Centile Position Calculation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Management and Comparison</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="multiple_formula_comparison.html">Multiple Formula Model Comparison</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Base vs Target Model Comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base_target_visualization.html">Visualization of Effective Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="permutation_testing.html">Permutation Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brain_surface_visualization.html">Brain Surface Visualization</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="multisite_transfer.html">Multisite Model Transfer</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference and Troubleshooting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../r_integration_reference.html">R Integration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting and Common Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../convergence_problems.html">Convergence Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/base_target_comparison.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Base vs Target Model Comparison</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-utils-model-comparison">model_utils.<br/><strong>model_comparison</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="base-vs-target-model-comparison">
+<span id="base-target-comparison"></span><h1>Base vs Target Model Comparison<a class="headerlink" href="#base-vs-target-model-comparison" title="Link to this heading">#</a></h1>
+<section id="model-utils-model-comparison">
+<h2>model_utils.<br><strong>model_comparison</strong><a class="headerlink" href="#model-utils-model-comparison" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_comparison</span><span class="p">(</span><span class="n">create_model_func</span><span class="p">,</span> <span class="n">y_val_columns</span><span class="p">,</span> <span class="n">df_train</span><span class="p">,</span> <span class="n">additional_features</span><span class="p">,</span> 
+                 <span class="n">base_formula</span><span class="p">,</span> <span class="n">target_formula</span><span class="p">,</span> <span class="n">x_vals</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;site&#39;</span><span class="p">],</span> 
+                 <span class="n">main_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_cores</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force_overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                 <span class="n">save_models</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_multiprocessing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">eval_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">affected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>    Compares base and target GAMLSS models to determine whether additional features significantly improve model fit. Positive AIC/BIC differences indicate the target model is better.</p>
+<p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Parameters:</strong></span></p>
+<p>        <strong>create_model_func</strong> : <em><strong>callable</strong></em> <br>
+            Function to create a GAMLSS model</p>
+<p>        <strong>y_val_columns</strong> : <em><strong>list of str</strong></em> <br>
+            List of y-value column names to model</p>
+<p>        <strong>df_train</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
+            Training dataframe</p>
+<p>        <strong>additional_features</strong> : <em><strong>list of str</strong></em> <br>
+            Additional features to include in the target model</p>
+<p>        <strong>base_formula</strong> : <em><strong>dict</strong></em> <br>
+            Dictionary specifying the base model formula</p>
+<p>        <strong>target_formula</strong> : <em><strong>dict</strong></em> <br>
+            Dictionary specifying the target model formula</p>
+<p>        <strong>x_vals</strong> : <em><strong>list of str</strong></em>, <em>default=[‘age’, ‘sex’, ‘site’]</em> <br>
+            List of predictor variables</p>
+<p>        <strong>main_folder</strong> : <em><strong>str</strong></em>, <em>default=’results’</em> <br>
+            Folder for saving results and logs</p>
+<p>        <strong>save_log</strong> : <em><strong>bool</strong></em>, <em>default=True</em> <br>
+            Whether to save logs</p>
+<p>        <strong>num_cores</strong> : <em><strong>int</strong></em>, <em>optional</em> <br>
+            Number of CPU cores for multiprocessing (uses 4 if None)</p>
+<p>        <strong>force_overwrite</strong> : <em><strong>bool</strong></em>, <em>default=False</em> <br>
+            Whether to overwrite existing cached results</p>
+<p>        <strong>save_models</strong> : <em><strong>bool</strong></em>, <em>default=False</em> <br>
+            Whether to save fitted models</p>
+<p>        <strong>use_multiprocessing</strong> : <em><strong>bool</strong></em>, <em>default=True</em> <br>
+            Whether to use multiprocessing</p>
+<p>        <strong>eval_data</strong> : <em><strong>pandas.DataFrame</strong></em>, <em>optional</em> <br>
+            DataFrame for evaluation</p>
+<p>        <strong>affected</strong> : <em><strong>array-like</strong></em>, <em>optional</em> <br>
+            Array indicating affected status for evaluation. If None, assumes all subjects are healthy</p>
+<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
+            Distribution family name for evaluation (auto-detected if None)</p>
+<p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Returns:</strong></span></p>
+<p>        <strong>comparison_df</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
+            AIC and BIC values for base and target models with differences</p>
+<p>        <strong>summary_df</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
+            Best models and their differences for each y-value</p>
+<p>        <strong>eval_results</strong> : <em><strong>dict</strong></em>, <em>optional</em> <br>
+            Evaluation metrics (returned if eval_data provided)</p>
+<br>
+<p><strong>Examples:</strong></p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">multiprocessing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mp</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">normgamlss.gamlss_main</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gamlss</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">normgamlss.model_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_comparison</span>
+
+<span class="c1"># This function gives us the flexibility on what we want to change and what we want to keep constant</span>
+<span class="c1"># For example, we can keep the nu and tau formula fixed by removing it from this creat_model_func and in the next cell we can</span>
+<span class="c1"># just change the other parameters or even change the way we want to input</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_model_func</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">x_vals</span><span class="p">,</span> <span class="n">y_val</span><span class="p">,</span> <span class="n">mu_formula</span><span class="p">,</span> <span class="n">sigma_formula</span><span class="p">,</span> <span class="n">nu_formula</span><span class="p">,</span> <span class="n">tau_formula</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">model_func</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="n">gamlss_model</span> <span class="o">=</span> <span class="n">Gamlss</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">x_vals</span><span class="p">,</span> <span class="n">y_val</span><span class="p">)</span>
+        <span class="n">gamlss_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+            <span class="n">r_code</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            model &lt;- gamlss(</span>
+<span class="s2">                y ~ </span><span class="si">{</span><span class="n">mu_formula</span><span class="si">}</span><span class="s2">,</span>
+<span class="s2">                sigma.formula = ~ </span><span class="si">{</span><span class="n">sigma_formula</span><span class="si">}</span><span class="s2">,</span>
+<span class="s2">                nu.formula = ~ </span><span class="si">{</span><span class="n">nu_formula</span><span class="si">}</span><span class="s2">,</span>
+<span class="s2">                tau.formula = ~ </span><span class="si">{</span><span class="n">tau_formula</span><span class="si">}</span><span class="s2">,</span>
+<span class="s2">                family = SHASH(),</span>
+<span class="s2">                method = RS(10)</span>
+<span class="s2">            )</span>
+<span class="s2">            &quot;&quot;&quot;</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">data</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">gamlss_model</span>
+    <span class="k">return</span> <span class="n">model_func</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#### Preparing the input</span>
+<span class="n">main_folder</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;../../results/model_comparison&quot;</span>
+<span class="n">num_cores</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>  <span class="c1"># Get the number of CPU cores</span>
+<span class="n">y_val_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;y_thickness1&#39;</span><span class="p">,</span><span class="s1">&#39;y_thickness2&#39;</span><span class="p">,</span> <span class="s1">&#39;y_thickness3&#39;</span><span class="p">,</span> <span class="s1">&#39;y_thickness4&#39;</span><span class="p">]</span>
+<span class="n">additional_features</span> <span class="o">=</span>  <span class="p">[</span><span class="s1">&#39;feature_volume1&#39;</span><span class="p">,</span> <span class="s1">&#39;feature_volume2&#39;</span><span class="p">]</span>
+
+<span class="c1"># Formula&#39;s for baseline and target</span>
+<span class="n">base_formula</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;mu_formula&#39;</span><span class="p">:</span> <span class="s1">&#39;pvc(age, by = as.factor(sex)) +  re(random=~1|site)&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;sigma_formula&#39;</span><span class="p">:</span> <span class="s1">&#39;pvc(age) +  re(random=~1|site)&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;nu_formula&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;tau_formula&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">}</span>
+
+<span class="n">target_formula</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;mu_formula&#39;</span><span class="p">:</span> <span class="s1">&#39;pvc(age, by = as.factor(sex)) +  re(random=~1|site)&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;sigma_formula&#39;</span><span class="p">:</span> <span class="s1">&#39;pvc(age) +  re(random=~1|site) + feature_volume1 + feature_volume2&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;nu_formula&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;tau_formula&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">}</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of CPU cores: </span><span class="si">{</span><span class="n">num_cores</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of CPU cores: 28
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">comparison_df</span><span class="p">,</span> <span class="n">summary_df</span><span class="p">,</span> <span class="n">eval_results</span> <span class="o">=</span> <span class="n">model_comparison</span><span class="p">(</span>
+    <span class="n">create_model_func</span> <span class="o">=</span> <span class="n">create_model_func</span><span class="p">,</span>
+    <span class="n">y_val_columns</span><span class="o">=</span><span class="n">y_val_columns</span><span class="p">,</span>
+    <span class="n">df_train</span><span class="o">=</span><span class="n">train_data1</span><span class="p">,</span>
+    <span class="n">eval_data</span><span class="o">=</span><span class="n">test_data1</span><span class="p">,</span>
+    <span class="n">affected</span> <span class="o">=</span> <span class="n">test_data1</span><span class="p">[</span><span class="s1">&#39;affected&#39;</span><span class="p">],</span>
+    <span class="n">additional_features</span><span class="o">=</span><span class="n">additional_features</span><span class="p">,</span>
+    <span class="n">base_formula</span><span class="o">=</span><span class="n">base_formula</span><span class="p">,</span>
+    <span class="n">target_formula</span><span class="o">=</span><span class="n">target_formula</span><span class="p">,</span>
+    <span class="n">x_vals</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;site&#39;</span><span class="p">],</span>
+    <span class="n">main_folder</span><span class="o">=</span> <span class="n">main_folder</span><span class="p">,</span>
+    <span class="n">save_log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">num_cores</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>  <span class="c1"># number of CPU cores to use</span>
+    <span class="n">force_overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># recompute results even if cached versions exist</span>
+    <span class="n">save_models</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">use_multiprocessing</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-09 13:26:49,674 - INFO - Using multiprocessing for processing
+2026-10-09 13:26:49,675 - INFO - Using 4 cores for multiprocessing
+2026-10-09 13:26:49,683 - INFO - Detected distribution family: SHASH
+2026-10-09 13:26:49,688 - INFO - Skipping 0 already processed y_vals
+2026-10-09 13:26:49,690 - INFO - Processing 4 y_vals
+2026-10-09 13:26:49,777 - INFO - Running models for y_val: y_thickness2
+2026-10-09 13:26:49,777 - INFO - Running models for y_val: y_thickness1
+2026-10-09 13:26:49,779 - INFO - Running models for y_val: y_thickness3
+2026-10-09 13:26:49,779 - INFO - Running models for y_val: y_thickness4
+GAMLSS-RS iteration 1: Global Deviance = 4164.66 
+GAMLSS-RS iteration 1: Global Deviance = 3594.915 
+GAMLSS-RS iteration 2: Global Deviance = 4119.447 
+GAMLSS-RS iteration 1: Global Deviance = 3517.461 
+GAMLSS-RS iteration 1: Global Deviance = 3517.72 
+GAMLSS-RS iteration 2: Global Deviance = 3509.95 
+GAMLSS-RS iteration 3: Global Deviance = 4085.34 
+GAMLSS-RS iteration 4: Global Deviance = 4057.893 
+GAMLSS-RS iteration 5: Global Deviance = 4037.394 
+GAMLSS-RS iteration 3: Global Deviance = 3446.16 
+GAMLSS-RS iteration 6: Global Deviance = 4021.056 
+GAMLSS-RS iteration 2: Global Deviance = 3451.642 
+GAMLSS-RS iteration 2: Global Deviance = 3438.841 
+GAMLSS-RS iteration 7: Global Deviance = 4007.78 
+GAMLSS-RS iteration 8: Global Deviance = 3997.277 
+GAMLSS-RS iteration 9: Global Deviance = 3988.909 
+GAMLSS-RS iteration 4: Global Deviance = 3397.412 
+GAMLSS-RS iteration 10: Global Deviance = 3981.68 
+Model saved to ../../results/model_comparison/model_cache/saved_models/model_y_thickness3_base.rds
+2026-10-09 13:27:09,919 - INFO - Model name: model_y_thickness3_base has been saved at ../../results/model_comparison/model_cache/saved_models
+2026-10-09 13:27:09,920 - DEBUG - Model name: model_y_thickness3_base
+2026-10-09 13:27:09,925 - DEBUG - Available objects in R: [&#39;all_effects&#39;, &#39;centile_values&#39;, &#39;centiles&#39;, &#39;combined_effects&#39;, &#39;feature_volume1&#39;, &#39;feature_volume2&#39;, &#39;i&#39;, &#39;install_pvc_fixed_structure_prediction_patch&#39;, &#39;j&#39;, &#39;kurtosis&#39;, &#39;lme_obj&#39;, &#39;lme_positions&#39;, &#39;loaded_model&#39;, &#39;log_densities&#39;, &#39;log_densities_final&#39;, &#39;logscore&#39;, &#39;m_predicted&#39;, &#39;m_quantiles&#39;, &#39;m_quantiles_bounded&#39;, &#39;m1&#39;, &#39;m2&#39;, &#39;m3&#39;, &#39;m4&#39;, &#39;mean_mu&#39;, &#39;mean_nu&#39;, &#39;mean_sigma&#39;, &#39;mean_tau&#39;, &#39;model_call&#39;, &#39;model_y_thickness2_formula1&#39;, &#39;model_y_thickness3_base&#39;, &#39;n&#39;, &#39;normality_stat&#39;, &#39;param_coefSmo&#39;, &#39;pos&#39;, &#39;re&#39;, &#39;re_df&#39;, &#39;results&#39;, &#39;s1&#39;, &#39;skewness&#39;, &#39;z_mean&#39;, &#39;z_scores&#39;, &#39;z_sd&#39;]
+2026-10-09 13:27:09,927 - DEBUG - Accessing AIC for model: model_y_thickness3_base
+2026-10-09 13:27:09,929 - DEBUG - Accessing BIC for model: model_y_thickness3_base
+2026-10-09 13:27:09,930 - DEBUG - Accessing converged status for model: model_y_thickness3_base
+GAMLSS-RS iteration 1: Global Deviance = 4163.631 
+GAMLSS-RS iteration 5: Global Deviance = 3359.032 
+GAMLSS-RS iteration 3: Global Deviance = 3380.714 
+GAMLSS-RS iteration 3: Global Deviance = 3399.762 
+GAMLSS-RS iteration 6: Global Deviance = 3327.979 
+GAMLSS-RS iteration 7: Global Deviance = 3302.675 
+GAMLSS-RS iteration 8: Global Deviance = 3281.777 
+GAMLSS-RS iteration 2: Global Deviance = 4118.613 
+GAMLSS-RS iteration 9: Global Deviance = 3264.62 
+GAMLSS-RS iteration 4: Global Deviance = 3337 
+GAMLSS-RS iteration 10: Global Deviance = 3249.667 
+Model saved to ../../results/model_comparison/model_cache/saved_models/model_y_thickness4_base.rds
+2026-10-09 13:27:20,436 - INFO - Model name: model_y_thickness4_base has been saved at ../../results/model_comparison/model_cache/saved_models
+2026-10-09 13:27:20,438 - DEBUG - Model name: model_y_thickness4_base
+2026-10-09 13:27:20,444 - DEBUG - Available objects in R: [&#39;all_effects&#39;, &#39;centile_values&#39;, &#39;centiles&#39;, &#39;combined_effects&#39;, &#39;feature_volume1&#39;, &#39;feature_volume2&#39;, &#39;i&#39;, &#39;install_pvc_fixed_structure_prediction_patch&#39;, &#39;j&#39;, &#39;kurtosis&#39;, &#39;lme_obj&#39;, &#39;lme_positions&#39;, &#39;loaded_model&#39;, &#39;log_densities&#39;, &#39;log_densities_final&#39;, &#39;logscore&#39;, &#39;m_predicted&#39;, &#39;m_quantiles&#39;, &#39;m_quantiles_bounded&#39;, &#39;m1&#39;, &#39;m2&#39;, &#39;m3&#39;, &#39;m4&#39;, &#39;mean_mu&#39;, &#39;mean_nu&#39;, &#39;mean_sigma&#39;, &#39;mean_tau&#39;, &#39;model_call&#39;, &#39;model_y_thickness2_formula1&#39;, &#39;model_y_thickness4_base&#39;, &#39;n&#39;, &#39;normality_stat&#39;, &#39;param_coefSmo&#39;, &#39;pos&#39;, &#39;re&#39;, &#39;re_df&#39;, &#39;results&#39;, &#39;s1&#39;, &#39;skewness&#39;, &#39;z_mean&#39;, &#39;z_scores&#39;, &#39;z_sd&#39;]
+2026-10-09 13:27:20,446 - DEBUG - Accessing AIC for model: model_y_thickness4_base
+2026-10-09 13:27:20,450 - DEBUG - Accessing BIC for model: model_y_thickness4_base
+2026-10-09 13:27:20,451 - DEBUG - Accessing converged status for model: model_y_thickness4_base
+GAMLSS-RS iteration 4: Global Deviance = 3358.61 
+GAMLSS-RS iteration 3: Global Deviance = 4083.744 
+GAMLSS-RS iteration 4: Global Deviance = 4056.849 
+GAMLSS-RS iteration 5: Global Deviance = 4036.464 
+GAMLSS-RS iteration 6: Global Deviance = 4020.108 
+GAMLSS-RS iteration 5: Global Deviance = 3302.682 
+GAMLSS-RS iteration 1: Global Deviance = 3593.935 
+GAMLSS-RS iteration 7: Global Deviance = 4007.209 
+GAMLSS-RS iteration 5: Global Deviance = 3325.658 
+GAMLSS-RS iteration 8: Global Deviance = 3996.755 
+GAMLSS-RS iteration 9: Global Deviance = 3988.237 
+GAMLSS-RS iteration 6: Global Deviance = 3274.515 
+GAMLSS-RS iteration 2: Global Deviance = 3508.32 
+GAMLSS-RS iteration 10: Global Deviance = 3981.162 
+Model saved to ../../results/model_comparison/model_cache/saved_models/model_y_thickness3_target.rds
+2026-10-09 13:27:31,528 - INFO - Model name: model_y_thickness3_target has been saved at ../../results/model_comparison/model_cache/saved_models
+2026-10-09 13:27:31,529 - DEBUG - Model name: model_y_thickness3_target
+2026-10-09 13:27:31,534 - DEBUG - Available objects in R: [&#39;all_effects&#39;, &#39;centile_values&#39;, &#39;centiles&#39;, &#39;combined_effects&#39;, &#39;feature_volume1&#39;, &#39;feature_volume2&#39;, &#39;i&#39;, &#39;install_pvc_fixed_structure_prediction_patch&#39;, &#39;j&#39;, &#39;kurtosis&#39;, &#39;lme_obj&#39;, &#39;lme_positions&#39;, &#39;loaded_model&#39;, &#39;log_densities&#39;, &#39;log_densities_final&#39;, &#39;logscore&#39;, &#39;m_predicted&#39;, &#39;m_quantiles&#39;, &#39;m_quantiles_bounded&#39;, &#39;m1&#39;, &#39;m2&#39;, &#39;m3&#39;, &#39;m4&#39;, &#39;mean_mu&#39;, &#39;mean_nu&#39;, &#39;mean_sigma&#39;, &#39;mean_tau&#39;, &#39;model_call&#39;, &#39;model_y_thickness2_formula1&#39;, &#39;model_y_thickness3_target&#39;, &#39;n&#39;, &#39;normality_stat&#39;, &#39;param_coefSmo&#39;, &#39;pos&#39;, &#39;re&#39;, &#39;re_df&#39;, &#39;results&#39;, &#39;s1&#39;, &#39;skewness&#39;, &#39;z_mean&#39;, &#39;z_scores&#39;, &#39;z_sd&#39;]
+2026-10-09 13:27:31,537 - DEBUG - Accessing AIC for model: model_y_thickness3_target
+2026-10-09 13:27:31,539 - DEBUG - Accessing BIC for model: model_y_thickness3_target
+2026-10-09 13:27:31,541 - DEBUG - Accessing converged status for model: model_y_thickness3_target
+GAMLSS-RS iteration 6: Global Deviance = 3298.729 
+GAMLSS-RS iteration 3: Global Deviance = 3444.175 
+GAMLSS-RS iteration 1: Global Deviance = 4164.66 
+GAMLSS-RS iteration 7: Global Deviance = 3251.364 
+GAMLSS-RS iteration 4: Global Deviance = 3395.56 
+GAMLSS-RS iteration 2: Global Deviance = 4119.447 
+GAMLSS-RS iteration 5: Global Deviance = 3357.279 
+GAMLSS-RS iteration 7: Global Deviance = 3276.382 
+GAMLSS-RS iteration 6: Global Deviance = 3326.561 
+GAMLSS-RS iteration 8: Global Deviance = 3232.242 
+GAMLSS-RS iteration 7: Global Deviance = 3301.228 
+GAMLSS-RS iteration 3: Global Deviance = 4085.34 
+GAMLSS-RS iteration 8: Global Deviance = 3280.773 
+GAMLSS-RS iteration 4: Global Deviance = 4057.893 
+GAMLSS-RS iteration 5: Global Deviance = 4037.394 
+GAMLSS-RS iteration 6: Global Deviance = 4021.056 
+GAMLSS-RS iteration 9: Global Deviance = 3216.26 
+GAMLSS-RS iteration 8: Global Deviance = 3257.585 
+GAMLSS-RS iteration 7: Global Deviance = 4007.78 
+GAMLSS-RS iteration 9: Global Deviance = 3263.083 
+GAMLSS-RS iteration 8: Global Deviance = 3997.277 
+GAMLSS-RS iteration 9: Global Deviance = 3988.909 
+GAMLSS-RS iteration 10: Global Deviance = 3981.68 
+Using 370 healthy subjects out of 470 total subjects for evaluation
+Using 370 healthy subjects out of 470 total subjects for evaluation
+2026-10-09 13:27:51,041 - INFO - Successfully evaluated base model for y_thickness3
+GAMLSS-RS iteration 10: Global Deviance = 3202.732 
+GAMLSS-RS iteration 10: Global Deviance = 3248.256 
+Model saved to ../../results/model_comparison/model_cache/saved_models/model_y_thickness1_base.rds
+2026-10-09 13:27:52,586 - INFO - Model name: model_y_thickness1_base has been saved at ../../results/model_comparison/model_cache/saved_models
+2026-10-09 13:27:52,587 - DEBUG - Model name: model_y_thickness1_base
+2026-10-09 13:27:52,592 - DEBUG - Available objects in R: [&#39;all_effects&#39;, &#39;centile_values&#39;, &#39;centiles&#39;, &#39;combined_effects&#39;, &#39;feature_volume1&#39;, &#39;feature_volume2&#39;, &#39;i&#39;, &#39;install_pvc_fixed_structure_prediction_patch&#39;, &#39;j&#39;, &#39;kurtosis&#39;, &#39;lme_obj&#39;, &#39;lme_positions&#39;, &#39;loaded_model&#39;, &#39;log_densities&#39;, &#39;log_densities_final&#39;, &#39;logscore&#39;, &#39;m_predicted&#39;, &#39;m_quantiles&#39;, &#39;m_quantiles_bounded&#39;, &#39;m1&#39;, &#39;m2&#39;, &#39;m3&#39;, &#39;m4&#39;, &#39;mean_mu&#39;, &#39;mean_nu&#39;, &#39;mean_sigma&#39;, &#39;mean_tau&#39;, &#39;model_call&#39;, &#39;model_y_thickness1_base&#39;, &#39;model_y_thickness2_formula1&#39;, &#39;n&#39;, &#39;normality_stat&#39;, &#39;param_coefSmo&#39;, &#39;pos&#39;, &#39;re&#39;, &#39;re_df&#39;, &#39;results&#39;, &#39;s1&#39;, &#39;skewness&#39;, &#39;z_mean&#39;, &#39;z_scores&#39;, &#39;z_sd&#39;]
+2026-10-09 13:27:52,594 - DEBUG - Accessing AIC for model: model_y_thickness1_base
+2026-10-09 13:27:52,599 - DEBUG - Accessing BIC for model: model_y_thickness1_base
+2026-10-09 13:27:52,602 - DEBUG - Accessing converged status for model: model_y_thickness1_base
+Model saved to ../../results/model_comparison/model_cache/saved_models/model_y_thickness4_target.rds
+2026-10-09 13:27:53,449 - INFO - Model name: model_y_thickness4_target has been saved at ../../results/model_comparison/model_cache/saved_models
+2026-10-09 13:27:53,450 - DEBUG - Model name: model_y_thickness4_target
+2026-10-09 13:27:53,456 - DEBUG - Available objects in R: [&#39;all_effects&#39;, &#39;centile_values&#39;, &#39;centiles&#39;, &#39;combined_effects&#39;, &#39;feature_volume1&#39;, &#39;feature_volume2&#39;, &#39;i&#39;, &#39;install_pvc_fixed_structure_prediction_patch&#39;, &#39;j&#39;, &#39;kurtosis&#39;, &#39;lme_obj&#39;, &#39;lme_positions&#39;, &#39;loaded_model&#39;, &#39;log_densities&#39;, &#39;log_densities_final&#39;, &#39;logscore&#39;, &#39;m_predicted&#39;, &#39;m_quantiles&#39;, &#39;m_quantiles_bounded&#39;, &#39;m1&#39;, &#39;m2&#39;, &#39;m3&#39;, &#39;m4&#39;, &#39;mean_mu&#39;, &#39;mean_nu&#39;, &#39;mean_sigma&#39;, &#39;mean_tau&#39;, &#39;model_call&#39;, &#39;model_y_thickness2_formula1&#39;, &#39;model_y_thickness4_target&#39;, &#39;n&#39;, &#39;normality_stat&#39;, &#39;param_coefSmo&#39;, &#39;pos&#39;, &#39;re&#39;, &#39;re_df&#39;, &#39;results&#39;, &#39;s1&#39;, &#39;skewness&#39;, &#39;z_mean&#39;, &#39;z_scores&#39;, &#39;z_sd&#39;]
+2026-10-09 13:27:53,460 - DEBUG - Accessing AIC for model: model_y_thickness4_target
+2026-10-09 13:27:53,463 - DEBUG - Accessing BIC for model: model_y_thickness4_target
+2026-10-09 13:27:53,466 - DEBUG - Accessing converged status for model: model_y_thickness4_target
+GAMLSS-RS iteration 1: Global Deviance = 4163.631 
+GAMLSS-RS iteration 9: Global Deviance = 3241.567 
+GAMLSS-RS iteration 2: Global Deviance = 4118.613 
+GAMLSS-RS iteration 1: Global Deviance = 3594.915 
+GAMLSS-RS iteration 1: Global Deviance = 3516.006 
+GAMLSS-RS iteration 10: Global Deviance = 3227.838 
+GAMLSS-RS iteration 3: Global Deviance = 4083.744 
+Model saved to ../../results/model_comparison/model_cache/saved_models/model_y_thickness2_base.rds
+2026-10-09 13:28:01,601 - INFO - Model name: model_y_thickness2_base has been saved at ../../results/model_comparison/model_cache/saved_models
+2026-10-09 13:28:01,602 - DEBUG - Model name: model_y_thickness2_base
+2026-10-09 13:28:01,607 - DEBUG - Available objects in R: [&#39;all_effects&#39;, &#39;centile_values&#39;, &#39;centiles&#39;, &#39;combined_effects&#39;, &#39;feature_volume1&#39;, &#39;feature_volume2&#39;, &#39;i&#39;, &#39;install_pvc_fixed_structure_prediction_patch&#39;, &#39;j&#39;, &#39;kurtosis&#39;, &#39;lme_obj&#39;, &#39;lme_positions&#39;, &#39;loaded_model&#39;, &#39;log_densities&#39;, &#39;log_densities_final&#39;, &#39;logscore&#39;, &#39;m_predicted&#39;, &#39;m_quantiles&#39;, &#39;m_quantiles_bounded&#39;, &#39;m1&#39;, &#39;m2&#39;, &#39;m3&#39;, &#39;m4&#39;, &#39;mean_mu&#39;, &#39;mean_nu&#39;, &#39;mean_sigma&#39;, &#39;mean_tau&#39;, &#39;model_call&#39;, &#39;model_y_thickness2_base&#39;, &#39;model_y_thickness2_formula1&#39;, &#39;n&#39;, &#39;normality_stat&#39;, &#39;param_coefSmo&#39;, &#39;pos&#39;, &#39;re&#39;, &#39;re_df&#39;, &#39;results&#39;, &#39;s1&#39;, &#39;skewness&#39;, &#39;z_mean&#39;, &#39;z_scores&#39;, &#39;z_sd&#39;]
+2026-10-09 13:28:01,609 - DEBUG - Accessing AIC for model: model_y_thickness2_base
+2026-10-09 13:28:01,612 - DEBUG - Accessing BIC for model: model_y_thickness2_base
+2026-10-09 13:28:01,615 - DEBUG - Accessing converged status for model: model_y_thickness2_base
+GAMLSS-RS iteration 2: Global Deviance = 3509.95 
+GAMLSS-RS iteration 4: Global Deviance = 4056.849 
+GAMLSS-RS iteration 5: Global Deviance = 4036.464 
+GAMLSS-RS iteration 6: Global Deviance = 4020.108 
+GAMLSS-RS iteration 7: Global Deviance = 4007.209 
+GAMLSS-RS iteration 3: Global Deviance = 3446.16 
+GAMLSS-RS iteration 2: Global Deviance = 3436.616 
+GAMLSS-RS iteration 1: Global Deviance = 3516.44 
+GAMLSS-RS iteration 8: Global Deviance = 3996.755 
+GAMLSS-RS iteration 9: Global Deviance = 3988.237 
+GAMLSS-RS iteration 10: Global Deviance = 3981.162 
+Using 370 healthy subjects out of 470 total subjects for evaluation
+Using 370 healthy subjects out of 470 total subjects for evaluation
+2026-10-09 13:28:11,382 - INFO - Successfully evaluated target model for y_thickness3
+2026-10-09 13:28:11,385 - INFO - Finished models for y_val: y_thickness3
+GAMLSS-RS iteration 4: Global Deviance = 3397.412 
+2026-10-09 13:28:12,654 - INFO - Cached result for y_thickness3
+GAMLSS-RS iteration 3: Global Deviance = 3375.905 
+GAMLSS-RS iteration 5: Global Deviance = 3359.032 
+GAMLSS-RS iteration 6: Global Deviance = 3327.979 
+GAMLSS-RS iteration 2: Global Deviance = 3448.76 
+GAMLSS-RS iteration 7: Global Deviance = 3302.675 
+GAMLSS-RS iteration 4: Global Deviance = 3328.231 
+GAMLSS-RS iteration 5: Global Deviance = 3284.815 
+GAMLSS-RS iteration 8: Global Deviance = 3281.777 
+GAMLSS-RS iteration 9: Global Deviance = 3264.62 
+GAMLSS-RS iteration 6: Global Deviance = 3242.751 
+GAMLSS-RS iteration 10: Global Deviance = 3249.667 
+Using 370 healthy subjects out of 470 total subjects for evaluation
+Using 370 healthy subjects out of 470 total subjects for evaluation
+2026-10-09 13:28:22,805 - INFO - Successfully evaluated base model for y_thickness4
+GAMLSS-RS iteration 7: Global Deviance = 3198.608 
+GAMLSS-RS iteration 3: Global Deviance = 3392.654 
+GAMLSS-RS iteration 8: Global Deviance = 3148.32 
+GAMLSS-RS iteration 1: Global Deviance = 3593.935 
+GAMLSS-RS iteration 9: Global Deviance = 3089.477 
+GAMLSS-RS iteration 4: Global Deviance = 3343.849 
+GAMLSS-RS iteration 10: Global Deviance = 3022.965 
+GAMLSS-RS iteration 2: Global Deviance = 3508.32 
+Model saved to ../../results/model_comparison/model_cache/saved_models/model_y_thickness1_target.rds
+2026-10-09 13:28:32,351 - INFO - Model name: model_y_thickness1_target has been saved at ../../results/model_comparison/model_cache/saved_models
+2026-10-09 13:28:32,352 - DEBUG - Model name: model_y_thickness1_target
+2026-10-09 13:28:32,359 - DEBUG - Available objects in R: [&#39;all_effects&#39;, &#39;centile_values&#39;, &#39;centiles&#39;, &#39;combined_effects&#39;, &#39;feature_volume1&#39;, &#39;feature_volume2&#39;, &#39;i&#39;, &#39;install_pvc_fixed_structure_prediction_patch&#39;, &#39;j&#39;, &#39;kurtosis&#39;, &#39;lme_obj&#39;, &#39;lme_positions&#39;, &#39;loaded_model&#39;, &#39;log_densities&#39;, &#39;log_densities_final&#39;, &#39;logscore&#39;, &#39;m_predicted&#39;, &#39;m_quantiles&#39;, &#39;m_quantiles_bounded&#39;, &#39;m1&#39;, &#39;m2&#39;, &#39;m3&#39;, &#39;m4&#39;, &#39;mean_mu&#39;, &#39;mean_nu&#39;, &#39;mean_sigma&#39;, &#39;mean_tau&#39;, &#39;model_call&#39;, &#39;model_y_thickness1_target&#39;, &#39;model_y_thickness2_formula1&#39;, &#39;n&#39;, &#39;normality_stat&#39;, &#39;param_coefSmo&#39;, &#39;pos&#39;, &#39;re&#39;, &#39;re_df&#39;, &#39;results&#39;, &#39;s1&#39;, &#39;skewness&#39;, &#39;z_mean&#39;, &#39;z_scores&#39;, &#39;z_sd&#39;]
+2026-10-09 13:28:32,362 - DEBUG - Accessing AIC for model: model_y_thickness1_target
+2026-10-09 13:28:32,365 - DEBUG - Accessing BIC for model: model_y_thickness1_target
+2026-10-09 13:28:32,367 - DEBUG - Accessing converged status for model: model_y_thickness1_target
+GAMLSS-RS iteration 5: Global Deviance = 3297.881 
+GAMLSS-RS iteration 3: Global Deviance = 3444.175 
+GAMLSS-RS iteration 6: Global Deviance = 3250.669 
+GAMLSS-RS iteration 1: Global Deviance = 3517.72 
+GAMLSS-RS iteration 4: Global Deviance = 3395.56 
+GAMLSS-RS iteration 5: Global Deviance = 3357.279 
+GAMLSS-RS iteration 6: Global Deviance = 3326.561 
+GAMLSS-RS iteration 7: Global Deviance = 3195.467 
+GAMLSS-RS iteration 7: Global Deviance = 3301.228 
+GAMLSS-RS iteration 8: Global Deviance = 3280.773 
+GAMLSS-RS iteration 2: Global Deviance = 3438.841 
+GAMLSS-RS iteration 8: Global Deviance = 3130.22 
+GAMLSS-RS iteration 9: Global Deviance = 3263.083 
+GAMLSS-RS iteration 9: Global Deviance = 3056.243 
+GAMLSS-RS iteration 10: Global Deviance = 2981.261 
+Model saved to ../../results/model_comparison/model_cache/saved_models/model_y_thickness2_target.rds
+2026-10-09 13:28:53,957 - INFO - Model name: model_y_thickness2_target has been saved at ../../results/model_comparison/model_cache/saved_models
+2026-10-09 13:28:53,958 - DEBUG - Model name: model_y_thickness2_target
+2026-10-09 13:28:53,965 - DEBUG - Available objects in R: [&#39;all_effects&#39;, &#39;centile_values&#39;, &#39;centiles&#39;, &#39;combined_effects&#39;, &#39;feature_volume1&#39;, &#39;feature_volume2&#39;, &#39;i&#39;, &#39;install_pvc_fixed_structure_prediction_patch&#39;, &#39;j&#39;, &#39;kurtosis&#39;, &#39;lme_obj&#39;, &#39;lme_positions&#39;, &#39;loaded_model&#39;, &#39;log_densities&#39;, &#39;log_densities_final&#39;, &#39;logscore&#39;, &#39;m_predicted&#39;, &#39;m_quantiles&#39;, &#39;m_quantiles_bounded&#39;, &#39;m1&#39;, &#39;m2&#39;, &#39;m3&#39;, &#39;m4&#39;, &#39;mean_mu&#39;, &#39;mean_nu&#39;, &#39;mean_sigma&#39;, &#39;mean_tau&#39;, &#39;model_call&#39;, &#39;model_y_thickness2_formula1&#39;, &#39;model_y_thickness2_target&#39;, &#39;n&#39;, &#39;normality_stat&#39;, &#39;param_coefSmo&#39;, &#39;pos&#39;, &#39;re&#39;, &#39;re_df&#39;, &#39;results&#39;, &#39;s1&#39;, &#39;skewness&#39;, &#39;z_mean&#39;, &#39;z_scores&#39;, &#39;z_sd&#39;]
+2026-10-09 13:28:53,967 - DEBUG - Accessing AIC for model: model_y_thickness2_target
+2026-10-09 13:28:53,970 - DEBUG - Accessing BIC for model: model_y_thickness2_target
+2026-10-09 13:28:53,972 - DEBUG - Accessing converged status for model: model_y_thickness2_target
+GAMLSS-RS iteration 3: Global Deviance = 3380.714 
+GAMLSS-RS iteration 10: Global Deviance = 3248.256 
+Using 370 healthy subjects out of 470 total subjects for evaluation
+Using 370 healthy subjects out of 470 total subjects for evaluation
+2026-10-09 13:28:55,623 - INFO - Successfully evaluated target model for y_thickness4
+2026-10-09 13:28:55,625 - INFO - Finished models for y_val: y_thickness4
+2026-10-09 13:28:56,885 - INFO - Cached result for y_thickness4
+GAMLSS-RS iteration 4: Global Deviance = 3337 
+GAMLSS-RS iteration 1: Global Deviance = 3517.461 
+GAMLSS-RS iteration 5: Global Deviance = 3302.682 
+GAMLSS-RS iteration 2: Global Deviance = 3451.642 
+GAMLSS-RS iteration 6: Global Deviance = 3274.515 
+GAMLSS-RS iteration 7: Global Deviance = 3251.364 
+GAMLSS-RS iteration 3: Global Deviance = 3399.762 
+GAMLSS-RS iteration 8: Global Deviance = 3232.242 
+GAMLSS-RS iteration 4: Global Deviance = 3358.61 
+GAMLSS-RS iteration 9: Global Deviance = 3216.26 
+GAMLSS-RS iteration 5: Global Deviance = 3325.658 
+GAMLSS-RS iteration 10: Global Deviance = 3202.732 
+Using 370 healthy subjects out of 470 total subjects for evaluation
+Using 370 healthy subjects out of 470 total subjects for evaluation
+2026-10-09 13:29:33,479 - INFO - Successfully evaluated base model for y_thickness1
+GAMLSS-RS iteration 6: Global Deviance = 3298.729 
+GAMLSS-RS iteration 1: Global Deviance = 3516.006 
+GAMLSS-RS iteration 7: Global Deviance = 3276.382 
+GAMLSS-RS iteration 2: Global Deviance = 3436.616 
+GAMLSS-RS iteration 8: Global Deviance = 3257.585 
+GAMLSS-RS iteration 3: Global Deviance = 3375.905 
+GAMLSS-RS iteration 9: Global Deviance = 3241.567 
+GAMLSS-RS iteration 4: Global Deviance = 3328.231 
+GAMLSS-RS iteration 5: Global Deviance = 3284.815 
+GAMLSS-RS iteration 6: Global Deviance = 3242.751 
+GAMLSS-RS iteration 10: Global Deviance = 3227.838 
+Using 370 healthy subjects out of 470 total subjects for evaluation
+Using 370 healthy subjects out of 470 total subjects for evaluation
+2026-10-09 13:30:02,447 - INFO - Successfully evaluated base model for y_thickness2
+GAMLSS-RS iteration 7: Global Deviance = 3198.608 
+GAMLSS-RS iteration 8: Global Deviance = 3148.32 
+GAMLSS-RS iteration 9: Global Deviance = 3089.477 
+GAMLSS-RS iteration 1: Global Deviance = 3516.44 
+GAMLSS-RS iteration 10: Global Deviance = 3022.965 
+Using 370 healthy subjects out of 470 total subjects for evaluation
+Using 370 healthy subjects out of 470 total subjects for evaluation
+2026-10-09 13:30:11,155 - INFO - Successfully evaluated target model for y_thickness1
+2026-10-09 13:30:11,157 - INFO - Finished models for y_val: y_thickness1
+2026-10-09 13:30:12,394 - INFO - Cached result for y_thickness1
+GAMLSS-RS iteration 2: Global Deviance = 3448.76 
+GAMLSS-RS iteration 3: Global Deviance = 3392.654 
+GAMLSS-RS iteration 4: Global Deviance = 3343.849 
+GAMLSS-RS iteration 5: Global Deviance = 3297.881 
+GAMLSS-RS iteration 6: Global Deviance = 3250.669 
+GAMLSS-RS iteration 7: Global Deviance = 3195.467 
+GAMLSS-RS iteration 8: Global Deviance = 3130.22 
+GAMLSS-RS iteration 9: Global Deviance = 3056.243 
+GAMLSS-RS iteration 10: Global Deviance = 2981.261 
+Using 370 healthy subjects out of 470 total subjects for evaluation
+Using 370 healthy subjects out of 470 total subjects for evaluation
+2026-10-09 13:30:54,263 - INFO - Successfully evaluated target model for y_thickness2
+2026-10-09 13:30:54,265 - INFO - Finished models for y_val: y_thickness2
+2026-10-09 13:30:55,499 - INFO - Cached result for y_thickness2
+2026-10-09 13:30:55,589 - INFO - Processing evaluation results...
+2026-10-09 13:30:55,650 - INFO - Evaluation results saved to ../../results/model_comparison/evaluation_results
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">comparison_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>y_val</th>
+      <th>base_AIC</th>
+      <th>target_AIC</th>
+      <th>base_BIC</th>
+      <th>target_BIC</th>
+      <th>base_Converged</th>
+      <th>target_Converged</th>
+      <th>AIC_diff</th>
+      <th>BIC_diff</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>y_thickness1</td>
+      <td>3225.840790</td>
+      <td>3050.953588</td>
+      <td>3282.887611</td>
+      <td>3120.048216</td>
+      <td>False</td>
+      <td>False</td>
+      <td>174.887202</td>
+      <td>162.839394</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>y_thickness2</td>
+      <td>3257.353180</td>
+      <td>3017.449913</td>
+      <td>3330.216783</td>
+      <td>3106.788042</td>
+      <td>False</td>
+      <td>False</td>
+      <td>239.903267</td>
+      <td>223.428741</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>y_thickness3</td>
+      <td>4002.630989</td>
+      <td>4006.108527</td>
+      <td>4054.352387</td>
+      <td>4067.692090</td>
+      <td>False</td>
+      <td>False</td>
+      <td>-3.477538</td>
+      <td>-13.339703</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>y_thickness4</td>
+      <td>3268.824048</td>
+      <td>3271.525192</td>
+      <td>3316.117143</td>
+      <td>3328.967498</td>
+      <td>False</td>
+      <td>False</td>
+      <td>-2.701144</td>
+      <td>-12.850355</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">summary_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>y_val</th>
+      <th>Best_Model_AIC</th>
+      <th>AIC_Diff</th>
+      <th>Best_Model_BIC</th>
+      <th>BIC_Diff</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>y_thickness1</td>
+      <td>model_y_thickness1_target</td>
+      <td>174.887202</td>
+      <td>model_y_thickness1_target</td>
+      <td>162.839394</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>y_thickness2</td>
+      <td>model_y_thickness2_target</td>
+      <td>239.903267</td>
+      <td>model_y_thickness2_target</td>
+      <td>223.428741</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>y_thickness3</td>
+      <td>model_y_thickness3_base</td>
+      <td>3.477538</td>
+      <td>model_y_thickness3_base</td>
+      <td>13.339703</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>y_thickness4</td>
+      <td>model_y_thickness4_base</td>
+      <td>2.701144</td>
+      <td>model_y_thickness4_base</td>
+      <td>12.850355</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eval_results</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;y_thickness1&#39;, &#39;y_thickness2&#39;, &#39;y_thickness3&#39;, &#39;y_thickness4&#39;])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eval_results</span><span class="p">[</span><span class="s1">&#39;y_thickness1&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Category</th>
+      <th>base</th>
+      <th>target</th>
+    </tr>
+    <tr>
+      <th>Metric</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Z_Scores_Mean</th>
+      <td>GAMLSS</td>
+      <td>0.036957</td>
+      <td>-0.248807</td>
+    </tr>
+    <tr>
+      <th>Z_Scores_SD</th>
+      <td>GAMLSS</td>
+      <td>1.022716</td>
+      <td>1.001153</td>
+    </tr>
+    <tr>
+      <th>Logarithmic_Score</th>
+      <td>GAMLSS</td>
+      <td>-1.519019</td>
+      <td>-1.420444</td>
+    </tr>
+    <tr>
+      <th>Skewness</th>
+      <td>GAMLSS</td>
+      <td>-0.066628</td>
+      <td>0.456581</td>
+    </tr>
+    <tr>
+      <th>Kurtosis</th>
+      <td>GAMLSS</td>
+      <td>-0.987648</td>
+      <td>-0.987528</td>
+    </tr>
+    <tr>
+      <th>Normality_Test_Statistic</th>
+      <td>GAMLSS</td>
+      <td>0.974247</td>
+      <td>0.932409</td>
+    </tr>
+    <tr>
+      <th>MAE</th>
+      <td>ML</td>
+      <td>0.943473</td>
+      <td>0.976399</td>
+    </tr>
+    <tr>
+      <th>MSE</th>
+      <td>ML</td>
+      <td>1.228213</td>
+      <td>1.400999</td>
+    </tr>
+    <tr>
+      <th>RMSE</th>
+      <td>ML</td>
+      <td>1.108248</td>
+      <td>1.183638</td>
+    </tr>
+    <tr>
+      <th>R_Squared</th>
+      <td>ML</td>
+      <td>0.418505</td>
+      <td>0.336700</td>
+    </tr>
+    <tr>
+      <th>MAPE</th>
+      <td>ML</td>
+      <td>3.997571</td>
+      <td>4.215250</td>
+    </tr>
+    <tr>
+      <th>Mean_Error</th>
+      <td>ML</td>
+      <td>-0.040269</td>
+      <td>0.421481</td>
+    </tr>
+    <tr>
+      <th>AIC</th>
+      <td>Information_Criteria</td>
+      <td>3225.840790</td>
+      <td>3050.953588</td>
+    </tr>
+    <tr>
+      <th>BIC</th>
+      <td>Information_Criteria</td>
+      <td>3282.887611</td>
+      <td>3120.048216</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="multiple_formula_comparison.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Multiple Formula Model Comparison</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="base_target_visualization.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Visualization of Effective Results</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-utils-model-comparison">model_utils.<br/><strong>model_comparison</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Nitin
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

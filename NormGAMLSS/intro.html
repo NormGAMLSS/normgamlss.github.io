@@ -1,0 +1,610 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>NormGAMLSS Documentation &#8212; NormGAMLSS Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=04637fd3" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation Guide" href="installation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="NormGAMLSS Documentation - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="NormGAMLSS Documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Setup and Preprocessing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/setup_imports.html">Setup and Imports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_and_setup_theory.html">Understanding R Integration and External Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/structuring_data.html">Structuring Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/data_preprocessing.html">Data Preprocessing</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Specification and Fitting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gamlss_theory.html">GAMLSS Theory and Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formulas_and_syntax.html">GAMLSS Formula Reference and Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/fitting_models.html">Fitting GAMLSS Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/saving_loading_models.html">Saving and Loading Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/deleting_model.html">Deleting Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/model_diagnostics.html">Model Diagnostics and Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diagnostics_summary.html">Comprehensive Model Diagnostics Interpretation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diagnostic_plot_summary.html">Diagnostic Plots Interpretation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Evaluation and Predictions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/model_predictions.html">Model Predictions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/model_evaluation.html">Model Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/z_score_calculation.html">Z-Score Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/z_score_plotting.html">Z-Score Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/centiles_calculation.html">Centiles Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/centiles_plotting.html">Centiles Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/continuous_centiles.html">Continuous Centiles with Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/centile_positions.html">Centile Position Calculation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Management and Comparison</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/multiple_formula_comparison.html">Multiple Formula Model Comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/base_target_comparison.html">Base vs Target Model Comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/base_target_visualization.html">Visualization of Effective Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/permutation_testing.html">Permutation Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/brain_surface_visualization.html">Brain Surface Visualization</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/multisite_transfer.html">Multisite Model Transfer</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference and Troubleshooting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="r_integration_reference.html">R Integration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting and Common Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="convergence_problems.html">Convergence Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/intro.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>NormGAMLSS Documentation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-gamlss">What is GAMLSS?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key Features</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-python-package">Why This Python Package?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-example">Quick Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">Documentation Structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#acknowledgments">Acknowledgments</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="normgamlss-documentation">
+<h1>NormGAMLSS Documentation<a class="headerlink" href="#normgamlss-documentation" title="Link to this heading">#</a></h1>
+<p>Welcome to the comprehensive documentation for the NormGAMLSS package! This package provides a powerful framework for fitting and analyzing <strong>Generalized Additive Models for Location, Scale, and Shape</strong> by integrating with the R GAMLSS package through rpy2.</p>
+<section id="what-is-gamlss">
+<h2>What is GAMLSS?<a class="headerlink" href="#what-is-gamlss" title="Link to this heading">#</a></h2>
+<p>GAMLSS extends traditional regression modeling by allowing you to model not just the mean (location) of your response variable, but also its:</p>
+<ul class="simple">
+<li><p><strong>Scale</strong> (variance/dispersion)</p></li>
+<li><p><strong>Shape</strong> (skewness and kurtosis)</p></li>
+</ul>
+<p>This makes GAMLSS particularly powerful for:</p>
+<ul class="simple">
+<li><p><strong>Neuroimaging data</strong> with complex distributions</p></li>
+<li><p><strong>Clinical measurements</strong> requiring reference curves</p></li>
+<li><p><strong>Multi-site studies</strong> with heterogeneous populations</p></li>
+<li><p><strong>Outlier detection</strong> and normative modeling</p></li>
+</ul>
+</section>
+<section id="key-features">
+<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading">#</a></h2>
+<p>✅ <strong>Flexible Distributions</strong>: 100+ distribution families beyond normal distribution<br />
+✅ <strong>Random Effects</strong>: Proper multi-site modeling with shrinkage<br />
+✅ <strong>Smoothing Terms</strong>: Non-linear relationships with penalized splines<br />
+✅ <strong>Model Comparison</strong>: AIC/BIC comparison with permutation testing<br />
+✅ <strong>Brain Visualization</strong>: Map results to brain surface models<br />
+✅ <strong>Site Transfer</strong>: Adapt models to new sites without retraining<br />
+✅ <strong>Parallel Processing</strong>: Efficient computation for large-scale analysis</p>
+</section>
+<section id="why-this-python-package">
+<h2>Why This Python Package?<a class="headerlink" href="#why-this-python-package" title="Link to this heading">#</a></h2>
+<p>While GAMLSS is natively available in R, this Python package provides:</p>
+<ul class="simple">
+<li><p><strong>Seamless Integration</strong>: Work in Python while leveraging R’s GAMLSS power</p></li>
+<li><p><strong>Automated Workflows</strong>: Batch processing, caching, and model management</p></li>
+<li><p><strong>Neuroimaging Focus</strong>: Brain visualization and multi-site transfer tools</p></li>
+<li><p><strong>Production Ready</strong>: Save/load models, robust error handling</p></li>
+</ul>
+</section>
+<section id="quick-example">
+<h2>Quick Example<a class="headerlink" href="#quick-example" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">normgamlss</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gamlss</span>
+
+<span class="c1"># Fit a GAMLSS model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Gamlss</span><span class="p">(</span><span class="s1">&#39;my_model&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;site&#39;</span><span class="p">],</span> <span class="s1">&#39;brain_volume&#39;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">r_code</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    model &lt;- gamlss(y ~ pvc(age, by = as.factor(sex)) + re(random=~1|site),</span>
+<span class="s2">                   sigma.formula = ~ pvc(age) + re(random=~1|site), </span>
+<span class="s2">                   family = SHASH(), method = RS(50))</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">train_data</span><span class="p">)</span>
+
+<span class="c1"># Get z-scores for outlier detection</span>
+<span class="n">z_scores</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">z_score</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+
+<span class="c1"># Create reference curves</span>
+<span class="n">model</span><span class="o">.</span><span class="n">plot_centiles</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">centiles</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">97</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="documentation-structure">
+<h2>Documentation Structure<a class="headerlink" href="#documentation-structure" title="Link to this heading">#</a></h2>
+<p>This documentation follows a practical workflow:</p>
+<ol class="arabic simple">
+<li><p><strong>Setup</strong>: Installation and data preparation</p></li>
+<li><p><strong>Basic Modeling</strong>: Fit your first GAMLSS model</p></li>
+<li><p><strong>Evaluation</strong>: Assess model quality and interpret results</p></li>
+<li><p><strong>Advanced Features</strong>: Model comparison, permutation testing</p></li>
+<li><p><strong>Applications</strong>: Brain visualization, multi-site studies</p></li>
+<li><p><strong>Reference</strong>: Complete syntax guide and troubleshooting</p></li>
+</ol>
+</section>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
+<p>Ready to dive in? Start with the <a class="reference internal" href="installation.html"><span class="std std-doc">Installation Guide</span></a> or jump straight to the <a class="reference internal" href="quick_start.html"><span class="std std-doc">Quick Start</span></a> for a 5-minute tutorial.</p>
+</section>
+<section id="acknowledgments">
+<h2>Acknowledgments<a class="headerlink" href="#acknowledgments" title="Link to this heading">#</a></h2>
+<p>This package builds on the excellent work of:</p>
+<ul class="simple">
+<li><p><strong>R GAMLSS Team</strong>: <a class="reference external" href="https://www.gamlss.com/">gamlss.com</a> - The original GAMLSS implementation</p></li>
+<li><p><strong>rpy2 Project</strong>: <a class="reference external" href="https://rpy2.github.io/">rpy2.github.io</a> - R integration for Python</p></li>
+</ul>
+<hr class="docutils" />
+<p><em>This documentation covers the Python wrapper for GAMLSS. For comprehensive theoretical background, statistical details, and additional examples, please refer to the <a class="reference external" href="https://www.gamlss.com/">official R GAMLSS documentation</a>.</em></p>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="installation.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Installation Guide</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-gamlss">What is GAMLSS?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key Features</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-python-package">Why This Python Package?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-example">Quick Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">Documentation Structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#acknowledgments">Acknowledgments</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Nitin
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

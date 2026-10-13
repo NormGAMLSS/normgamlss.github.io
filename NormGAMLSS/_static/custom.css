@@ -1,0 +1,49 @@
+/* ---------------------------------------------------------------------
+   1. Long TEXT outputs (R fitting logs from permutation testing, multi-
+      formula runs, etc.) get their own scrollbar instead of stretching
+      the whole page. This targets only the <pre> blocks that hold
+      printed/stdout text -- matplotlib figures are untouched, so plots
+      keep displaying at full size rather than being cropped into a
+      scroll box.
+      (This is a fail-safe on top of `nb_scroll_outputs: true` in
+      _config.yml -- that setting depends on myst-nb >= 1.3.0 to work
+      correctly for every output type; this CSS guarantees the behavior
+      for text output regardless of the installed version.)
+   --------------------------------------------------------------------- */
+div.cell_output pre,
+div.output pre,
+.jp-OutputArea-output pre {
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+/* ---------------------------------------------------------------------
+   2. Widen the article column so figures get more room to breathe.
+      Jupyter's own interface renders figures at whatever width your
+      browser/pane happens to be; the book's article column defaults to
+      a fixed, narrower reading width, which shrinks wide multi-panel
+      figures (and their baked-in font sizes) more than Jupyter does.
+      Widening the column here is a one-time, site-wide fix -- no need
+      to touch figsize in the notebook to compensate.
+   --------------------------------------------------------------------- */
+.bd-main .bd-content .bd-article-container {
+  max-width: 100%;
+}
+.bd-page-width {
+  max-width: 100rem;
+}
+
+/* 3. Never let images grow past their own native resolution. Widening the
+      article column (rule 2 below) gives wide figures more room, but if the
+      theme scales images with `width: 100%` (fill the container) rather
+      than `max-width: 100%` (never exceed native size), every image that's
+      narrower than the new, wider column gets force-stretched to fill it --
+      which is the blurry/stretched look. This rule wins regardless of what
+      the theme does, and always preserves the image's real aspect ratio. */
+.bd-article-container img,
+.cell_output img,
+.output img {
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+}

@@ -1,0 +1,777 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Diagnostic Plots Interpretation &#8212; NormGAMLSS Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=04637fd3" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'diagnostic_plot_summary';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Model Predictions" href="notebooks/model_predictions.html" />
+    <link rel="prev" title="Comprehensive Model Diagnostics Interpretation" href="diagnostics_summary.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="NormGAMLSS Documentation - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="NormGAMLSS Documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Setup and Preprocessing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/setup_imports.html">Setup and Imports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_and_setup_theory.html">Understanding R Integration and External Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/structuring_data.html">Structuring Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/data_preprocessing.html">Data Preprocessing</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Specification and Fitting</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gamlss_theory.html">GAMLSS Theory and Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formulas_and_syntax.html">GAMLSS Formula Reference and Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/fitting_models.html">Fitting GAMLSS Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/saving_loading_models.html">Saving and Loading Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/deleting_model.html">Deleting Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/model_diagnostics.html">Model Diagnostics and Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diagnostics_summary.html">Comprehensive Model Diagnostics Interpretation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Diagnostic Plots Interpretation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Evaluation and Predictions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/model_predictions.html">Model Predictions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/model_evaluation.html">Model Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/z_score_calculation.html">Z-Score Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/z_score_plotting.html">Z-Score Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/centiles_calculation.html">Centiles Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/centiles_plotting.html">Centiles Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/continuous_centiles.html">Continuous Centiles with Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/centile_positions.html">Centile Position Calculation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Management and Comparison</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/multiple_formula_comparison.html">Multiple Formula Model Comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/base_target_comparison.html">Base vs Target Model Comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/base_target_visualization.html">Visualization of Effective Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/permutation_testing.html">Permutation Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/brain_surface_visualization.html">Brain Surface Visualization</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/multisite_transfer.html">Multisite Model Transfer</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference and Troubleshooting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="r_integration_reference.html">R Integration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting and Common Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="convergence_problems.html">Convergence Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/diagnostic_plot_summary.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Diagnostic Plots Interpretation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#against-fitted-values-plot">1. Against Fitted Values Plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#against-index-plot">2. Against Index Plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#density-estimate-plot">3. Density Estimate Plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-q-q-plot">4. Normal Q-Q Plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-statistics-for-residuals">Summary Statistics for Residuals</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mean">Mean</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variance">Variance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coefficient-of-skewness">Coefficient of Skewness</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coefficient-of-kurtosis">Coefficient of Kurtosis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#filliben-correlation-coefficient">Filliben Correlation Coefficient</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-assessment-guidelines">Model Assessment Guidelines</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-the-model-is-performing-well">When the Model is Performing Well</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-the-model-needs-improvement">When the Model Needs Improvement</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#action-steps-for-model-issues">Action Steps for Model Issues</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-diagnostic-considerations">Advanced Diagnostic Considerations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smoothing-terms">Smoothing Terms</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#random-effects-assessment">Random Effects Assessment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-parameter-modeling">Multi-parameter Modeling</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="diagnostic-plots-interpretation">
+<h1>Diagnostic Plots Interpretation<a class="headerlink" href="#diagnostic-plots-interpretation" title="Link to this heading">#</a></h1>
+<p>GAMLSS diagnostic plots check the normalized (randomized for discrete distributions) quantile residuals through four standard plots: residuals vs fitted values, residuals vs index, density plot, and normal Q-Q plot.</p>
+<section id="against-fitted-values-plot">
+<h2>1. Against Fitted Values Plot<a class="headerlink" href="#against-fitted-values-plot" title="Link to this heading">#</a></h2>
+<p><strong>Purpose</strong>: Assess heteroscedasticity and non-linearity</p>
+<p><strong>Ideal appearance</strong>:</p>
+<ul class="simple">
+<li><p>Random scatter around horizontal line at zero</p></li>
+<li><p>Constant spread across fitted value range</p></li>
+<li><p>No systematic patterns or curves</p></li>
+</ul>
+<p><strong>Problematic patterns</strong>:</p>
+<ul class="simple">
+<li><p><strong>Funnel shape</strong>: Indicates heteroscedasticity (changing variance)</p></li>
+<li><p><strong>Curved patterns</strong>: Suggests missing non-linear terms</p></li>
+<li><p><strong>Systematic trends</strong>: May indicate model misspecification</p></li>
+</ul>
+<p><strong>Actions for problems</strong>:</p>
+<ul class="simple">
+<li><p>Model sigma parameter with covariates for heteroscedasticity</p></li>
+<li><p>Add polynomial or smoothing terms for non-linearity</p></li>
+<li><p>Consider data transformation</p></li>
+</ul>
+</section>
+<section id="against-index-plot">
+<h2>2. Against Index Plot<a class="headerlink" href="#against-index-plot" title="Link to this heading">#</a></h2>
+<p><strong>Purpose</strong>: Identify temporal patterns or systematic data collection issues</p>
+<p><strong>Ideal appearance</strong>:</p>
+<ul class="simple">
+<li><p>Random scatter with no discernible patterns</p></li>
+<li><p>No trending or cyclical behavior</p></li>
+<li><p>Constant variance across observation order</p></li>
+</ul>
+<p><strong>Problematic patterns</strong>:</p>
+<ul class="simple">
+<li><p><strong>Time trends</strong>: Systematic increase/decrease</p></li>
+<li><p><strong>Cyclical patterns</strong>: Regular oscillations</p></li>
+<li><p><strong>Clustering</strong>: Groups of similar residuals</p></li>
+</ul>
+<p><strong>Actions for problems</strong>:</p>
+<ul class="simple">
+<li><p>Include time variables in model</p></li>
+<li><p>Check data collection procedures</p></li>
+<li><p>Consider autocorrelation structure</p></li>
+</ul>
+</section>
+<section id="density-estimate-plot">
+<h2>3. Density Estimate Plot<a class="headerlink" href="#density-estimate-plot" title="Link to this heading">#</a></h2>
+<p><strong>Purpose</strong>: Visualize overall distribution of residuals</p>
+<p><strong>Ideal appearance</strong>:</p>
+<ul class="simple">
+<li><p>Symmetric, unimodal distribution</p></li>
+<li><p>Centered approximately at zero</p></li>
+<li><p>Bell-shaped curve resembling normal distribution</p></li>
+</ul>
+<p><strong>Problematic patterns</strong>:</p>
+<ul class="simple">
+<li><p><strong>Skewness</strong>: Asymmetric distribution</p></li>
+<li><p><strong>Multiple modes</strong>: Bimodal or multimodal distributions</p></li>
+<li><p><strong>Heavy tails</strong>: Extreme values more common than expected</p></li>
+</ul>
+<p><strong>Actions for problems</strong>:</p>
+<ul class="simple">
+<li><p>Try more flexible distribution families (SHASH, GG)</p></li>
+<li><p>Check for outliers or data quality issues</p></li>
+<li><p>Consider mixture distributions</p></li>
+</ul>
+</section>
+<section id="normal-q-q-plot">
+<h2>4. Normal Q-Q Plot<a class="headerlink" href="#normal-q-q-plot" title="Link to this heading">#</a></h2>
+<p><strong>Purpose</strong>: Assess whether residuals follow normal distribution by comparing quantiles</p>
+<p><strong>Ideal appearance</strong>:</p>
+<ul class="simple">
+<li><p>Points closely follow diagonal reference line</p></li>
+<li><p>Minimal deviation especially in central region</p></li>
+<li><p>Slight deviation at extremes is acceptable</p></li>
+</ul>
+<p><strong>Problematic patterns</strong>:</p>
+<ul class="simple">
+<li><p><strong>S-shaped curve</strong>: Indicates skewness</p></li>
+<li><p><strong>Curved at ends</strong>: Heavy or light tails</p></li>
+<li><p><strong>Systematic deviations</strong>: Non-normality</p></li>
+</ul>
+<p><strong>Interpretation guidance</strong>: Departure from normality may be important depending on analysis purpose - especially critical when estimating centiles in the tails</p>
+</section>
+<section id="summary-statistics-for-residuals">
+<h2>Summary Statistics for Residuals<a class="headerlink" href="#summary-statistics-for-residuals" title="Link to this heading">#</a></h2>
+<p>When running diagnostic plots, GAMLSS provides summary statistics for the quantile residuals:</p>
+<section id="mean">
+<h3>Mean<a class="headerlink" href="#mean" title="Link to this heading">#</a></h3>
+<p><strong>Ideal value</strong>: ≈ 0
+<strong>Interpretation</strong>:</p>
+<ul class="simple">
+<li><p>Values close to zero indicate unbiased model</p></li>
+<li><p>Systematic deviation suggests model bias</p></li>
+</ul>
+</section>
+<section id="variance">
+<h3>Variance<a class="headerlink" href="#variance" title="Link to this heading">#</a></h3>
+<p><strong>Ideal value</strong>: ≈ 1
+<strong>Interpretation</strong>:</p>
+<ul class="simple">
+<li><p>Values close to 1 indicate proper scaling</p></li>
+<li><p>Much larger values suggest underdispersion modeling</p></li>
+<li><p>Much smaller values suggest overdispersion</p></li>
+</ul>
+</section>
+<section id="coefficient-of-skewness">
+<h3>Coefficient of Skewness<a class="headerlink" href="#coefficient-of-skewness" title="Link to this heading">#</a></h3>
+<p><strong>Ideal value</strong>: ≈ 0
+<strong>Interpretation</strong>:</p>
+<ul class="simple">
+<li><p>Positive values: Right-skewed residuals</p></li>
+<li><p>Negative values: Left-skewed residuals</p></li>
+<li><p>Values &gt; |0.5| may indicate distribution issues</p></li>
+</ul>
+</section>
+<section id="coefficient-of-kurtosis">
+<h3>Coefficient of Kurtosis<a class="headerlink" href="#coefficient-of-kurtosis" title="Link to this heading">#</a></h3>
+<p><strong>Ideal value</strong>: ≈ 3 (normal distribution)</p>
+<p><em>Note:</em> this is R’s plain kurtosis. The <code class="docutils literal notranslate"><span class="pre">Kurtosis</span></code> metric from <code class="docutils literal notranslate"><span class="pre">evaluate()</span></code> is <em>excess</em>
+kurtosis (kurtosis − 3), so its target is ≈ 0.
+<strong>Interpretation</strong>:</p>
+<ul class="simple">
+<li><p>Values &gt; 3: Heavy-tailed (more extreme values)</p></li>
+<li><p>Values &lt; 3: Light-tailed (fewer extreme values)</p></li>
+<li><p>Significant departure suggests distribution choice issues</p></li>
+</ul>
+</section>
+<section id="filliben-correlation-coefficient">
+<h3>Filliben Correlation Coefficient<a class="headerlink" href="#filliben-correlation-coefficient" title="Link to this heading">#</a></h3>
+<p><strong>Ideal value</strong>: ≈ 1 (close to 1)
+<strong>Interpretation</strong>:</p>
+<ul class="simple">
+<li><p>Measures correlation between residuals and normal quantiles</p></li>
+<li><p>Values &lt; 0.95 may indicate normality violations</p></li>
+<li><p>Lower values suggest need for different distribution</p></li>
+</ul>
+</section>
+</section>
+<section id="model-assessment-guidelines">
+<h2>Model Assessment Guidelines<a class="headerlink" href="#model-assessment-guidelines" title="Link to this heading">#</a></h2>
+<section id="when-the-model-is-performing-well">
+<h3>When the Model is Performing Well<a class="headerlink" href="#when-the-model-is-performing-well" title="Link to this heading">#</a></h3>
+<p><strong>Good signs</strong>:</p>
+<ul class="simple">
+<li><p>All diagnostic plots show random scatter</p></li>
+<li><p>Summary statistics near ideal values</p></li>
+<li><p>Residual variance ≈ 1 and mean ≈ 0</p></li>
+<li><p>Filliben correlation &gt; 0.99</p></li>
+<li><p>No systematic patterns in any plot</p></li>
+</ul>
+</section>
+<section id="when-the-model-needs-improvement">
+<h3>When the Model Needs Improvement<a class="headerlink" href="#when-the-model-needs-improvement" title="Link to this heading">#</a></h3>
+<p><strong>Warning signs</strong>:</p>
+<ul class="simple">
+<li><p>Clear patterns in residual plots</p></li>
+<li><p>Summary statistics far from ideal values</p></li>
+<li><p>Systematic deviations in Q-Q plot</p></li>
+<li><p>Very low or high residual variance</p></li>
+<li><p>Significant skewness or kurtosis</p></li>
+</ul>
+</section>
+<section id="action-steps-for-model-issues">
+<h3>Action Steps for Model Issues<a class="headerlink" href="#action-steps-for-model-issues" title="Link to this heading">#</a></h3>
+<p><strong>For heteroscedasticity</strong>:</p>
+<ol class="arabic simple">
+<li><p>Model sigma parameter with covariates</p></li>
+<li><p>Try different link functions</p></li>
+<li><p>Consider data transformation</p></li>
+</ol>
+<p><strong>For non-linearity</strong>:</p>
+<ol class="arabic simple">
+<li><p>Add smoothing terms <code class="docutils literal notranslate"><span class="pre">pvc(x)</span></code> or <code class="docutils literal notranslate"><span class="pre">cs(x)</span></code></p></li>
+<li><p>Include polynomial terms</p></li>
+<li><p>Try tensor product smooths <code class="docutils literal notranslate"><span class="pre">te(x1,</span> <span class="pre">x2)</span></code></p></li>
+</ol>
+<p><strong>For distribution issues</strong>:</p>
+<ol class="arabic simple">
+<li><p>Try more flexible families (SHASH, GG, BCT)</p></li>
+<li><p>Check for outliers in data</p></li>
+<li><p>Consider zero-inflated or mixture distributions</p></li>
+</ol>
+<p><strong>For temporal patterns</strong>:</p>
+<ol class="arabic simple">
+<li><p>Include time variables in model</p></li>
+<li><p>Add lagged variables</p></li>
+<li><p>Consider time series modeling approaches</p></li>
+</ol>
+</section>
+</section>
+<section id="advanced-diagnostic-considerations">
+<h2>Advanced Diagnostic Considerations<a class="headerlink" href="#advanced-diagnostic-considerations" title="Link to this heading">#</a></h2>
+<section id="smoothing-terms">
+<h3>Smoothing Terms<a class="headerlink" href="#smoothing-terms" title="Link to this heading">#</a></h3>
+<p>When using smoothing terms like <code class="docutils literal notranslate"><span class="pre">pvc(age)</span></code>:</p>
+<ul class="simple">
+<li><p>Standard errors are approximate</p></li>
+<li><p>Focus on overall model fit rather than individual significance</p></li>
+<li><p>Use model comparison for term selection</p></li>
+</ul>
+</section>
+<section id="random-effects-assessment">
+<h3>Random Effects Assessment<a class="headerlink" href="#random-effects-assessment" title="Link to this heading">#</a></h3>
+<p>For models with random effects:</p>
+<ul class="simple">
+<li><p>Check lambda values (indicates shrinkage)</p></li>
+<li><p>Compare degrees of freedom to number of groups</p></li>
+<li><p>Verify random effects are actually being applied</p></li>
+</ul>
+</section>
+<section id="multi-parameter-modeling">
+<h3>Multi-parameter Modeling<a class="headerlink" href="#multi-parameter-modeling" title="Link to this heading">#</a></h3>
+<p>When modeling multiple parameters (sigma, nu, tau):</p>
+<ul class="simple">
+<li><p>Each parameter should be assessed separately</p></li>
+<li><p>Consider interaction between parameter modeling</p></li>
+<li><p>Simpler is often better for less important parameters</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="diagnostics_summary.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Comprehensive Model Diagnostics Interpretation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="notebooks/model_predictions.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Model Predictions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#against-fitted-values-plot">1. Against Fitted Values Plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#against-index-plot">2. Against Index Plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#density-estimate-plot">3. Density Estimate Plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-q-q-plot">4. Normal Q-Q Plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-statistics-for-residuals">Summary Statistics for Residuals</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mean">Mean</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variance">Variance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coefficient-of-skewness">Coefficient of Skewness</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coefficient-of-kurtosis">Coefficient of Kurtosis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#filliben-correlation-coefficient">Filliben Correlation Coefficient</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-assessment-guidelines">Model Assessment Guidelines</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-the-model-is-performing-well">When the Model is Performing Well</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-the-model-needs-improvement">When the Model Needs Improvement</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#action-steps-for-model-issues">Action Steps for Model Issues</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-diagnostic-considerations">Advanced Diagnostic Considerations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smoothing-terms">Smoothing Terms</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#random-effects-assessment">Random Effects Assessment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-parameter-modeling">Multi-parameter Modeling</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Nitin
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

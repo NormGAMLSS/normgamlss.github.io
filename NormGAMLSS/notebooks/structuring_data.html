@@ -1,0 +1,884 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Structuring Data &#8212; NormGAMLSS Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=04637fd3" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/structuring_data';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Data Preprocessing" href="data_preprocessing.html" />
+    <link rel="prev" title="Understanding R Integration and External Packages" href="../data_and_setup_theory.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="NormGAMLSS Documentation - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="NormGAMLSS Documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Setup and Preprocessing</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="setup_imports.html">Setup and Imports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_and_setup_theory.html">Understanding R Integration and External Packages</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Structuring Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_preprocessing.html">Data Preprocessing</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Specification and Fitting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../gamlss_theory.html">GAMLSS Theory and Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formulas_and_syntax.html">GAMLSS Formula Reference and Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fitting_models.html">Fitting GAMLSS Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="saving_loading_models.html">Saving and Loading Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deleting_model.html">Deleting Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_diagnostics.html">Model Diagnostics and Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diagnostics_summary.html">Comprehensive Model Diagnostics Interpretation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diagnostic_plot_summary.html">Diagnostic Plots Interpretation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Evaluation and Predictions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="model_predictions.html">Model Predictions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_evaluation.html">Model Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="z_score_calculation.html">Z-Score Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="z_score_plotting.html">Z-Score Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="centiles_calculation.html">Centiles Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="centiles_plotting.html">Centiles Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="continuous_centiles.html">Continuous Centiles with Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="centile_positions.html">Centile Position Calculation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Management and Comparison</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="multiple_formula_comparison.html">Multiple Formula Model Comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base_target_comparison.html">Base vs Target Model Comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base_target_visualization.html">Visualization of Effective Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="permutation_testing.html">Permutation Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brain_surface_visualization.html">Brain Surface Visualization</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="multisite_transfer.html">Multisite Model Transfer</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference and Troubleshooting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../r_integration_reference.html">R Integration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting and Common Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../convergence_problems.html">Convergence Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/structuring_data.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Structuring Data</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#input-dataset-requirements">Input Dataset Requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-example-data">Generating Example Data</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="structuring-data">
+<span id="id1"></span><h1>Structuring Data<a class="headerlink" href="#structuring-data" title="Link to this heading">#</a></h1>
+<section id="input-dataset-requirements">
+<h2>Input Dataset Requirements<a class="headerlink" href="#input-dataset-requirements" title="Link to this heading">#</a></h2>
+<p><strong>Core Requirements (Flexible):</strong></p>
+<ul class="simple">
+<li><p><strong>X values</strong>: Predictor variables (in below example: <code class="docutils literal notranslate"><span class="pre">'site'</span></code>, <code class="docutils literal notranslate"><span class="pre">'age'</span></code>, <code class="docutils literal notranslate"><span class="pre">'sex'</span></code>)</p></li>
+<li><p><strong>Y values</strong>: Outcome variables (feature columns like <code class="docutils literal notranslate"><span class="pre">'y_thickness1'</span></code>, <code class="docutils literal notranslate"><span class="pre">'y_thickness2'</span></code>, etc.)</p></li>
+</ul>
+<p><strong>Optional Requirements:</strong></p>
+<ul class="simple">
+<li><p><strong>Modality column</strong>: Only needed if you want to identify different conditions/groups</p>
+<ul>
+<li><p>Column name is flexible (below used <code class="docutils literal notranslate"><span class="pre">'affected'</span></code> as an example)</p></li>
+<li><p>Healthy subjects should be labeled as <code class="docutils literal notranslate"><span class="pre">'None'</span></code></p></li>
+<li><p>Conditions can be any descriptive names (<code class="docutils literal notranslate"><span class="pre">'Schizo'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Dementia'</span></code>, <code class="docutils literal notranslate"><span class="pre">'MDD'</span></code>, etc.)</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Key Insights:</strong></p>
+<ol class="arabic simple">
+<li><p>The documentation example shows a specific neuroimaging use case, but the package is more general-purpose</p></li>
+<li><p>The minimum requirement is just predictors (X) and outcomes (Y)</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">'affected'</span></code> column is essentially for stratification/group analysis, not a core modeling requirement</p></li>
+<li><p>This makes the package applicable to various domains beyond neuroimaging</p></li>
+</ol>
+</section>
+<section id="generating-example-data">
+<h2>Generating Example Data<a class="headerlink" href="#generating-example-data" title="Link to this heading">#</a></h2>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">string</span>
+
+<span class="c1"># Example data generation code</span>
+<span class="c1"># Function to generate random site ID</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_random_site_id</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">letters</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">ascii_uppercase</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">letters</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">))</span>
+
+<span class="c1"># Generate train dataset</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">n_train</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">train_sites_seeds</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>  <span class="c1"># Fixed seeds for reproducibility</span>
+<span class="n">train_sites</span> <span class="o">=</span> <span class="p">[</span><span class="n">generate_random_site_id</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span> <span class="k">for</span> <span class="n">seed</span> <span class="ow">in</span> <span class="n">train_sites_seeds</span><span class="p">]</span>
+<span class="n">age_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="n">n_train</span><span class="p">)</span>
+<span class="n">sex_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">n_train</span><span class="p">)</span>
+<span class="n">feature_volume_train1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="n">n_train</span><span class="p">)</span>
+<span class="n">feature_volume_train2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="n">n_train</span><span class="p">)</span>
+<span class="n">feature_volume_train3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="n">n_train</span><span class="p">)</span>
+<span class="n">feature_volume_train4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="n">n_train</span><span class="p">)</span>
+<span class="n">feature_volume_train5</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="n">n_train</span><span class="p">)</span>
+<span class="c1"># Non-linear age effect: values decline steeply through early adulthood and</span>
+<span class="c1"># then flatten out at older ages (exponential decay) -- the trajectory seen</span>
+<span class="c1"># in real cortical-thickness data. The two sexes follow near-parallel curves.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">age_effect</span><span class="p">(</span><span class="n">age</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mf">6.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">age</span> <span class="o">/</span> <span class="mf">30.0</span><span class="p">)</span>
+
+<span class="n">y_thickness_train1</span> <span class="o">=</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">age_effect</span><span class="p">(</span><span class="n">age_train</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">feature_volume_train1</span> <span class="o">+</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">sex_train</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">n_train</span><span class="p">)</span>
+<span class="n">y_thickness_train2</span> <span class="o">=</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">age_effect</span><span class="p">(</span><span class="n">age_train</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">feature_volume_train2</span> <span class="o">+</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">sex_train</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">n_train</span><span class="p">)</span>
+<span class="n">y_thickness_train3</span> <span class="o">=</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">age_effect</span><span class="p">(</span><span class="n">age_train</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">feature_volume_train3</span> <span class="o">+</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">feature_volume_train4</span> <span class="o">+</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">sex_train</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">n_train</span><span class="p">)</span>
+<span class="n">y_thickness_train4</span> <span class="o">=</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">age_effect</span><span class="p">(</span><span class="n">age_train</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">feature_volume_train5</span> <span class="o">+</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">sex_train</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">n_train</span><span class="p">)</span>
+
+<span class="n">train_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;site&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">train_sites</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_train</span><span class="p">),</span>
+    <span class="s1">&#39;sex&#39;</span><span class="p">:</span> <span class="n">sex_train</span><span class="p">,</span>
+    <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="n">age_train</span><span class="p">,</span>
+    <span class="s1">&#39;feature_volume1&#39;</span><span class="p">:</span> <span class="n">feature_volume_train1</span><span class="p">,</span>
+    <span class="s1">&#39;feature_volume2&#39;</span><span class="p">:</span> <span class="n">feature_volume_train2</span><span class="p">,</span>
+    <span class="s1">&#39;feature_volume3&#39;</span><span class="p">:</span> <span class="n">feature_volume_train3</span><span class="p">,</span>
+    <span class="s1">&#39;feature_volume4&#39;</span><span class="p">:</span> <span class="n">feature_volume_train4</span><span class="p">,</span>
+    <span class="s1">&#39;feature_volume5&#39;</span><span class="p">:</span> <span class="n">feature_volume_train5</span><span class="p">,</span>
+    <span class="s1">&#39;y_thickness1&#39;</span><span class="p">:</span> <span class="n">y_thickness_train1</span><span class="p">,</span>
+    <span class="s1">&#39;y_thickness2&#39;</span><span class="p">:</span> <span class="n">y_thickness_train2</span><span class="p">,</span>
+    <span class="s1">&#39;y_thickness3&#39;</span><span class="p">:</span> <span class="n">y_thickness_train3</span><span class="p">,</span>
+    <span class="s1">&#39;y_thickness4&#39;</span><span class="p">:</span> <span class="n">y_thickness_train4</span>
+<span class="p">}</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
+
+<span class="c1"># Generate test dataset</span>
+<span class="n">n_test</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">morbidity_size</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">test_sites_seeds</span> <span class="o">=</span> <span class="n">train_sites_seeds</span> <span class="o">+</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>  <span class="c1"># Additional fixed seeds for test sites</span>
+<span class="n">test_sites</span> <span class="o">=</span> <span class="p">[</span><span class="n">generate_random_site_id</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span> <span class="k">for</span> <span class="n">seed</span> <span class="ow">in</span> <span class="n">test_sites_seeds</span><span class="p">]</span>
+<span class="n">age_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="n">n_test</span><span class="p">)</span>
+<span class="n">sex_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">n_test</span><span class="p">)</span>
+<span class="n">feature_volume_test1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="n">n_test</span><span class="p">)</span>
+<span class="n">feature_volume_test2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="n">n_test</span><span class="p">)</span>
+<span class="n">feature_volume_test3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="n">n_test</span><span class="p">)</span>
+<span class="n">feature_volume_test4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="n">n_test</span><span class="p">)</span>
+<span class="n">feature_volume_test5</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="n">n_test</span><span class="p">)</span>
+<span class="c1"># Same non-linear age trajectory as the training data</span>
+<span class="n">y_thickness_test1</span> <span class="o">=</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">age_effect</span><span class="p">(</span><span class="n">age_test</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">feature_volume_test1</span> <span class="o">+</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">sex_test</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">n_test</span><span class="p">)</span>
+<span class="n">y_thickness_test2</span> <span class="o">=</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">age_effect</span><span class="p">(</span><span class="n">age_test</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">feature_volume_test2</span> <span class="o">+</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">sex_test</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">n_test</span><span class="p">)</span>
+<span class="n">y_thickness_test3</span> <span class="o">=</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">age_effect</span><span class="p">(</span><span class="n">age_test</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">feature_volume_test3</span> <span class="o">+</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">feature_volume_test4</span> <span class="o">+</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">sex_test</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">n_test</span><span class="p">)</span>
+<span class="n">y_thickness_test4</span> <span class="o">=</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">age_effect</span><span class="p">(</span><span class="n">age_test</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">feature_volume_test5</span> <span class="o">+</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">sex_test</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">n_test</span><span class="p">)</span>
+
+<span class="c1"># Add outliers to the test data</span>
+<span class="n">outlier_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n_test</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">morbidity_size</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">y_thickness_test1</span><span class="p">[</span><span class="n">outlier_indices</span><span class="p">[:(</span><span class="n">morbidity_size</span><span class="o">//</span><span class="mi">4</span><span class="p">)]]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">morbidity_size</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>  <span class="c1"># Positive outliers for y_thickness1</span>
+<span class="n">y_thickness_test1</span><span class="p">[</span><span class="n">outlier_indices</span><span class="p">[(</span><span class="n">morbidity_size</span><span class="o">//</span><span class="mi">4</span><span class="p">):(</span><span class="n">morbidity_size</span><span class="o">//</span><span class="mi">2</span><span class="p">)]]</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">morbidity_size</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>  <span class="c1"># Negative outliers for y_thickness1</span>
+<span class="n">y_thickness_test2</span><span class="p">[</span><span class="n">outlier_indices</span><span class="p">[(</span><span class="n">morbidity_size</span><span class="o">//</span><span class="mi">2</span><span class="p">):(</span><span class="mi">3</span><span class="o">*</span><span class="n">morbidity_size</span><span class="o">//</span><span class="mi">4</span><span class="p">)]]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">morbidity_size</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>  <span class="c1"># Positive outliers for y_thickness2</span>
+<span class="n">y_thickness_test2</span><span class="p">[</span><span class="n">outlier_indices</span><span class="p">[(</span><span class="mi">3</span><span class="o">*</span><span class="n">morbidity_size</span><span class="o">//</span><span class="mi">4</span><span class="p">):]]</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">morbidity_size</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>  <span class="c1"># Negative outliers for y_thickness2</span>
+
+<span class="n">morbidities</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="s1">&#39;Schizo&#39;</span><span class="p">,</span> <span class="s1">&#39;Dementia&#39;</span><span class="p">,</span> <span class="s1">&#39;MDD&#39;</span><span class="p">]</span>
+<span class="n">affected_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n_test</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+<span class="n">affected_test</span><span class="p">[</span><span class="n">outlier_indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">morbidities</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">size</span><span class="o">=</span><span class="n">morbidity_size</span><span class="p">)</span>  <span class="c1"># Assign morbidities only to outliers</span>
+
+<span class="n">test_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;site&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">test_sites</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_test</span><span class="p">),</span>
+    <span class="s1">&#39;sex&#39;</span><span class="p">:</span> <span class="n">sex_test</span><span class="p">,</span>
+    <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="n">age_test</span><span class="p">,</span>
+    <span class="s1">&#39;feature_volume1&#39;</span><span class="p">:</span> <span class="n">feature_volume_test1</span><span class="p">,</span>
+    <span class="s1">&#39;feature_volume2&#39;</span><span class="p">:</span> <span class="n">feature_volume_test2</span><span class="p">,</span>
+    <span class="s1">&#39;feature_volume3&#39;</span><span class="p">:</span> <span class="n">feature_volume_test3</span><span class="p">,</span>
+    <span class="s1">&#39;feature_volume4&#39;</span><span class="p">:</span> <span class="n">feature_volume_test4</span><span class="p">,</span>
+    <span class="s1">&#39;feature_volume5&#39;</span><span class="p">:</span> <span class="n">feature_volume_test5</span><span class="p">,</span>
+    <span class="s1">&#39;y_thickness1&#39;</span><span class="p">:</span> <span class="n">y_thickness_test1</span><span class="p">,</span>
+    <span class="s1">&#39;y_thickness2&#39;</span><span class="p">:</span> <span class="n">y_thickness_test2</span><span class="p">,</span>
+    <span class="s1">&#39;y_thickness3&#39;</span><span class="p">:</span> <span class="n">y_thickness_test3</span><span class="p">,</span>
+    <span class="s1">&#39;y_thickness4&#39;</span><span class="p">:</span> <span class="n">y_thickness_test4</span><span class="p">,</span>
+    <span class="s1">&#39;affected&#39;</span><span class="p">:</span> <span class="n">affected_test</span>
+<span class="p">}</span>
+<span class="n">test_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">test_data</span><span class="p">)</span>
+
+<span class="c1"># Print the datasets</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Training Dataset:&quot;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">train_data</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing Dataset:&quot;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">test_data</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training Dataset:
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>site</th>
+      <th>sex</th>
+      <th>age</th>
+      <th>feature_volume1</th>
+      <th>feature_volume2</th>
+      <th>feature_volume3</th>
+      <th>feature_volume4</th>
+      <th>feature_volume5</th>
+      <th>y_thickness1</th>
+      <th>y_thickness2</th>
+      <th>y_thickness3</th>
+      <th>y_thickness4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>HJDXM</td>
+      <td>0</td>
+      <td>56</td>
+      <td>848.209032</td>
+      <td>1019.328233</td>
+      <td>942.341904</td>
+      <td>844.454859</td>
+      <td>1171.438753</td>
+      <td>21.277471</td>
+      <td>23.285272</td>
+      <td>30.851458</td>
+      <td>24.390216</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>BCCLF</td>
+      <td>0</td>
+      <td>69</td>
+      <td>1092.409469</td>
+      <td>851.195283</td>
+      <td>833.567814</td>
+      <td>1059.242014</td>
+      <td>1095.497404</td>
+      <td>23.369578</td>
+      <td>21.380807</td>
+      <td>31.456619</td>
+      <td>23.368378</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>ESZYC</td>
+      <td>1</td>
+      <td>46</td>
+      <td>877.039611</td>
+      <td>1152.854246</td>
+      <td>933.385037</td>
+      <td>1150.047218</td>
+      <td>922.507155</td>
+      <td>22.482468</td>
+      <td>25.267274</td>
+      <td>34.556324</td>
+      <td>23.208468</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>BCCLF</td>
+      <td>0</td>
+      <td>32</td>
+      <td>846.112808</td>
+      <td>957.379139</td>
+      <td>1071.016378</td>
+      <td>1116.208204</td>
+      <td>906.032514</td>
+      <td>22.553167</td>
+      <td>23.751988</td>
+      <td>36.149900</td>
+      <td>23.229095</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>HSREL</td>
+      <td>0</td>
+      <td>60</td>
+      <td>968.705064</td>
+      <td>1131.147350</td>
+      <td>828.844437</td>
+      <td>856.443038</td>
+      <td>1078.476980</td>
+      <td>22.484007</td>
+      <td>24.163945</td>
+      <td>29.541937</td>
+      <td>23.391176</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Testing Dataset:
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>site</th>
+      <th>sex</th>
+      <th>age</th>
+      <th>feature_volume1</th>
+      <th>feature_volume2</th>
+      <th>feature_volume3</th>
+      <th>feature_volume4</th>
+      <th>feature_volume5</th>
+      <th>y_thickness1</th>
+      <th>y_thickness2</th>
+      <th>y_thickness3</th>
+      <th>y_thickness4</th>
+      <th>affected</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>BCCLF</td>
+      <td>0</td>
+      <td>30</td>
+      <td>1023.903397</td>
+      <td>848.225798</td>
+      <td>826.236346</td>
+      <td>829.913302</td>
+      <td>1012.805391</td>
+      <td>24.390944</td>
+      <td>22.570610</td>
+      <td>30.784494</td>
+      <td>24.170846</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>HJDXM</td>
+      <td>0</td>
+      <td>31</td>
+      <td>943.319765</td>
+      <td>847.976074</td>
+      <td>1082.031971</td>
+      <td>1166.870174</td>
+      <td>964.376733</td>
+      <td>26.720256</td>
+      <td>22.602273</td>
+      <td>36.553445</td>
+      <td>24.038759</td>
+      <td>Schizo</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>KEMUB</td>
+      <td>0</td>
+      <td>61</td>
+      <td>834.336911</td>
+      <td>1090.357464</td>
+      <td>1017.414439</td>
+      <td>1096.616055</td>
+      <td>1040.821469</td>
+      <td>21.166279</td>
+      <td>23.691480</td>
+      <td>33.927770</td>
+      <td>23.309050</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>HJDXM</td>
+      <td>0</td>
+      <td>57</td>
+      <td>1091.966252</td>
+      <td>1027.887763</td>
+      <td>1010.311723</td>
+      <td>934.196882</td>
+      <td>1053.981485</td>
+      <td>23.772841</td>
+      <td>23.165027</td>
+      <td>32.182817</td>
+      <td>23.922547</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>TIXLZ</td>
+      <td>0</td>
+      <td>70</td>
+      <td>1148.455260</td>
+      <td>1013.496792</td>
+      <td>916.818223</td>
+      <td>945.175512</td>
+      <td>817.113312</td>
+      <td>23.895126</td>
+      <td>22.691146</td>
+      <td>31.215588</td>
+      <td>20.647750</td>
+      <td>None</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../data_and_setup_theory.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Understanding R Integration and External Packages</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="data_preprocessing.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Data Preprocessing</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#input-dataset-requirements">Input Dataset Requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-example-data">Generating Example Data</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Nitin
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

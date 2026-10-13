@@ -1,0 +1,1090 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Model Evaluation Metrics &#8212; NormGAMLSS Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=04637fd3" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/model_evaluation';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Z-Score Calculation" href="z_score_calculation.html" />
+    <link rel="prev" title="Model Predictions" href="model_predictions.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="NormGAMLSS Documentation - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="NormGAMLSS Documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Setup and Preprocessing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="setup_imports.html">Setup and Imports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_and_setup_theory.html">Understanding R Integration and External Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structuring_data.html">Structuring Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_preprocessing.html">Data Preprocessing</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Specification and Fitting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../gamlss_theory.html">GAMLSS Theory and Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formulas_and_syntax.html">GAMLSS Formula Reference and Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fitting_models.html">Fitting GAMLSS Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="saving_loading_models.html">Saving and Loading Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deleting_model.html">Deleting Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_diagnostics.html">Model Diagnostics and Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diagnostics_summary.html">Comprehensive Model Diagnostics Interpretation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diagnostic_plot_summary.html">Diagnostic Plots Interpretation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Evaluation and Predictions</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="model_predictions.html">Model Predictions</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Model Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="z_score_calculation.html">Z-Score Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="z_score_plotting.html">Z-Score Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="centiles_calculation.html">Centiles Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="centiles_plotting.html">Centiles Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="continuous_centiles.html">Continuous Centiles with Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="centile_positions.html">Centile Position Calculation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Management and Comparison</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="multiple_formula_comparison.html">Multiple Formula Model Comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base_target_comparison.html">Base vs Target Model Comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base_target_visualization.html">Visualization of Effective Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="permutation_testing.html">Permutation Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brain_surface_visualization.html">Brain Surface Visualization</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="multisite_transfer.html">Multisite Model Transfer</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference and Troubleshooting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../r_integration_reference.html">R Integration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting and Common Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../convergence_problems.html">Convergence Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/model_evaluation.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Model Evaluation Metrics</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gamlss-main-gamlss-evaluate">gamlss_main.Gamlss.<br/><strong>evaluate</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gamlss-main-gamlss-evaluate-ml">gamlss_main.Gamlss.<br/><strong>evaluate_ml</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gamlss-main-gamlss-evaluate-detailed">gamlss_main.Gamlss.<br/><strong>evaluate_detailed</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="model-evaluation-metrics">
+<span id="model-evaluation"></span><h1>Model Evaluation Metrics<a class="headerlink" href="#model-evaluation-metrics" title="Link to this heading">#</a></h1>
+<section id="gamlss-main-gamlss-evaluate">
+<h2>gamlss_main.Gamlss.<br><strong>evaluate</strong><a class="headerlink" href="#gamlss-main-gamlss-evaluate" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">,</span> <span class="n">handle_outliers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+         <span class="n">affected_col_name</span><span class="o">=</span><span class="s1">&#39;affected&#39;</span><span class="p">,</span> <span class="n">use_transfer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gam_refit_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+         <span class="n">adjustment_covariates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">params_to_adjust</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">treat_missing_as_healthy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>    Calculates six key evaluation metrics for assessing GAMLSS model quality:</p>
+<ol class="arabic simple">
+<li><p><strong>Z_Scores_Mean</strong>: Mean of normalized quantile residuals (z-scores) (should ≈ 0)</p></li>
+<li><p><strong>Z_Scores_SD</strong>: Standard deviation of normalized quantile residuals (z-scores) (should ≈ 1)</p></li>
+<li><p><strong>Logarithmic_Score</strong>: Mean log probability density (higher values indicate better fit)</p></li>
+<li><p><strong>Skewness</strong>: Bias-corrected asymmetry measure (values close to 0 indicate symmetry)</p></li>
+<li><p><strong>Kurtosis</strong>: Bias-corrected excess kurtosis (values close to 0 indicate appropriate tail behavior)</p></li>
+<li><p><strong>Normality_Test_Statistic</strong>: Adaptive normality test (Shapiro-Wilk for n≤5000, Anderson-Darling for n&gt;5000)</p></li>
+</ol>
+<p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Parameters:</strong></span></p>
+<p>        <strong>test_data</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
+            DataFrame containing the test data for evaluation</p>
+<p>        <strong>train_data</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
+            DataFrame containing the training data used for model fitting</p>
+<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>default=’SHASH’</em> <br>
+            Distribution family name</p>
+<p>        <strong>handle_outliers</strong> : <em><strong>bool</strong></em>, <em>default=True</em> <br>
+            Whether to apply censoring for extreme values at 1st and 99th percentiles</p>
+<p>        <strong>affected</strong> : <em><strong>array-like</strong></em>, <em>optional</em> <br>
+            Array indicating affected status for filtering to healthy subjects only. <br>
+            If None, attempts to use column specified by <code class="docutils literal notranslate"><span class="pre">affected_col_name</span></code> from test_data. <br>
+            If neither array nor column exists, assumes all subjects are healthy. <br>
+            Supports multiple formats: <br>
+            • <strong><code class="docutils literal notranslate"><span class="pre">'None'</span></code></strong>: the text <code class="docutils literal notranslate"><span class="pre">'None'</span></code> is treated as healthy <br>
+            • <strong>Missing values</strong>: <code class="docutils literal notranslate"><span class="pre">np.nan</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code> raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>, unless <code class="docutils literal notranslate"><span class="pre">treat_missing_as_healthy=True</span></code> <br>
+            • <strong>Binary masking</strong>: <code class="docutils literal notranslate"><span class="pre">0</span></code> = healthy, <code class="docutils literal notranslate"><span class="pre">1</span></code> (or non-zero) = affected <br>
+            • <strong>Healthy labels</strong>: the whole label is <code class="docutils literal notranslate"><span class="pre">'healthy'</span></code>, <code class="docutils literal notranslate"><span class="pre">'healthy</span> <span class="pre">control'</span></code>, <code class="docutils literal notranslate"><span class="pre">'healthy</span> <span class="pre">controls'</span></code>, <code class="docutils literal notranslate"><span class="pre">'control'</span></code> or <code class="docutils literal notranslate"><span class="pre">'controls'</span></code> (any case, e.g. <code class="docutils literal notranslate"><span class="pre">'Healthy'</span></code>, <code class="docutils literal notranslate"><span class="pre">'HEALTHY'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Healthy</span> <span class="pre">Control'</span></code>) <br>
+              labels that mention ‘healthy’ or ‘control’ but are not on this list (e.g. <code class="docutils literal notranslate"><span class="pre">'healthy</span> <span class="pre">subject'</span></code>, <code class="docutils literal notranslate"><span class="pre">'HealthyControl'</span></code>, <code class="docutils literal notranslate"><span class="pre">'unhealthy'</span></code>) raise an error asking you to rename them; any other string (e.g. <code class="docutils literal notranslate"><span class="pre">'MDD'</span></code>) is treated as affected <br></p>
+<p>        <strong>affected_col_name</strong> : <em><strong>str</strong></em>, <em>default=’affected’</em> <br>
+            Name of the column in test_data to use for identifying healthy subjects. <br>
+            Only used if <code class="docutils literal notranslate"><span class="pre">affected</span></code> parameter is None. <br>
+            Supports the same formats as the <code class="docutils literal notranslate"><span class="pre">affected</span></code> array (<code class="docutils literal notranslate"><span class="pre">'None'</span></code>, binary, strings).</p>
+<p>        <strong>use_transfer</strong> : <em><strong>bool</strong></em>, <em>default=False</em> <br>
+            If True, use site transfer adjustments for predictions and z-scores. <br>
+            Requires <code class="docutils literal notranslate"><span class="pre">gam_refit_path</span></code> to be provided.</p>
+<p>        <strong>gam_refit_path</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
+            Path to saved adjustment model (.rds file). <br>
+            Required when <code class="docutils literal notranslate"><span class="pre">use_transfer=True</span></code>. <br>
+            Should be obtained from <code class="docutils literal notranslate"><span class="pre">multisite_transfer()</span></code> results.</p>
+<p>        <strong>adjustment_covariates</strong> : <em><strong>list of str</strong></em>, <em>optional</em> <br>
+            Column names in test_data used as covariates in the adjustment model. <br>
+            Only needed if <code class="docutils literal notranslate"><span class="pre">use_transfer=True</span></code> and the transfer model was fitted with covariates. <br>
+            Required when the adjustment model has covariate terms; leaving it out then raises an error (default is None).</p>
+<p>        <strong>params_to_adjust</strong> : <em><strong>list of str</strong></em>, <em>optional</em> <br>
+            Parameters the transfer adjusted (<code class="docutils literal notranslate"><span class="pre">site_transfer</span></code>’s <code class="docutils literal notranslate"><span class="pre">params_to_adjust</span></code>). Only used if <code class="docutils literal notranslate"><span class="pre">use_transfer=True</span></code>. <br>
+            If None (default), read from the saved adjustment model itself; if given, it must match what the transfer adjusted (an error is raised otherwise).</p>
+<p>        <strong>treat_missing_as_healthy</strong> : <em><strong>bool</strong></em>, <em>default=False</em> <br>
+            Whether subjects with a missing status (<code class="docutils literal notranslate"><span class="pre">np.nan</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>) count as healthy. <br>
+            By default they raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>, because a missing diagnosis is not a healthy one. The text <code class="docutils literal notranslate"><span class="pre">'None'</span></code> is always healthy, whatever this is set to. <br>
+            Note that <code class="docutils literal notranslate"><span class="pre">pd.read_csv</span></code> reads the text <code class="docutils literal notranslate"><span class="pre">None</span></code> as missing; read the file with <code class="docutils literal notranslate"><span class="pre">pd.read_csv(...,</span> <span class="pre">keep_default_na=False,</span> <span class="pre">na_values=[''])</span></code> to keep it.</p>
+<p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Returns:</strong></span></p>
+<p>        <strong>results_df</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
+            DataFrame with two columns: ‘Metric’ and ‘Value’ containing six evaluation metrics</p>
+<br>
+<p><strong>Examples:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example 1: Using binary masking (0 = healthy, 1 = affected)</span>
+<span class="n">affected_binary</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="n">affected_binary</span><span class="p">)</span>
+
+<span class="c1"># Example 2: Using the text &#39;None&#39; for healthy subjects</span>
+<span class="n">affected_none</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="s1">&#39;Disease A&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="s1">&#39;Disease B&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">])</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="n">affected_none</span><span class="p">)</span>
+<span class="c1"># &#39;None&#39; → treated as healthy</span>
+<span class="c1"># &#39;Disease A&#39;, &#39;Disease B&#39; → treated as affected</span>
+<span class="c1"># A missing status (np.nan or None) raises a ValueError; pass</span>
+<span class="c1"># treat_missing_as_healthy=True only if missing really means healthy</span>
+
+<span class="c1"># Example 3: Using healthy labels (whole label, case-insensitive)</span>
+<span class="n">affected_strings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;Healthy&#39;</span><span class="p">,</span> <span class="s1">&#39;Healthy Control&#39;</span><span class="p">,</span> <span class="s1">&#39;Affected&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;HEALTHY&#39;</span><span class="p">,</span> <span class="s1">&#39;MDD&#39;</span><span class="p">,</span> <span class="s1">&#39;controls&#39;</span><span class="p">])</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="n">affected_strings</span><span class="p">)</span>
+<span class="c1"># &#39;Healthy&#39;, &#39;Healthy Control&#39;, &#39;HEALTHY&#39;, &#39;controls&#39; → treated as healthy</span>
+<span class="c1"># &#39;Affected&#39;, &#39;MDD&#39; → treated as affected</span>
+<span class="c1"># Labels such as &#39;healthy subject&#39;, &#39;HealthyControl&#39; or &#39;unhealthy&#39; raise a</span>
+<span class="c1"># ValueError: rename them to a healthy label (or &#39;None&#39;) or to a condition name</span>
+
+<span class="c1"># Example 4: No affected parameter (all subjects assumed healthy)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+</pre></div>
+</div>
+<br>
+<p><strong>Notes:</strong></p>
+<ul class="simple">
+<li><p>Evaluation is performed only on healthy subjects identified through the <code class="docutils literal notranslate"><span class="pre">affected</span></code> parameter</p></li>
+<li><p>The method automatically filters out affected subjects before calculating metrics</p></li>
+<li><p>The number of healthy subjects used is printed during execution</p></li>
+<li><p>If no healthy subjects are found after filtering, a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> is raised</p></li>
+<li><p>A missing status (<code class="docutils literal notranslate"><span class="pre">np.nan</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>) raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>, unless <code class="docutils literal notranslate"><span class="pre">treat_missing_as_healthy=True</span></code></p></li>
+</ul>
+<p><strong>Examples 1:</strong></p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># To check how many healthy subjects we have</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">test_data1</span><span class="p">[</span><span class="n">test_data1</span><span class="p">[</span><span class="s1">&#39;affected&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;None&#39;</span><span class="p">])</span>   
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>370
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gamlss_model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_data</span> <span class="o">=</span> <span class="n">test_data1</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="n">test_data1</span><span class="p">[</span><span class="s1">&#39;affected&#39;</span><span class="p">],</span> <span class="n">train_data</span><span class="o">=</span><span class="n">df_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using 370 healthy subjects out of 470 total subjects for evaluation
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>Z_Scores_Mean</td>
+      <td>0.042010</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Z_Scores_SD</td>
+      <td>1.002632</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Logarithmic_Score</td>
+      <td>-1.474098</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Skewness</td>
+      <td>-0.041689</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Kurtosis</td>
+      <td>-0.682350</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Normality_Test_Statistic</td>
+      <td>0.988805</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p><strong>Examples 2:</strong></p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Get the None value index and create a masking array</span>
+<span class="n">none_indices</span> <span class="o">=</span> <span class="n">test_data1</span><span class="p">[</span><span class="n">test_data1</span><span class="p">[</span><span class="s1">&#39;affected&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;None&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+<span class="n">affected_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test_data1</span><span class="p">))</span>
+<span class="n">affected_arr</span><span class="p">[</span><span class="n">none_indices</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gamlss_model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_data</span> <span class="o">=</span> <span class="n">test_data1</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="n">affected_arr</span><span class="p">,</span> <span class="n">train_data</span><span class="o">=</span><span class="n">df_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using 370 healthy subjects out of 470 total subjects for evaluation
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>Z_Scores_Mean</td>
+      <td>0.042010</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Z_Scores_SD</td>
+      <td>1.002632</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Logarithmic_Score</td>
+      <td>-1.474098</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Skewness</td>
+      <td>-0.041689</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Kurtosis</td>
+      <td>-0.682350</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Normality_Test_Statistic</td>
+      <td>0.988805</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="gamlss-main-gamlss-evaluate-ml">
+<h2>gamlss_main.Gamlss.<br><strong>evaluate_ml</strong><a class="headerlink" href="#gamlss-main-gamlss-evaluate-ml" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">evaluate_ml</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">affected_col_name</span><span class="o">=</span><span class="s1">&#39;affected&#39;</span><span class="p">,</span> <span class="n">use_transfer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gam_refit_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">adjustment_covariates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">params_to_adjust</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">treat_missing_as_healthy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>    Calculates six machine learning evaluation metrics for assessing predictive performance:</p>
+<ol class="arabic simple">
+<li><p><strong>MAE</strong>: Mean Absolute Error (lower values indicate better predictions)</p></li>
+<li><p><strong>MSE</strong>: Mean Squared Error (lower values indicate better predictions)</p></li>
+<li><p><strong>RMSE</strong>: Root Mean Squared Error (lower values indicate better predictions)</p></li>
+<li><p><strong>R_Squared</strong>: Coefficient of determination (values closer to 1 indicate better fit)</p></li>
+<li><p><strong>MAPE</strong>: Mean Absolute Percentage Error (lower percentages indicate better accuracy)</p></li>
+<li><p><strong>Mean_Error</strong>: Prediction bias (values close to 0 indicate unbiased predictions)</p></li>
+</ol>
+<p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Parameters:</strong></span></p>
+<p>        <strong>test_data</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
+            DataFrame containing the test data for evaluation</p>
+<p>        <strong>train_data</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
+            DataFrame containing the training data used for model fitting</p>
+<p>        <strong>transform</strong> : <em><strong>bool</strong></em>, <em>default=True</em> <br>
+            Whether to apply transformations for predictions</p>
+<p>        <strong>verbose</strong> : <em><strong>bool</strong></em>, <em>default=False</em> <br>
+            Whether to print detailed information during evaluation   <br></p>
+<p>        <strong>affected</strong> : <em><strong>array-like</strong></em>, <em>optional</em> <br>
+            Array indicating affected status for filtering to healthy subjects only. <br>
+            If None, attempts to use column specified by <code class="docutils literal notranslate"><span class="pre">affected_col_name</span></code> from test_data. <br>
+            If neither array nor column exists, assumes all subjects are healthy. <br>
+            Supports multiple formats: <br>
+            • <strong><code class="docutils literal notranslate"><span class="pre">'None'</span></code></strong>: the text <code class="docutils literal notranslate"><span class="pre">'None'</span></code> is treated as healthy <br>
+            • <strong>Missing values</strong>: <code class="docutils literal notranslate"><span class="pre">np.nan</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code> raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>, unless <code class="docutils literal notranslate"><span class="pre">treat_missing_as_healthy=True</span></code> <br>
+            • <strong>Binary masking</strong>: <code class="docutils literal notranslate"><span class="pre">0</span></code> = healthy, <code class="docutils literal notranslate"><span class="pre">1</span></code> (or non-zero) = affected <br>
+            • <strong>Healthy labels</strong>: the whole label is <code class="docutils literal notranslate"><span class="pre">'healthy'</span></code>, <code class="docutils literal notranslate"><span class="pre">'healthy</span> <span class="pre">control'</span></code>, <code class="docutils literal notranslate"><span class="pre">'healthy</span> <span class="pre">controls'</span></code>, <code class="docutils literal notranslate"><span class="pre">'control'</span></code> or <code class="docutils literal notranslate"><span class="pre">'controls'</span></code> (any case, e.g. <code class="docutils literal notranslate"><span class="pre">'Healthy'</span></code>, <code class="docutils literal notranslate"><span class="pre">'HEALTHY'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Healthy</span> <span class="pre">Control'</span></code>) <br>
+              labels that mention ‘healthy’ or ‘control’ but are not on this list (e.g. <code class="docutils literal notranslate"><span class="pre">'healthy</span> <span class="pre">subject'</span></code>, <code class="docutils literal notranslate"><span class="pre">'HealthyControl'</span></code>, <code class="docutils literal notranslate"><span class="pre">'unhealthy'</span></code>) raise an error asking you to rename them; any other string (e.g. <code class="docutils literal notranslate"><span class="pre">'MDD'</span></code>) is treated as affected <br></p>
+<p>        <strong>affected_col_name</strong> : <em><strong>str</strong></em>, <em>default=’affected’</em> <br>
+            Name of the column in test_data to use for identifying healthy subjects. <br>
+            Only used if <code class="docutils literal notranslate"><span class="pre">affected</span></code> parameter is None. <br>
+            Supports the same formats as the <code class="docutils literal notranslate"><span class="pre">affected</span></code> array (<code class="docutils literal notranslate"><span class="pre">'None'</span></code>, binary, strings).</p>
+<p>        <strong>use_transfer</strong> : <em><strong>bool</strong></em>, <em>default=False</em> <br>
+            If True, use site transfer adjustments for predictions and z-scores. <br>
+            Requires <code class="docutils literal notranslate"><span class="pre">gam_refit_path</span></code> to be provided.</p>
+<p>        <strong>gam_refit_path</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
+            Path to saved adjustment model (.rds file). <br>
+            Required when <code class="docutils literal notranslate"><span class="pre">use_transfer=True</span></code>. <br>
+            Should be obtained from <code class="docutils literal notranslate"><span class="pre">multisite_transfer()</span></code> results.</p>
+<p>        <strong>adjustment_covariates</strong> : <em><strong>list of str</strong></em>, <em>optional</em> <br>
+            Column names in test_data used as covariates in the adjustment model. <br>
+            Only needed if <code class="docutils literal notranslate"><span class="pre">use_transfer=True</span></code> and the transfer model was fitted with covariates. <br>
+            Required when the adjustment model has covariate terms; leaving it out then raises an error (default is None).</p>
+<p>        <strong>params_to_adjust</strong> : <em><strong>list of str</strong></em>, <em>optional</em> <br>
+            Parameters the transfer adjusted (<code class="docutils literal notranslate"><span class="pre">site_transfer</span></code>’s <code class="docutils literal notranslate"><span class="pre">params_to_adjust</span></code>). Only used if <code class="docutils literal notranslate"><span class="pre">use_transfer=True</span></code>. <br>
+            If None (default), read from the saved adjustment model itself; if given, it must match what the transfer adjusted (an error is raised otherwise).</p>
+<p>        <strong>treat_missing_as_healthy</strong> : <em><strong>bool</strong></em>, <em>default=False</em> <br>
+            Whether subjects with a missing status (<code class="docutils literal notranslate"><span class="pre">np.nan</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>) count as healthy. <br>
+            By default they raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>, because a missing diagnosis is not a healthy one. The text <code class="docutils literal notranslate"><span class="pre">'None'</span></code> is always healthy, whatever this is set to. <br>
+            Note that <code class="docutils literal notranslate"><span class="pre">pd.read_csv</span></code> reads the text <code class="docutils literal notranslate"><span class="pre">None</span></code> as missing; read the file with <code class="docutils literal notranslate"><span class="pre">pd.read_csv(...,</span> <span class="pre">keep_default_na=False,</span> <span class="pre">na_values=[''])</span></code> to keep it.</p>
+<p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Returns:</strong></span></p>
+<p>        <strong>results_df</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
+            DataFrame with two columns: ‘Metric’ and ‘Value’ containing six ML evaluation metrics</p>
+<br>
+<p><strong>Examples:</strong></p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_test</span> <span class="o">=</span> <span class="n">test_data1</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">columns</span><span class="p">]</span>
+<span class="n">gamlss_model</span><span class="o">.</span><span class="n">evaluate_ml</span><span class="p">(</span><span class="n">test_data</span> <span class="o">=</span> <span class="n">test_data1</span><span class="p">,</span> <span class="n">affected</span> <span class="o">=</span> <span class="n">test_data1</span><span class="p">[</span><span class="s1">&#39;affected&#39;</span><span class="p">],</span> <span class="n">train_data</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using 370 healthy subjects out of 470 total subjects for evaluation
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>MAE</td>
+      <td>0.944181</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>MSE</td>
+      <td>1.227799</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>RMSE</td>
+      <td>1.108061</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>R_Squared</td>
+      <td>0.418701</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>MAPE</td>
+      <td>3.996934</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Mean_Error</td>
+      <td>-0.054679</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="gamlss-main-gamlss-evaluate-detailed">
+<h2>gamlss_main.Gamlss.<br><strong>evaluate_detailed</strong><a class="headerlink" href="#gamlss-main-gamlss-evaluate-detailed" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">evaluate_detailed</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">,</span> <span class="n">handle_outliers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                  <span class="n">transform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">affected_col_name</span><span class="o">=</span><span class="s1">&#39;affected&#39;</span><span class="p">,</span>
+                  <span class="n">use_transfer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gam_refit_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">adjustment_covariates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">params_to_adjust</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">treat_missing_as_healthy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>    Calculates comprehensive evaluation metrics combining GAMLSS-specific, ML, and information criteria metrics for complete model assessment. Returns all 14 metrics organized by category:</p>
+<p><strong>GAMLSS Metrics (6):</strong> Z_Scores_Mean, Z_Scores_SD, Logarithmic_Score, Skewness, Kurtosis, Normality_Test_Statistic</p>
+<p><strong>ML Metrics (6):</strong> MAE, MSE, RMSE, R_Squared, MAPE, Mean_Error</p>
+<p><strong>Information Criteria (2):</strong> AIC, BIC</p>
+<p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Parameters:</strong></span></p>
+<p>        <strong>test_data</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
+            DataFrame containing the test data for evaluation</p>
+<p>        <strong>train_data</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
+            DataFrame containing the training data used for model fitting</p>
+<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>default=’SHASH’</em> <br>
+            Distribution family name</p>
+<p>        <strong>handle_outliers</strong> : <em><strong>bool</strong></em>, <em>default=True</em> <br>
+            Whether to apply censoring for extreme values in GAMLSS metrics</p>
+<p>        <strong>transform</strong> : <em><strong>bool</strong></em>, <em>default=True</em> <br>
+            Whether to apply transformations for ML predictions</p>
+<p>        <strong>verbose</strong> : <em><strong>bool</strong></em>, <em>default=False</em> <br>
+            Whether to print detailed information and interpretation guidance  <br></p>
+<p>        <strong>affected</strong> : <em><strong>array-like</strong></em>, <em>optional</em> <br>
+            Array indicating affected status for filtering to healthy subjects only. <br>
+            If None, attempts to use column specified by <code class="docutils literal notranslate"><span class="pre">affected_col_name</span></code> from test_data. <br>
+            If neither array nor column exists, assumes all subjects are healthy. <br>
+            Supports multiple formats: <br>
+            • <strong><code class="docutils literal notranslate"><span class="pre">'None'</span></code></strong>: the text <code class="docutils literal notranslate"><span class="pre">'None'</span></code> is treated as healthy <br>
+            • <strong>Missing values</strong>: <code class="docutils literal notranslate"><span class="pre">np.nan</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code> raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>, unless <code class="docutils literal notranslate"><span class="pre">treat_missing_as_healthy=True</span></code> <br>
+            • <strong>Binary masking</strong>: <code class="docutils literal notranslate"><span class="pre">0</span></code> = healthy, <code class="docutils literal notranslate"><span class="pre">1</span></code> (or non-zero) = affected <br>
+            • <strong>Healthy labels</strong>: the whole label is <code class="docutils literal notranslate"><span class="pre">'healthy'</span></code>, <code class="docutils literal notranslate"><span class="pre">'healthy</span> <span class="pre">control'</span></code>, <code class="docutils literal notranslate"><span class="pre">'healthy</span> <span class="pre">controls'</span></code>, <code class="docutils literal notranslate"><span class="pre">'control'</span></code> or <code class="docutils literal notranslate"><span class="pre">'controls'</span></code> (any case, e.g. <code class="docutils literal notranslate"><span class="pre">'Healthy'</span></code>, <code class="docutils literal notranslate"><span class="pre">'HEALTHY'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Healthy</span> <span class="pre">Control'</span></code>) <br>
+              labels that mention ‘healthy’ or ‘control’ but are not on this list (e.g. <code class="docutils literal notranslate"><span class="pre">'healthy</span> <span class="pre">subject'</span></code>, <code class="docutils literal notranslate"><span class="pre">'HealthyControl'</span></code>, <code class="docutils literal notranslate"><span class="pre">'unhealthy'</span></code>) raise an error asking you to rename them; any other string (e.g. <code class="docutils literal notranslate"><span class="pre">'MDD'</span></code>) is treated as affected <br></p>
+<p>        <strong>affected_col_name</strong> : <em><strong>str</strong></em>, <em>default=’affected’</em> <br>
+            Name of the column in test_data to use for identifying healthy subjects. <br>
+            Only used if <code class="docutils literal notranslate"><span class="pre">affected</span></code> parameter is None. <br>
+            Supports the same formats as the <code class="docutils literal notranslate"><span class="pre">affected</span></code> array (<code class="docutils literal notranslate"><span class="pre">'None'</span></code>, binary, strings).</p>
+<p>        <strong>use_transfer</strong> : <em><strong>bool</strong></em>, <em>default=False</em> <br>
+            If True, use site transfer adjustments for predictions and z-scores. <br>
+            Requires <code class="docutils literal notranslate"><span class="pre">gam_refit_path</span></code> to be provided.</p>
+<p>        <strong>gam_refit_path</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
+            Path to saved adjustment model (.rds file). <br>
+            Required when <code class="docutils literal notranslate"><span class="pre">use_transfer=True</span></code>. <br>
+            Should be obtained from <code class="docutils literal notranslate"><span class="pre">multisite_transfer()</span></code> results.</p>
+<p>        <strong>adjustment_covariates</strong> : <em><strong>list of str</strong></em>, <em>optional</em> <br>
+            Column names in test_data used as covariates in the adjustment model. <br>
+            Only needed if <code class="docutils literal notranslate"><span class="pre">use_transfer=True</span></code> and the transfer model was fitted with covariates. <br>
+            Required when the adjustment model has covariate terms; leaving it out then raises an error (default is None).</p>
+<p>        <strong>params_to_adjust</strong> : <em><strong>list of str</strong></em>, <em>optional</em> <br>
+            Parameters the transfer adjusted (<code class="docutils literal notranslate"><span class="pre">site_transfer</span></code>’s <code class="docutils literal notranslate"><span class="pre">params_to_adjust</span></code>). Only used if <code class="docutils literal notranslate"><span class="pre">use_transfer=True</span></code>. <br>
+            If None (default), read from the saved adjustment model itself; if given, it must match what the transfer adjusted (an error is raised otherwise).</p>
+<p>        <strong>treat_missing_as_healthy</strong> : <em><strong>bool</strong></em>, <em>default=False</em> <br>
+            Whether subjects with a missing status (<code class="docutils literal notranslate"><span class="pre">np.nan</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>) count as healthy. <br>
+            By default they raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>, because a missing diagnosis is not a healthy one. The text <code class="docutils literal notranslate"><span class="pre">'None'</span></code> is always healthy, whatever this is set to. <br>
+            Note that <code class="docutils literal notranslate"><span class="pre">pd.read_csv</span></code> reads the text <code class="docutils literal notranslate"><span class="pre">None</span></code> as missing; read the file with <code class="docutils literal notranslate"><span class="pre">pd.read_csv(...,</span> <span class="pre">keep_default_na=False,</span> <span class="pre">na_values=[''])</span></code> to keep it.</p>
+<p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Returns:</strong></span></p>
+<p>        <strong>results_df</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
+            DataFrame with three columns: ‘Category’, ‘Metric’, ‘Value’ containing all 14 evaluation metrics</p>
+<br>
+<p><strong>Examples:</strong></p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_test</span> <span class="o">=</span> <span class="n">test_data1</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">columns</span><span class="p">]</span>
+<span class="n">gamlss_model</span><span class="o">.</span><span class="n">evaluate_detailed</span><span class="p">(</span><span class="n">test_data</span> <span class="o">=</span> <span class="n">test_data1</span><span class="p">,</span> <span class="n">affected</span> <span class="o">=</span> <span class="n">test_data1</span><span class="p">[</span><span class="s1">&#39;affected&#39;</span><span class="p">],</span> <span class="n">train_data</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using 370 healthy subjects out of 470 total subjects for evaluation
+Using 370 healthy subjects out of 470 total subjects for evaluation
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Category</th>
+      <th>Metric</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>GAMLSS</td>
+      <td>Z_Scores_Mean</td>
+      <td>0.042010</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>GAMLSS</td>
+      <td>Z_Scores_SD</td>
+      <td>1.002632</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>GAMLSS</td>
+      <td>Logarithmic_Score</td>
+      <td>-1.474098</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>GAMLSS</td>
+      <td>Skewness</td>
+      <td>-0.041689</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>GAMLSS</td>
+      <td>Kurtosis</td>
+      <td>-0.682350</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>GAMLSS</td>
+      <td>Normality_Test_Statistic</td>
+      <td>0.988805</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>ML</td>
+      <td>MAE</td>
+      <td>0.944181</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>ML</td>
+      <td>MSE</td>
+      <td>1.227799</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>ML</td>
+      <td>RMSE</td>
+      <td>1.108061</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>ML</td>
+      <td>R_Squared</td>
+      <td>0.418701</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>ML</td>
+      <td>MAPE</td>
+      <td>3.996934</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>ML</td>
+      <td>Mean_Error</td>
+      <td>-0.054679</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Information_Criteria</td>
+      <td>AIC</td>
+      <td>3101.761139</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>Information_Criteria</td>
+      <td>BIC</td>
+      <td>3154.663770</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="model_predictions.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Model Predictions</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="z_score_calculation.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Z-Score Calculation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gamlss-main-gamlss-evaluate">gamlss_main.Gamlss.<br/><strong>evaluate</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gamlss-main-gamlss-evaluate-ml">gamlss_main.Gamlss.<br/><strong>evaluate_ml</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gamlss-main-gamlss-evaluate-detailed">gamlss_main.Gamlss.<br/><strong>evaluate_detailed</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Nitin
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

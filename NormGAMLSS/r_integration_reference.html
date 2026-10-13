@@ -1,0 +1,748 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>R Integration Reference &#8212; NormGAMLSS Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=04637fd3" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'r_integration_reference';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Troubleshooting and Common Issues" href="troubleshooting.html" />
+    <link rel="prev" title="Multisite Model Transfer" href="notebooks/multisite_transfer.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="NormGAMLSS Documentation - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="NormGAMLSS Documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Setup and Preprocessing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/setup_imports.html">Setup and Imports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_and_setup_theory.html">Understanding R Integration and External Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/structuring_data.html">Structuring Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/data_preprocessing.html">Data Preprocessing</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Specification and Fitting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gamlss_theory.html">GAMLSS Theory and Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formulas_and_syntax.html">GAMLSS Formula Reference and Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/fitting_models.html">Fitting GAMLSS Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/saving_loading_models.html">Saving and Loading Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/deleting_model.html">Deleting Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/model_diagnostics.html">Model Diagnostics and Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diagnostics_summary.html">Comprehensive Model Diagnostics Interpretation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diagnostic_plot_summary.html">Diagnostic Plots Interpretation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Evaluation and Predictions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/model_predictions.html">Model Predictions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/model_evaluation.html">Model Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/z_score_calculation.html">Z-Score Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/z_score_plotting.html">Z-Score Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/centiles_calculation.html">Centiles Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/centiles_plotting.html">Centiles Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/continuous_centiles.html">Continuous Centiles with Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/centile_positions.html">Centile Position Calculation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Management and Comparison</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/multiple_formula_comparison.html">Multiple Formula Model Comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/base_target_comparison.html">Base vs Target Model Comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/base_target_visualization.html">Visualization of Effective Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/permutation_testing.html">Permutation Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/brain_surface_visualization.html">Brain Surface Visualization</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/multisite_transfer.html">Multisite Model Transfer</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference and Troubleshooting</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">R Integration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting and Common Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="convergence_problems.html">Convergence Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/r_integration_reference.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>R Integration Reference</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-r-functions-by-package">Important R Functions by Package</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-gamlss-package">From <code class="docutils literal notranslate"><span class="pre">gamlss</span></code> package:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-stats-package">From <code class="docutils literal notranslate"><span class="pre">stats</span></code> package:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-base-package">From <code class="docutils literal notranslate"><span class="pre">base</span></code> package:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-gamlss-dist-package">From <code class="docutils literal notranslate"><span class="pre">gamlss.dist</span></code> package:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accessing-model-parameters">Accessing Model Parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-r-integration-techniques">Advanced R Integration Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-random-effects-implementation">Checking Random Effects Implementation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-r-graphics-in-python-notebooks">Using R Graphics in Python Notebooks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-handling-with-r-functions">Error Handling with R Functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#converting-r-objects-to-python">Converting R Objects to Python</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debugging-r-integration-issues">Debugging R Integration Issues</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-r-environment">Check R Environment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-integration-problems">Common Integration Problems</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="r-integration-reference">
+<h1>R Integration Reference<a class="headerlink" href="#r-integration-reference" title="Link to this heading">#</a></h1>
+<p>Complete reference for working with R functions and packages through rpy2 in the NormGAMLSS package.</p>
+<section id="important-r-functions-by-package">
+<h2>Important R Functions by Package<a class="headerlink" href="#important-r-functions-by-package" title="Link to this heading">#</a></h2>
+<section id="from-gamlss-package">
+<h3>From <code class="docutils literal notranslate"><span class="pre">gamlss</span></code> package:<a class="headerlink" href="#from-gamlss-package" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gamlss()</span></code>: Main fitting function for GAMLSS models</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stepGAIC()</span></code>: Stepwise model selection using Generalized AIC</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">centiles()</span></code>: Compute centiles/quantiles for fitted models</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot()</span></code>: Diagnostic plots for GAMLSS models</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">getSmo()</span></code>: Extract smoothing parameters</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">predictAll()</span></code>: Generate predictions for new data</p></li>
+</ul>
+</section>
+<section id="from-stats-package">
+<h3>From <code class="docutils literal notranslate"><span class="pre">stats</span></code> package:<a class="headerlink" href="#from-stats-package" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">AIC()</span></code>: Akaike Information Criterion</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BIC()</span></code>: Bayesian Information Criterion</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">coef()</span></code>: Extract model coefficients</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fitted()</span></code>: Extract fitted values</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">residuals()</span></code>: Extract model residuals</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deviance()</span></code>: Compute model deviance</p></li>
+</ul>
+</section>
+<section id="from-base-package">
+<h3>From <code class="docutils literal notranslate"><span class="pre">base</span></code> package:<a class="headerlink" href="#from-base-package" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">summary()</span></code>: Model summary statistics</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot()</span></code>: Basic diagnostic plots</p></li>
+</ul>
+</section>
+<section id="from-gamlss-dist-package">
+<h3>From <code class="docutils literal notranslate"><span class="pre">gamlss.dist</span></code> package:<a class="headerlink" href="#from-gamlss-dist-package" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fitDist()</span></code>: Fit parametric distributions to data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">histDist()</span></code>: Histogram with fitted distribution overlay</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pdfplot()</span></code>: Plot probability density functions</p></li>
+</ul>
+</section>
+</section>
+<section id="accessing-model-parameters">
+<h2>Accessing Model Parameters<a class="headerlink" href="#accessing-model-parameters" title="Link to this heading">#</a></h2>
+<p><strong>Get all available model components</strong> (<code class="docutils literal notranslate"><span class="pre">model_name</span></code> is the name you gave <code class="docutils literal notranslate"><span class="pre">Gamlss(model_name,</span> <span class="pre">...)</span></code>):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">keys</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">names</span><span class="p">(</span><span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="n">model_name</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Key model parameters include:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'aic'</span></code>: Akaike Information Criterion</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'sbc'</span></code>: Schwarz Bayesian Criterion (BIC)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'G.deviance'</span></code>: Global deviance</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'mu.coefficients'</span></code>: Coefficients for mu parameter</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'sigma.coefficients'</span></code>: Coefficients for sigma parameter</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'mu.df'</span></code>: Effective degrees of freedom for mu</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'converged'</span></code>: Convergence status</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'call'</span></code>: Model call/formula used</p></li>
+</ul>
+<p><strong>Extract specific parameters:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Information criteria</span>
+<span class="n">aic</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">rx2</span><span class="p">(</span><span class="s1">&#39;aic&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">bic</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">rx2</span><span class="p">(</span><span class="s1">&#39;sbc&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Coefficients</span>
+<span class="n">mu_coef</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">rx2</span><span class="p">(</span><span class="s1">&#39;mu.coefficients&#39;</span><span class="p">)</span>
+<span class="n">sigma_coef</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">rx2</span><span class="p">(</span><span class="s1">&#39;sigma.coefficients&#39;</span><span class="p">)</span>
+
+<span class="c1"># Model fit statistics</span>
+<span class="n">global_deviance</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">rx2</span><span class="p">(</span><span class="s1">&#39;G.deviance&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">degrees_freedom</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">rx2</span><span class="p">(</span><span class="s1">&#39;df.fit&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Convergence check</span>
+<span class="n">converged</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">rx2</span><span class="p">(</span><span class="s1">&#39;converged&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="advanced-r-integration-techniques">
+<h2>Advanced R Integration Techniques<a class="headerlink" href="#advanced-r-integration-techniques" title="Link to this heading">#</a></h2>
+<section id="checking-random-effects-implementation">
+<h3>Checking Random Effects Implementation<a class="headerlink" href="#checking-random-effects-implementation" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create comprehensive model analysis</span>
+<span class="n">comparison</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">list(</span>
+<span class="s1">    # Lambda value - high indicates random effects shrinkage</span>
+<span class="s1">    lambda = </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">$mu.lambda,</span>
+<span class="s1">    </span>
+<span class="s1">    # Effective degrees of freedom</span>
+<span class="s1">    mu_df = </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">$mu.df,</span>
+<span class="s1">    </span>
+<span class="s1">    # Number of site parameters vs effective df</span>
+<span class="s1">    site_params = length(</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">$mu.coefficients[grep(&quot;site&quot;, names(</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">$mu.coefficients))]),</span>
+<span class="s1">    </span>
+<span class="s1">    # Site coefficient values (to check shrinkage)</span>
+<span class="s1">    site_values = </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">$mu.coefficients[grep(&quot;site&quot;, names(</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">$mu.coefficients))],</span>
+<span class="s1">    </span>
+<span class="s1">    # Whether random effects were specified</span>
+<span class="s1">    random_specified = grepl(&quot;random&quot;, capture.output(</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">$call))</span>
+<span class="s1">)</span>
+<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">comparison</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="using-r-graphics-in-python-notebooks">
+<h3>Using R Graphics in Python Notebooks<a class="headerlink" href="#using-r-graphics-in-python-notebooks" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rpy2.robjects.packages</span><span class="w"> </span><span class="kn">import</span> <span class="n">importr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rpy2.robjects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">robjects</span>
+
+<span class="c1"># Import graphics packages</span>
+<span class="n">grdevices</span> <span class="o">=</span> <span class="n">importr</span><span class="p">(</span><span class="s1">&#39;grDevices&#39;</span><span class="p">)</span>
+<span class="n">graphics</span> <span class="o">=</span> <span class="n">importr</span><span class="p">(</span><span class="s1">&#39;graphics&#39;</span><span class="p">)</span>
+
+<span class="c1"># Create plot</span>
+<span class="n">grdevices</span><span class="o">.</span><span class="n">png</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s2">&quot;diagnostic_plot.png&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+
+<span class="c1"># R plotting commands</span>
+<span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1"># Your R plotting code here</span>
+<span class="s1">plot(</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">)</span>
+<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+
+<span class="c1"># Close device and display</span>
+<span class="n">grdevices</span><span class="o">.</span><span class="n">dev_off</span><span class="p">()</span>
+<span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;diagnostic_plot.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="error-handling-with-r-functions">
+<h3>Error Handling with R Functions<a class="headerlink" href="#error-handling-with-r-functions" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="c1"># Attempt R operation</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">BIC</span><span class="p">(</span><span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="n">model_name</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error calling R function: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Fallback or alternative approach</span>
+</pre></div>
+</div>
+</section>
+<section id="converting-r-objects-to-python">
+<h3>Converting R Objects to Python<a class="headerlink" href="#converting-r-objects-to-python" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rpy2.robjects</span><span class="w"> </span><span class="kn">import</span> <span class="n">pandas2ri</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rpy2.robjects.conversion</span><span class="w"> </span><span class="kn">import</span> <span class="n">localconverter</span>
+
+<span class="c1"># Scope the conversion to just the block that needs it, rather than</span>
+<span class="c1"># activating it globally -- this is the pattern used throughout this</span>
+<span class="c1"># package (see Gamlss.fit(), .predict_all(), etc.)</span>
+<span class="k">with</span> <span class="n">localconverter</span><span class="p">(</span><span class="n">robjects</span><span class="o">.</span><span class="n">default_converter</span> <span class="o">+</span> <span class="n">pandas2ri</span><span class="o">.</span><span class="n">converter</span><span class="p">):</span>
+    <span class="n">r_dataframe</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">conversion</span><span class="o">.</span><span class="n">py2rpy</span><span class="p">(</span><span class="n">my_pandas_dataframe</span><span class="p">)</span>
+    <span class="c1"># ... work with r_dataframe here ...</span>
+    <span class="n">python_dataframe</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">conversion</span><span class="o">.</span><span class="n">rpy2py</span><span class="p">(</span><span class="n">some_r_dataframe</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="debugging-r-integration-issues">
+<h2>Debugging R Integration Issues<a class="headerlink" href="#debugging-r-integration-issues" title="Link to this heading">#</a></h2>
+<section id="check-r-environment">
+<h3>Check R Environment<a class="headerlink" href="#check-r-environment" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Verify R packages are installed</span>
+<span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">(</span><span class="s1">&#39;installed.packages()[&quot;gamlss&quot;,]&#39;</span><span class="p">)</span>
+
+<span class="c1"># Check R version</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">(</span><span class="s1">&#39;R.version.string&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># List loaded packages</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">(</span><span class="s1">&#39;search()&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="common-integration-problems">
+<h3>Common Integration Problems<a class="headerlink" href="#common-integration-problems" title="Link to this heading">#</a></h3>
+<p><strong>Issue</strong>: R functions not found
+<strong>Solution</strong>: Ensure packages are properly imported</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Explicit package import</span>
+<span class="n">gamlss</span> <span class="o">=</span> <span class="n">importr</span><span class="p">(</span><span class="s1">&#39;gamlss&#39;</span><span class="p">)</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">importr</span><span class="p">(</span><span class="s1">&#39;stats&#39;</span><span class="p">)</span> 
+<span class="n">base</span> <span class="o">=</span> <span class="n">importr</span><span class="p">(</span><span class="s1">&#39;base&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Issue</strong>: Graphics not displaying
+<strong>Solution</strong>: Use proper device management</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Always close graphics devices</span>
+<span class="n">grdevices</span><span class="o">.</span><span class="n">dev_off</span><span class="p">()</span>
+<span class="c1"># Use non-interactive plotting</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ioff</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Issue</strong>: Memory issues with large models
+<strong>Solution</strong>: Explicit cleanup</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove R objects you no longer need (rm(list=ls()) would also delete</span>
+<span class="c1"># every fitted/loaded model that your Gamlss objects point to)</span>
+<span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">(</span><span class="s1">&#39;rm(my_large_object)&#39;</span><span class="p">)</span>
+<span class="c1"># Force garbage collection</span>
+<span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">(</span><span class="s1">&#39;gc()&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="notebooks/multisite_transfer.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Multisite Model Transfer</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="troubleshooting.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Troubleshooting and Common Issues</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-r-functions-by-package">Important R Functions by Package</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-gamlss-package">From <code class="docutils literal notranslate"><span class="pre">gamlss</span></code> package:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-stats-package">From <code class="docutils literal notranslate"><span class="pre">stats</span></code> package:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-base-package">From <code class="docutils literal notranslate"><span class="pre">base</span></code> package:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-gamlss-dist-package">From <code class="docutils literal notranslate"><span class="pre">gamlss.dist</span></code> package:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accessing-model-parameters">Accessing Model Parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-r-integration-techniques">Advanced R Integration Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-random-effects-implementation">Checking Random Effects Implementation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-r-graphics-in-python-notebooks">Using R Graphics in Python Notebooks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-handling-with-r-functions">Error Handling with R Functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#converting-r-objects-to-python">Converting R Objects to Python</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debugging-r-integration-issues">Debugging R Integration Issues</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-r-environment">Check R Environment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-integration-problems">Common Integration Problems</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Nitin
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
