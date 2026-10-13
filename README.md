@@ -1,4 +1,4 @@
-# normgamlss-site
+# normgamlss.github.io
 
 Landing page for the NormGAMLSS Python package. Plain HTML/CSS — no build step, no framework, no external dependencies. Open `index.html` directly, or drop the folder on any static host (Cloudflare Pages, GitHub Pages, Netlify) with zero config.
 
@@ -6,7 +6,7 @@ Every section was rendered in headless Chromium and checked visually at 1440px a
 
 ## What this page is
 
-A marketing/landing page only. The real API documentation is your separate Jupyter Book site — this page links out to it (button currently disabled, see below).
+A marketing/landing page only. The real API documentation is your separate Jupyter Book site — this page links to it (`NormGAMLSS/`).
 
 ## Structure
 
@@ -33,8 +33,8 @@ images/
 
 ## Before you publish
 
-1. **GitHub URL** — links point to `github.com/nsharma3150/norm_gamlss`. Update if the repo hasn't been renamed from `GAMLSS-python`.
-2. **Documentation button** — currently a disabled `<span class="btn btn-disabled">` in the nav. Swap for `<a class="btn btn-ghost" href="YOUR_JUPYTER_BOOK_URL">Documentation</a>` when docs go public.
+1. **GitHub URL** — links point to `github.com/NormGAMLSS/NormGAMLSS` (done).
+2. **Documentation** — the docs live in the `NormGAMLSS/` folder (https://normgamlss.github.io/NormGAMLSS/) and are copied there automatically from the NormGAMLSS repository. Do not edit that folder by hand.
 3. **Figure captions** say "tutorial output (synthetic data)". Confirm that's accurate for all five. If any figure derives from real patient data, the caption must change before this is public.
 4. **`pip install`** — the hero shows a status pill reading "releasing soon". Replace with the real command once on PyPI.
 5. **Counts** — the stats bar claims 5 modalities and 6 publications; the publications figure matches the six paper cards. Update both together if papers change.
