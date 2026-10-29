@@ -1334,7 +1334,7 @@ Sampling parameters: {&#39;age_col&#39;: &#39;age&#39;, &#39;n_bins&#39;: 10, &#
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>======================================================================
 Processing: ZSCPY (proxy: ESZYC, sample_size: 0.2)
 ======================================================================
-Model &#39;main_model_nonlinear&#39; loaded from ../../results/site_transfer_main_model_nonlinear.rds
+Model &#39;main_model_nonlinear_2&#39; loaded from ../../results/site_transfer_main_model_nonlinear.rds
 No &#39;affected&#39; array provided. Using &#39;affected&#39; column from data.
 Using 199 healthy subjects out of 250 total subjects
 Site: ZSCPY | Strategy: stratified_age
@@ -1395,23 +1395,22 @@ GAMLSS-RS iteration 47: Global Deviance = 119.3557
 GAMLSS-RS iteration 48: Global Deviance = 119.3092 
 GAMLSS-RS iteration 49: Global Deviance = 119.2919 
 GAMLSS-RS iteration 50: Global Deviance = 119.2497 
-2026-10-09 14:25:40,531 - WARNING - R[write to console]: In RS(50) :
-2026-10-09 14:25:40,532 - WARNING - R[write to console]:  Algorithm RS has not yet converged
+2026-10-29 19:47:53,112 - WARNING - R[write to console]: In RS(50) :
+2026-10-29 19:47:53,113 - WARNING - R[write to console]:  Algorithm RS has not yet converged
 
 Model saved to ../../results/site_transfer_results_nonlinear/adjustment_models/gam_refit_ZSCPY_20.rds
 ✓ Adjustment model saved: ../../results/site_transfer_results_nonlinear/adjustment_models/gam_refit_ZSCPY_20.rds
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>gamlss_python/site_transfer_utils.py:1218: RuntimeWarning: site_transfer [ZSCPY]: adjustment model did not converge in 50 RS cycles (n=39, params=[&#39;mu&#39;, &#39;sigma&#39;, &#39;nu&#39;, &#39;tau&#39;]). Adjustment intercepts are unreliable; raise `iterations` or exclude this cell.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>normgamlss/site_transfer_utils.py:1264: RuntimeWarning: site_transfer [ZSCPY]: adjustment model did not converge in 50 RS cycles (n=39, params=[&#39;mu&#39;, &#39;sigma&#39;, &#39;nu&#39;, &#39;tau&#39;]). Adjustment intercepts are unreliable; raise `iterations` or exclude this cell.
   warnings.warn(
-
-Processing sites:  25%|██▌       | 1/4 [00:02&lt;00:07,  2.34s/it]
+Processing sites:  25%|██▌       | 1/4 [00:02&lt;00:06,  2.29s/it]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>======================================================================
 Processing: KEMUB (proxy: ESZYC, sample_size: 0.2)
 ======================================================================
-Model &#39;main_model_nonlinear&#39; loaded from ../../results/site_transfer_main_model_nonlinear.rds
+Model &#39;main_model_nonlinear_2&#39; loaded from ../../results/site_transfer_main_model_nonlinear.rds
 No &#39;affected&#39; array provided. Using &#39;affected&#39; column from data.
 Using 197 healthy subjects out of 250 total subjects
 Site: KEMUB | Strategy: stratified_age
@@ -1472,23 +1471,22 @@ GAMLSS-RS iteration 47: Global Deviance = 122.3177
 GAMLSS-RS iteration 48: Global Deviance = 122.2791 
 GAMLSS-RS iteration 49: Global Deviance = 122.2422 
 GAMLSS-RS iteration 50: Global Deviance = 122.2068 
-2026-10-09 14:25:42,863 - WARNING - R[write to console]: In RS(50) :
-2026-10-09 14:25:42,864 - WARNING - R[write to console]:  Algorithm RS has not yet converged
+2026-10-29 19:47:55,406 - WARNING - R[write to console]: In RS(50) :
+2026-10-29 19:47:55,407 - WARNING - R[write to console]:  Algorithm RS has not yet converged
 
 Model saved to ../../results/site_transfer_results_nonlinear/adjustment_models/gam_refit_KEMUB_20.rds
 ✓ Adjustment model saved: ../../results/site_transfer_results_nonlinear/adjustment_models/gam_refit_KEMUB_20.rds
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>gamlss_python/site_transfer_utils.py:1218: RuntimeWarning: site_transfer [KEMUB]: adjustment model did not converge in 50 RS cycles (n=39, params=[&#39;mu&#39;, &#39;sigma&#39;, &#39;nu&#39;, &#39;tau&#39;]). Adjustment intercepts are unreliable; raise `iterations` or exclude this cell.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>normgamlss/site_transfer_utils.py:1264: RuntimeWarning: site_transfer [KEMUB]: adjustment model did not converge in 50 RS cycles (n=39, params=[&#39;mu&#39;, &#39;sigma&#39;, &#39;nu&#39;, &#39;tau&#39;]). Adjustment intercepts are unreliable; raise `iterations` or exclude this cell.
   warnings.warn(
-
-Processing sites:  50%|█████     | 2/4 [00:04&lt;00:04,  2.35s/it]
+Processing sites:  50%|█████     | 2/4 [00:04&lt;00:04,  2.29s/it]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>======================================================================
 Processing: HLMEG (proxy: ESZYC, sample_size: 0.2)
 ======================================================================
-Model &#39;main_model_nonlinear&#39; loaded from ../../results/site_transfer_main_model_nonlinear.rds
+Model &#39;main_model_nonlinear_2&#39; loaded from ../../results/site_transfer_main_model_nonlinear.rds
 No &#39;affected&#39; array provided. Using &#39;affected&#39; column from data.
 Using 206 healthy subjects out of 250 total subjects
 Site: HLMEG | Strategy: stratified_age
@@ -1549,23 +1547,22 @@ GAMLSS-RS iteration 47: Global Deviance = 131.265
 GAMLSS-RS iteration 48: Global Deviance = 131.224 
 GAMLSS-RS iteration 49: Global Deviance = 131.1855 
 GAMLSS-RS iteration 50: Global Deviance = 131.1483 
-2026-10-09 14:25:45,275 - WARNING - R[write to console]: In RS(50) :
-2026-10-09 14:25:45,276 - WARNING - R[write to console]:  Algorithm RS has not yet converged
+2026-10-29 19:47:57,691 - WARNING - R[write to console]: In RS(50) :
+2026-10-29 19:47:57,692 - WARNING - R[write to console]:  Algorithm RS has not yet converged
 
 Model saved to ../../results/site_transfer_results_nonlinear/adjustment_models/gam_refit_HLMEG_20.rds
 ✓ Adjustment model saved: ../../results/site_transfer_results_nonlinear/adjustment_models/gam_refit_HLMEG_20.rds
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>gamlss_python/site_transfer_utils.py:1218: RuntimeWarning: site_transfer [HLMEG]: adjustment model did not converge in 50 RS cycles (n=41, params=[&#39;mu&#39;, &#39;sigma&#39;, &#39;nu&#39;, &#39;tau&#39;]). Adjustment intercepts are unreliable; raise `iterations` or exclude this cell.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>normgamlss/site_transfer_utils.py:1264: RuntimeWarning: site_transfer [HLMEG]: adjustment model did not converge in 50 RS cycles (n=41, params=[&#39;mu&#39;, &#39;sigma&#39;, &#39;nu&#39;, &#39;tau&#39;]). Adjustment intercepts are unreliable; raise `iterations` or exclude this cell.
   warnings.warn(
-
-Processing sites:  75%|███████▌  | 3/4 [00:07&lt;00:02,  2.38s/it]
+Processing sites:  75%|███████▌  | 3/4 [00:06&lt;00:02,  2.28s/it]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>======================================================================
 Processing: OTLIE (proxy: ESZYC, sample_size: 0.2)
 ======================================================================
-Model &#39;main_model_nonlinear&#39; loaded from ../../results/site_transfer_main_model_nonlinear.rds
+Model &#39;main_model_nonlinear_2&#39; loaded from ../../results/site_transfer_main_model_nonlinear.rds
 No &#39;affected&#39; array provided. Using &#39;affected&#39; column from data.
 Using 198 healthy subjects out of 250 total subjects
 Site: OTLIE | Strategy: stratified_age
@@ -1620,8 +1617,7 @@ Model saved to ../../results/site_transfer_results_nonlinear/adjustment_models/g
 ✓ Adjustment model saved: ../../results/site_transfer_results_nonlinear/adjustment_models/gam_refit_OTLIE_20.rds
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing sites: 100%|██████████| 4/4 [00:09&lt;00:00,  2.28s/it]
-Processing sites: 100%|██████████| 4/4 [00:09&lt;00:00,  2.31s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing sites: 100%|██████████| 4/4 [00:08&lt;00:00,  2.23s/it]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>======================================================================
@@ -3770,7 +3766,7 @@ Sampling strategy: stratified_age
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model &#39;main_model_nonlinear&#39; loaded from ../../results/site_transfer_main_model_nonlinear.rds
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model &#39;main_model_nonlinear_2&#39; loaded from ../../results/site_transfer_main_model_nonlinear.rds
 
 ======================================================================
 CENTILE COMPARISON: BEFORE vs AFTER TRANSFER

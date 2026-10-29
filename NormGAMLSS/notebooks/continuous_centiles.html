@@ -389,7 +389,7 @@ document.write(`
 <section id="gamlss-main-gamlss-plot-continuous-centiles">
 <h2>gamlss_main.Gamlss.<br><strong>plot_continuous_centiles</strong><a class="headerlink" href="#gamlss-main-gamlss-plot-continuous-centiles" title="Link to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_continuous_centiles</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">centiles</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">97</span><span class="p">],</span> 
-                          <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">,</span> <span class="n">discrete_split</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">continuous_split</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                          <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">discrete_split</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">continuous_split</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
                           <span class="n">approximated</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x_axis</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="s1">&#39;Age&#39;</span><span class="p">},</span> <span class="n">y_axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
                           <span class="n">additional_global_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                           <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
@@ -404,8 +404,8 @@ document.write(`
             DataFrame containing the training data</p>
 <p>        <strong>centiles</strong> : <em><strong>list</strong></em>, <em>default=[3, 10, 25, 50, 75, 90, 97]</em> <br>
             List of centiles to plot</p>
-<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>default=’SHASH’</em> <br>
-            Distribution type</p>
+<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
+            Distribution family name. If None (default), the model’s own family is used; a different family raises an error</p>
 <p>        <strong>discrete_split</strong> : <em><strong>dict</strong></em>, <em>optional</em> <br>
             Dictionary with column name as key and list of values for discrete splitting</p>
 <p>        <strong>continuous_split</strong> : <em><strong>dict</strong></em>, <em>optional</em> <br>
@@ -461,7 +461,7 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>site: user provided = ESZYC
 </pre></div>
 </div>
-<img alt="../_images/c9f90be02c2bb8692e84e3aec853dec6277fb2d8f26ea382d35383f8ee78b8db.png" src="../_images/c9f90be02c2bb8692e84e3aec853dec6277fb2d8f26ea382d35383f8ee78b8db.png" style="width: 1396px; height: 1528px;" />
+<img alt="../_images/6f73a677c7ac625bbe0e046b5505b8a937aacb63f19639c3e8a42a1abee960e5.png" src="../_images/6f73a677c7ac625bbe0e046b5505b8a937aacb63f19639c3e8a42a1abee960e5.png" style="width: 1396px; height: 1528px;" />
 </div>
 </div>
 <div class="cell config_scroll_outputs docutils container">
@@ -486,7 +486,7 @@ Affected distribution after filtering:
 (array([&#39;Dementia&#39;, &#39;MDD&#39;, &#39;None&#39;, &#39;Schizo&#39;], dtype=object), array([ 3,  4, 47,  4]))
 </pre></div>
 </div>
-<img alt="../_images/5a3a19d4d2632a0414930928d5c80dcd0352bd65379d2ce47704e7c1bd32bf8b.png" src="../_images/5a3a19d4d2632a0414930928d5c80dcd0352bd65379d2ce47704e7c1bd32bf8b.png" style="width: 1396px; height: 1528px;" />
+<img alt="../_images/c2686757bdd13ecf75ee2893638f94645b5729a3e1b92c93a5eef2deb4d4ff2e.png" src="../_images/c2686757bdd13ecf75ee2893638f94645b5729a3e1b92c93a5eef2deb4d4ff2e.png" style="width: 1396px; height: 1528px;" />
 </div>
 </div>
 </section>

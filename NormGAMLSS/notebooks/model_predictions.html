@@ -395,8 +395,8 @@ document.write(`
 <p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Parameters:</strong></span></p>
 <p>        <strong>test_data</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
             DataFrame containing the test data</p>
-<p>        <strong>train_data</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
-            DataFrame containing the training data</p>
+<p>        <strong>train_data</strong> : <em><strong>pandas.DataFrame</strong></em> or <em><strong>None</strong></em> <br>
+            DataFrame containing the training data. None for a slim model (see <em>Sharing a model without the training data</em> in Saving and Loading Models)</p>
 <p>        <strong>transform</strong> : <em><strong>bool</strong></em>, <em>default=True</em> <br>
             Whether to apply transformations (response vs link scale)</p>
 <p>        <strong>verbose</strong> : <em><strong>bool</strong></em>, <em>default=False</em> <br>
@@ -416,18 +416,6 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>R[write to console]: In grSoftVersion() :
-R[write to console]:  unable to load shared object &#39;/usr/lib/R/modules//R_X11.so&#39;:
-  libicuuc.so.73: cannot open shared object file: No such file or directory
-
-R[write to console]: In cairoVersion() :
-R[write to console]:  unable to load shared object &#39;/usr/lib/R/library/grDevices/libs//cairo.so&#39;:
-  libicuuc.so.73: cannot open shared object file: No such file or directory
-
-R[write to console]: In (function (filename = &quot;Rplot%03d.png&quot;, width = 480, height = 480,  :
-R[write to console]:  failed to load cairo DLL
-</pre></div>
-</div>
 <div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -455,38 +443,38 @@ R[write to console]:  failed to load cairo DLL
   <tbody>
     <tr>
       <th>1</th>
-      <td>24.147695</td>
-      <td>2.733589</td>
-      <td>2.125571</td>
-      <td>2.090123</td>
+      <td>24.162162</td>
+      <td>14.978377</td>
+      <td>10.998055</td>
+      <td>10.823626</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>24.067658</td>
-      <td>2.733915</td>
-      <td>2.125571</td>
-      <td>2.090123</td>
+      <td>24.083428</td>
+      <td>14.979424</td>
+      <td>10.998055</td>
+      <td>10.823626</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>22.656329</td>
-      <td>2.741308</td>
-      <td>2.125571</td>
-      <td>2.090123</td>
+      <td>22.665159</td>
+      <td>15.008508</td>
+      <td>10.998055</td>
+      <td>10.823626</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>22.772542</td>
-      <td>2.740789</td>
-      <td>2.125571</td>
-      <td>2.090123</td>
+      <td>22.778040</td>
+      <td>15.005153</td>
+      <td>10.998055</td>
+      <td>10.823626</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>22.526281</td>
-      <td>2.741867</td>
-      <td>2.125571</td>
-      <td>2.090123</td>
+      <td>22.540969</td>
+      <td>15.015308</td>
+      <td>10.998055</td>
+      <td>10.823626</td>
     </tr>
     <tr>
       <th>...</th>
@@ -497,38 +485,38 @@ R[write to console]:  failed to load cairo DLL
     </tr>
     <tr>
       <th>466</th>
-      <td>23.708506</td>
-      <td>2.738382</td>
-      <td>2.125571</td>
-      <td>2.090123</td>
+      <td>23.706228</td>
+      <td>14.994779</td>
+      <td>10.998055</td>
+      <td>10.823626</td>
     </tr>
     <tr>
       <th>467</th>
-      <td>25.125914</td>
-      <td>2.730802</td>
-      <td>2.125571</td>
-      <td>2.090123</td>
+      <td>25.134436</td>
+      <td>14.969788</td>
+      <td>10.998055</td>
+      <td>10.823626</td>
     </tr>
     <tr>
       <th>468</th>
-      <td>23.214748</td>
-      <td>2.738112</td>
-      <td>2.125571</td>
-      <td>2.090123</td>
+      <td>23.236998</td>
+      <td>14.993781</td>
+      <td>10.998055</td>
+      <td>10.823626</td>
     </tr>
     <tr>
       <th>469</th>
-      <td>23.072959</td>
-      <td>2.741867</td>
-      <td>2.125571</td>
-      <td>2.090123</td>
+      <td>23.056083</td>
+      <td>15.015309</td>
+      <td>10.998055</td>
+      <td>10.823626</td>
     </tr>
     <tr>
       <th>470</th>
-      <td>23.362624</td>
-      <td>2.740789</td>
-      <td>2.125571</td>
-      <td>2.090123</td>
+      <td>23.351317</td>
+      <td>15.005154</td>
+      <td>10.998055</td>
+      <td>10.823626</td>
     </tr>
   </tbody>
 </table>
@@ -576,52 +564,52 @@ R[write to console]:  failed to load cairo DLL
     </tr>
     <tr>
       <th>mean</th>
-      <td>23.669538</td>
-      <td>2.737359</td>
-      <td>2.125571e+00</td>
-      <td>2.090123e+00</td>
+      <td>23.673564</td>
+      <td>14.994198</td>
+      <td>1.099806e+01</td>
+      <td>1.082363e+01</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>0.858320</td>
-      <td>0.004232</td>
-      <td>4.445624e-15</td>
-      <td>1.956075e-14</td>
+      <td>0.858797</td>
+      <td>0.017331</td>
+      <td>4.623449e-14</td>
+      <td>5.334749e-14</td>
     </tr>
     <tr>
       <th>min</th>
-      <td>22.518656</td>
-      <td>2.729325</td>
-      <td>2.125571e+00</td>
-      <td>2.090123e+00</td>
+      <td>22.520930</td>
+      <td>14.965388</td>
+      <td>1.099806e+01</td>
+      <td>1.082363e+01</td>
     </tr>
     <tr>
       <th>25%</th>
-      <td>22.965473</td>
-      <td>2.733588</td>
-      <td>2.125571e+00</td>
-      <td>2.090123e+00</td>
+      <td>22.974408</td>
+      <td>14.978375</td>
+      <td>1.099806e+01</td>
+      <td>1.082363e+01</td>
     </tr>
     <tr>
       <th>50%</th>
-      <td>23.508743</td>
-      <td>2.738382</td>
-      <td>2.125571e+00</td>
-      <td>2.090123e+00</td>
+      <td>23.508932</td>
+      <td>14.994780</td>
+      <td>1.099806e+01</td>
+      <td>1.082363e+01</td>
     </tr>
     <tr>
       <th>75%</th>
-      <td>24.401521</td>
-      <td>2.741500</td>
-      <td>2.125571e+00</td>
-      <td>2.090123e+00</td>
+      <td>24.410390</td>
+      <td>15.010102</td>
+      <td>1.099806e+01</td>
+      <td>1.082363e+01</td>
     </tr>
     <tr>
       <th>max</th>
-      <td>25.379274</td>
-      <td>2.741920</td>
-      <td>2.125571e+00</td>
-      <td>2.090123e+00</td>
+      <td>25.376388</td>
+      <td>15.021446</td>
+      <td>1.099806e+01</td>
+      <td>1.082363e+01</td>
     </tr>
   </tbody>
 </table>

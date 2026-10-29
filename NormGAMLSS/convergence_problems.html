@@ -700,7 +700,7 @@ document.write(`
 <li><p><strong>Label plots clearly:</strong> “Brain Thickness (÷100 units)” or “Thickness /100”</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Z-scores and centiles work normally with scaled data</span>
-<span class="n">z_scores</span> <span class="o">=</span> <span class="n">gamlss_model</span><span class="o">.</span><span class="n">z_score</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">)</span>
+<span class="n">z_scores</span> <span class="o">=</span> <span class="n">gamlss_model</span><span class="o">.</span><span class="n">z_score</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">)</span>  <span class="c1"># func_name is optional: the model&#39;s family</span>
 <span class="n">gamlss_model</span><span class="o">.</span><span class="n">plot_z_scores</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">x_var</span><span class="o">=</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="n">x_var_name</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">)</span>
 <span class="c1"># Y-axis shows scaled values - note this in interpretation</span>
 </pre></div>

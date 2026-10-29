@@ -58,6 +58,8 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/saving_loading_models';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -375,6 +377,8 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-persistence">Model Persistence</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gamlss-main-gamlss-save-model">gamlss_main.Gamlss.<br/><strong>save_model</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gamlss-main-gamlss-load-model-class-method">gamlss_main.Gamlss.<br/><strong>load_model</strong> (class method)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sharing-a-model-without-the-training-data-slim-models">Sharing a model without the training data (slim models)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gamlss-main-gamlss-export-slim">gamlss_main.Gamlss.<br/><strong>export_slim</strong></a></li>
 </ul>
             </nav>
         </div>
@@ -408,9 +412,12 @@ document.write(`
 <p><strong>Examples:</strong></p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">normgamlss.gamlss_main</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gamlss</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="c1"># Save the fitted model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">normgamlss.gamlss_main</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gamlss</span>
+
+<span class="c1"># Save the fitted model (the folder must exist)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;../../results&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">gamlss_model</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="s2">&quot;../../results/my_gamlss_model.rds&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -444,7 +451,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model &#39;model_shash&#39; loaded from ../../results/my_gamlss_model.rds
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model &#39;model_shash_2&#39; loaded from ../../results/my_gamlss_model.rds
 </pre></div>
 </div>
 </div>
@@ -458,7 +465,106 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loaded model Z-scores: [ 0.1881208   2.93811347 -1.34080186  0.82120307  1.18504441]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loaded model Z-scores: [ 0.16719671  3.25534027 -1.32695918  0.78290266  1.13964224]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sharing-a-model-without-the-training-data-slim-models">
+<h2>Sharing a model without the training data (slim models)<a class="headerlink" href="#sharing-a-model-without-the-training-data-slim-models" title="Link to this heading">#</a></h2>
+<p><strong>Why does prediction need the training data?</strong> Each parameter of the model is a sum of parts, for example</p>
+<div class="math notranslate nohighlight">
+\[\mu = \beta_0 + \beta_{\text{sex}} + f(\text{age}) + u_{\text{site}}\]</div>
+<p>The numbers (<span class="math notranslate nohighlight">\(\beta\)</span> and the site effects <span class="math notranslate nohighlight">\(u\)</span>) are stored in the fitted model. The smooth age curve <span class="math notranslate nohighlight">\(f\)</span> is not stored as numbers: gamlss keeps it as a recipe and rebuilds it from the training data every time it predicts for new people. That is why <code class="docutils literal notranslate"><span class="pre">predict_all</span></code>, <code class="docutils literal notranslate"><span class="pre">z_score</span></code>, <code class="docutils literal notranslate"><span class="pre">centiles</span></code> and the plots ask for <code class="docutils literal notranslate"><span class="pre">train_data</span></code>, and why a model saved with <code class="docutils literal notranslate"><span class="pre">save_model</span></code> is only useful together with its training data. The saved file also holds every training participant’s outcome and fitted values, so it often cannot be shared.</p>
+<p><strong>How a slim model gets around it.</strong> <code class="docutils literal notranslate"><span class="pre">export_slim</span></code> does the rebuilding once, while you still have the training data: it writes down the value of each smooth curve every 0.01 years of age (separately per group, e.g. per sex), next to the coefficients, site effects, link functions and family. Predicting is then looking up the curve at the new ages. The file holds no row of the training data, and it is much smaller.</p>
+<p><strong>How close is it?</strong> The slim model gives the same predictions up to tiny differences. On large real-data models (about 21,000 people) the z-scores differed by at most 0.0003, the file was 149 KB instead of 81 MB, and predictions were about 10 times faster. If a fitted model’s own parts do not add up exactly (for example when it has not fully converged), <code class="docutils literal notranslate"><span class="pre">export_slim</span></code> warns you, and the two can differ a little more.</p>
+<p><strong>What works and what does not.</strong> Everything that predicts works with <code class="docutils literal notranslate"><span class="pre">train_data=None</span></code>: <code class="docutils literal notranslate"><span class="pre">predict_all</span></code>, <code class="docutils literal notranslate"><span class="pre">z_score</span></code>, <code class="docutils literal notranslate"><span class="pre">centiles</span></code>, <code class="docutils literal notranslate"><span class="pre">get_centile_position</span></code>, <code class="docutils literal notranslate"><span class="pre">evaluate</span></code>, the centile and z-score plots, <code class="docutils literal notranslate"><span class="pre">create_site_adjusted_data</span></code> and site transfer. What needs the training rows does not: residuals, fitted values and the diagnostic plots (QQ, worm plots) give a clear error, so keep the full model for those. Ages outside the training range are extrapolated linearly, with a warning.</p>
+<p>Models saved by <code class="docutils literal notranslate"><span class="pre">save_model()</span></code> or by the pipelines (<code class="docutils literal notranslate"><span class="pre">save_models=True</span></code>) are full models. To share one, load it and export a slim copy with its training data, as below.</p>
+</section>
+<section id="gamlss-main-gamlss-export-slim">
+<h2>gamlss_main.Gamlss.<br><strong>export_slim</strong><a class="headerlink" href="#gamlss-main-gamlss-export-slim" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">export_slim</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">grid_step</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>    Writes a slim, data-free copy of the model. Load it with <code class="docutils literal notranslate"><span class="pre">load_model()</span></code>: it loads as <code class="docutils literal notranslate"><span class="pre">'&lt;model_name&gt;_slim'</span></code>, next to the full model if that is loaded too.</p>
+<p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Parameters:</strong></span></p>
+<p>        <strong>train_data</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
+            The data the model was fitted on (used for the export and its self-check; none of it is stored)</p>
+<p>        <strong>file_path</strong> : <em><strong>str</strong></em> <br>
+            Where to write the slim model (.rds extension added automatically)</p>
+<p>        <strong>grid_step</strong> : <em><strong>float</strong></em>, <em>default=0.01</em> <br>
+            Spacing of the grid on which the smooth curves are stored (in units of the continuous variable, e.g. years)</p>
+<p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Returns:</strong></span></p>
+<p>        <strong>check</strong> : <em><strong>dict</strong></em> <br>
+            Self-check: for each parameter, the largest difference between the rebuilt and the fitted linear predictor on the training rows</p>
+<br>
+<p><strong>Examples:</strong></p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Write a slim copy, once, with the data the model was fitted on</span>
+<span class="n">check</span> <span class="o">=</span> <span class="n">gamlss_model</span><span class="o">.</span><span class="n">export_slim</span><span class="p">(</span><span class="n">df_train</span><span class="p">,</span> <span class="s2">&quot;../../results/my_gamlss_model_slim.rds&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Self-check (largest difference per parameter):&#39;</span><span class="p">,</span> <span class="n">check</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Self-check (largest difference per parameter): {&#39;mu&#39;: 6.394884621840902e-13, &#39;sigma&#39;: 4.263256414560601e-14, &#39;nu&#39;: 1.3367085216486885e-13, &#39;tau&#39;: 5.071498776487715e-13}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the slim copy and use it WITHOUT the training data (train_data=None)</span>
+<span class="n">slim_model</span> <span class="o">=</span> <span class="n">Gamlss</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="s2">&quot;../../results/my_gamlss_model_slim.rds&quot;</span><span class="p">)</span>
+
+<span class="n">z_slim</span> <span class="o">=</span> <span class="n">slim_model</span><span class="o">.</span><span class="n">z_score</span><span class="p">(</span><span class="n">df_test</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">z_full</span> <span class="o">=</span> <span class="n">gamlss_model</span><span class="o">.</span><span class="n">z_score</span><span class="p">(</span><span class="n">df_test</span><span class="p">,</span> <span class="n">df_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Slim model Z-scores:&#39;</span><span class="p">,</span> <span class="n">z_slim</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Largest difference from the full model:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">z_slim</span> <span class="o">-</span> <span class="n">z_full</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model &#39;model_shash_slim&#39; loaded from ../../results/my_gamlss_model_slim.rds
+Slim model Z-scores: [ 0.16719627  3.25533195 -1.3269772   0.78291461  1.13963571]
+Largest difference from the full model: 0.0001287406076357911
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plots work the same way</span>
+<span class="n">slim_model</span><span class="o">.</span><span class="n">plot_centiles</span><span class="p">(</span><span class="n">df_test</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">centiles</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">97</span><span class="p">],</span>
+                         <span class="n">variables_to_split</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;sex&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]},</span> <span class="n">additional_global_vars</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;site&#39;</span><span class="p">:</span> <span class="s1">&#39;HJDXM&#39;</span><span class="p">},</span>
+                         <span class="n">x_axis</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="s1">&#39;Age&#39;</span><span class="p">},</span> <span class="n">plot_scatter</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>site: user specified = HJDXM
+</pre></div>
+</div>
+<img alt="../_images/8aa9e132d13c7b1301afc99703e34b12eab0bf6538236229f9347a8b9f094c0c.png" src="../_images/8aa9e132d13c7b1301afc99703e34b12eab0bf6538236229f9347a8b9f094c0c.png" style="width: 779px; height: 482px;" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Values used for centile calculation in this plot:
+sex: 0
+site: HJDXM
+
+Scatter data filtered by:
+  variables_to_split:
+    sex: 0
+</pre></div>
+</div>
+<img alt="../_images/4ba76363185f28d30f3ec4ed118870ea7214b9ffad01835143b5ab3f3e3bf932.png" src="../_images/4ba76363185f28d30f3ec4ed118870ea7214b9ffad01835143b5ab3f3e3bf932.png" style="width: 779px; height: 482px;" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Values used for centile calculation in this plot:
+sex: 1
+site: HJDXM
+
+Scatter data filtered by:
+  variables_to_split:
+    sex: 1
 </pre></div>
 </div>
 </div>
@@ -533,6 +639,8 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-persistence">Model Persistence</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gamlss-main-gamlss-save-model">gamlss_main.Gamlss.<br/><strong>save_model</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gamlss-main-gamlss-load-model-class-method">gamlss_main.Gamlss.<br/><strong>load_model</strong> (class method)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sharing-a-model-without-the-training-data-slim-models">Sharing a model without the training data (slim models)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gamlss-main-gamlss-export-slim">gamlss_main.Gamlss.<br/><strong>export_slim</strong></a></li>
 </ul>
   </nav></div>
 

@@ -517,7 +517,7 @@ document.write(`
 <section id="step-5-detect-outliers-with-z-scores">
 <h3>Step 5: Detect Outliers with Z-Scores<a class="headerlink" href="#step-5-detect-outliers-with-z-scores" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate z-scores for outlier detection</span>
-<span class="n">z_scores</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">z_score</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">)</span>
+<span class="n">z_scores</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">z_score</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">)</span>  <span class="c1"># func_name is optional: the model&#39;s family</span>
 
 <span class="c1"># Plot z-scores colored by condition</span>
 <span class="n">model</span><span class="o">.</span><span class="n">plot_z_scores</span><span class="p">(</span>

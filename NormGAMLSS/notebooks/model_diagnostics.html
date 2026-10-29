@@ -412,15 +412,16 @@ Family:  c(&quot;SHASH&quot;, &quot;Sinh-Arcsinh&quot;)
 Call:  gamlss(formula = y_thickness1 ~ pvc(age, by = as.factor(sex)) +  
     re(random = ~1 | as.factor(site)), sigma.formula = ~pvc(age) +  
     re(random = ~1 | as.factor(site)), nu.formula = ~1, tau.formula = ~1,  
-    family = SHASH(), data = model_shash_traindata, method = RS(50)) 
+    family = SHASH(), data = model_shash_traindata, method = mixed(10,  
+        100)) 
 
-Fitting method: RS(50) 
+Fitting method: mixed(10, 100) 
 
 ------------------------------------------------------------------
 Mu link function:  identity
 Mu Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  23.5013     0.0325     723   &lt;2e-16 ***
+(Intercept) 23.49569    0.03165   742.5   &lt;2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
@@ -428,8 +429,8 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 Sigma link function:  log
 Sigma Coefficients:
              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 1.0144373  0.0690711  14.687   &lt;2e-16 ***
-pvc(age)    0.0001134  0.0013107   0.087    0.931    
+(Intercept) 2.7086019  0.0583874  46.390   &lt;2e-16 ***
+pvc(age)    0.0000651  0.0011069   0.059    0.953    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
@@ -437,7 +438,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 Nu link function:  log 
 Nu Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.75353    0.03467   21.74   &lt;2e-16 ***
+(Intercept)  2.39772    0.03223    74.4   &lt;2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
@@ -445,7 +446,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 Tau link function:  log 
 Tau Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.73748    0.03288   22.43   &lt;2e-16 ***
+(Intercept)  2.38173    0.03064   77.72   &lt;2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
@@ -455,20 +456,20 @@ NOTE: Additive smoothing terms exist in the formulas:
 ii) Std. Error for the linear terms may not be reliable. 
 ------------------------------------------------------------------
 No. of observations in the fit:  1030 
-Degrees of Freedom for the fit:  10.71486
-      Residual Deg. of Freedom:  1019.285 
-                      at cycle:  50 
+Degrees of Freedom for the fit:  10.95707
+      Residual Deg. of Freedom:  1019.043 
+                      at cycle:  46 
  
-Global Deviance:     3080.331 
-            AIC:     3101.761 
-            SBC:     3154.664 
+Global Deviance:     3043.563 
+            AIC:     3065.477 
+            SBC:     3119.576 
 ******************************************************************
-                Estimate  Std. Error      t value     Pr(&gt;|t|)
-(Intercept) 2.350126e+01 0.032503578 723.03612057 0.000000e+00
-(Intercept) 1.014437e+00 0.069071123  14.68685157 1.780477e-44
-pvc(age)    1.134206e-04 0.001310732   0.08653226 9.310602e-01
-(Intercept) 7.535345e-01 0.034665729  21.73715903 1.624022e-86
-(Intercept) 7.374761e-01 0.032883355  22.42703385 5.161841e-91
+                Estimate  Std. Error      t value      Pr(&gt;|t|)
+(Intercept) 2.349569e+01 0.031645940 742.45527248  0.000000e+00
+(Intercept) 2.708602e+00 0.058387379  46.39019467 1.976890e-254
+pvc(age)    6.510289e-05 0.001106869   0.05881719  9.531091e-01
+(Intercept) 2.397718e+00 0.032225688  74.40394961  0.000000e+00
+(Intercept) 2.381731e+00 0.030644730  77.72074916  0.000000e+00
 </pre></div>
 </div>
 </div>
@@ -511,10 +512,10 @@ R[write to console]:  summary: vcov has failed, option qr is used instead
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>$lambda
-[1] 324.1604994   0.9997195
+[1] 346.003626   1.000273
 
 $mu_df
-[1] 7.711527
+[1] 7.951792
 
 $site_params
 [1] 1
@@ -524,7 +525,7 @@ re(random = ~1 | as.factor(site))
                                NA 
 
 $random_specified
-[1] FALSE  TRUE  TRUE FALSE
+[1] FALSE  TRUE  TRUE FALSE FALSE
 </pre></div>
 </div>
 </div>
@@ -560,14 +561,14 @@ $random_specified
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/15b97fa68e773bd1893a0d22d48e326d4cbeac7d384e85aaa32d4bdb349381a7.png" src="../_images/15b97fa68e773bd1893a0d22d48e326d4cbeac7d384e85aaa32d4bdb349381a7.png" style="width: 982px; height: 588px;" />
+<img alt="../_images/e851ee17f29a6ace20d78a874249b9a282117075412d6272ab81d895f24e48c9.png" src="../_images/e851ee17f29a6ace20d78a874249b9a282117075412d6272ab81d895f24e48c9.png" style="width: 982px; height: 588px;" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>******************************************************************
 	      Summary of the Quantile Residuals
-                           mean   =  0.004704422 
-                       variance   =  1.07954 
-               coef. of skewness  =  -0.00136674 
-               coef. of kurtosis  =  2.114605 
-Filliben correlation coefficient  =  0.9915867 
+                           mean   =  0.00150161 
+                       variance   =  1.062349 
+               coef. of skewness  =  0.005728379 
+               coef. of kurtosis  =  2.240857 
+Filliben correlation coefficient  =  0.9943954 
 ******************************************************************
 2
 </pre></div>
@@ -597,15 +598,15 @@ Filliben correlation coefficient  =  0.9915867
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>******************************************************************
 	      Summary of the Quantile Residuals
-                           mean   =  0.004704422 
-                       variance   =  1.07954 
-               coef. of skewness  =  -0.00136674 
-               coef. of kurtosis  =  2.114605 
-Filliben correlation coefficient  =  0.9915867 
+                           mean   =  0.00150161 
+                       variance   =  1.062349 
+               coef. of skewness  =  0.005728379 
+               coef. of kurtosis  =  2.240857 
+Filliben correlation coefficient  =  0.9943954 
 ******************************************************************
 </pre></div>
 </div>
-<img alt="../_images/2ea1f7f865e5de4f186d4d71cddbff06ba2bb6bdb9af44a8df2e6df696e9fd9e.png" src="../_images/2ea1f7f865e5de4f186d4d71cddbff06ba2bb6bdb9af44a8df2e6df696e9fd9e.png" />
+<img alt="../_images/90650c23ce1c0997c5aba8f8174d59a9966328e2eeeceb616d3f1e2a7e9bae1d.png" src="../_images/90650c23ce1c0997c5aba8f8174d59a9966328e2eeeceb616d3f1e2a7e9bae1d.png" />
 </div>
 </div>
 </section>

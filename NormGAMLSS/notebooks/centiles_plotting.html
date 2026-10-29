@@ -390,7 +390,7 @@ document.write(`
 <section id="gamlss-main-gamlss-plot-centiles">
 <h2>gamlss_main.Gamlss.<br><strong>plot_centiles</strong><a class="headerlink" href="#gamlss-main-gamlss-plot-centiles" title="Link to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_centiles</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">centiles</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">97</span><span class="p">],</span> 
-              <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">variables_to_split</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+              <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">variables_to_split</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
               <span class="n">x_axis</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="s1">&#39;Age&#39;</span><span class="p">},</span> <span class="n">additional_global_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot_scatter</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
               <span class="n">plot_all_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">subset_scatter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_correction</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
               <span class="n">correction_col_name</span><span class="o">=</span><span class="s1">&#39;site&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">save_image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
@@ -407,9 +407,9 @@ document.write(`
 <p>        <strong>train_data</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
             DataFrame containing the training data</p>
 <p>        <strong>centiles</strong> : <em><strong>list</strong></em>, <em>default=[3, 10, 25, 50, 75, 90, 97]</em> <br>
-            List of centiles to plot</p>
-<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>default=’SHASH’</em> <br>
-            Distribution type</p>
+            List of centiles to plot, in percent: between 0 and 100, not 0 or 100 themselves (e.g. 2.5 or 97.5). If all values are below 1 (e.g. 0.03), a warning reminds you that the 3rd centile is 3</p>
+<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
+            Distribution family name. If None (default), the model’s own family is used; a different family raises an error</p>
 <p>        <strong>affected</strong> : <em><strong>numpy.ndarray</strong></em>, <em>optional</em> <br>
             Array indicating affected status for highlighting specific data points <br>
             <code class="docutils literal notranslate"><span class="pre">'None'</span></code>, NaN and the healthy labels (<code class="docutils literal notranslate"><span class="pre">'healthy'</span></code>, <code class="docutils literal notranslate"><span class="pre">'healthy</span> <span class="pre">control(s)'</span></code>, <code class="docutils literal notranslate"><span class="pre">'control(s)'</span></code>, any case) are drawn as Controls; every other label is drawn as its own group. Labels that mention ‘healthy’ or ‘control’ but are not on this list (e.g. <code class="docutils literal notranslate"><span class="pre">'healthy</span> <span class="pre">subject'</span></code>, <code class="docutils literal notranslate"><span class="pre">'unhealthy'</span></code>) raise an error asking you to rename them.</p>
@@ -495,7 +495,7 @@ document.write(`
 feature_volume1: mean = 998.390
 </pre></div>
 </div>
-<img alt="../_images/0f608637ebd191f30a4357341028a2005bdaff62ea615ac1063eac2b0816964c.png" src="../_images/0f608637ebd191f30a4357341028a2005bdaff62ea615ac1063eac2b0816964c.png" style="width: 779px; height: 482px;" />
+<img alt="../_images/d37807e5f241807622adbf3234444d30ef5d81dd0e6967c5b374ddb83e6b92ee.png" src="../_images/d37807e5f241807622adbf3234444d30ef5d81dd0e6967c5b374ddb83e6b92ee.png" style="width: 779px; height: 482px;" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Values used for centile calculation in this plot:
 sex: 0
 site: HJDXM
@@ -508,7 +508,7 @@ Scatter data filtered by:
     sex: 0
 </pre></div>
 </div>
-<img alt="../_images/2cc61a50059e365d7269087ce56a082e3fb3be8877835a1b69f3a918d56c0476.png" src="../_images/2cc61a50059e365d7269087ce56a082e3fb3be8877835a1b69f3a918d56c0476.png" style="width: 779px; height: 482px;" />
+<img alt="../_images/0511066e32814547c2c54afb63a3746165ec49ef9dc0f6112e7274d58265621c.png" src="../_images/0511066e32814547c2c54afb63a3746165ec49ef9dc0f6112e7274d58265621c.png" style="width: 779px; height: 482px;" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Values used for centile calculation in this plot:
 sex: 1
 site: HJDXM
@@ -542,38 +542,58 @@ feature_volume1: mean = 998.390
 Checking mu parameter...
 Found random effects in mu parameter:
          offset  group
-BCCLF -0.001427  BCCLF
-ESZYC -0.000806  ESZYC
-HJDXM -0.002133  HJDXM
-HLMEG  0.001153  HLMEG
-HSREL -0.002275  HSREL
-KEMUB  0.000650  KEMUB
-TIXLZ  0.005537  TIXLZ
-ZSCPY -0.000698  ZSCPY
+BCCLF -0.004787  BCCLF
+ESZYC -0.002687  ESZYC
+HJDXM -0.005445  HJDXM
+HLMEG  0.003174  HLMEG
+HSREL -0.004600  HSREL
+KEMUB  0.001695  KEMUB
+TIXLZ  0.014594  TIXLZ
+ZSCPY -0.001944  ZSCPY
 
- Using random effects from mu parameter
+Checking sigma parameter...
+Found random effects in sigma parameter:
+             offset  group
+BCCLF  1.750685e-08  BCCLF
+ESZYC  8.567566e-08  ESZYC
+HJDXM -8.668942e-08  HJDXM
+HLMEG  1.065463e-08  HLMEG
+HSREL -5.122056e-08  HSREL
+KEMUB -5.814322e-09  KEMUB
+TIXLZ  3.700854e-08  TIXLZ
+ZSCPY -7.121374e-09  ZSCPY
 
- Using &#39;HJDXM&#39; as reference site (offset = -0.002133)
+Checking nu parameter...
+No random effects in nu
+
+Checking tau parameter...
+No random effects in tau
+
+ Using random effects from mu, sigma parameter(s)
+
+ Using &#39;HJDXM&#39; as reference site (mu offset = -0.005445)
+
+ Using &#39;HJDXM&#39; as reference site (sigma offset = -0.000000)
 
  Applying site corrections:
-  HJDXM: offset = 0.000000, n = 116
-  BCCLF: offset = 0.000707, n = 106
-  HSREL: offset = -0.000142, n = 90
-  TIXLZ: offset = 0.007670, n = 108
-  ESZYC: offset = 0.001327, n = 103
-  HLMEG: offset = 0.003286, n = 7
-  KEMUB: offset = 0.002783, n = 5
-  ZSCPY: offset = 0.001435, n = 5
+  HJDXM: mu offset = 0.000000, sigma offset = 0.000000, n = 116
+  BCCLF: mu offset = 0.000657, sigma offset = 0.000000, n = 106
+  HSREL: mu offset = 0.000844, sigma offset = 0.000000, n = 90
+  TIXLZ: mu offset = 0.020039, sigma offset = 0.000000, n = 108
+  ESZYC: mu offset = 0.002757, sigma offset = 0.000000, n = 103
+  HLMEG: mu offset = 0.008618, sigma offset = 0.000000, n = 7
+  KEMUB: mu offset = 0.007140, sigma offset = 0.000000, n = 5
+  ZSCPY: mu offset = 0.003501, sigma offset = 0.000000, n = 5
 
- Site correction completed. Added column &#39;y_thickness1_adjusted&#39;
+ Site correction completed (centile-preserving). Added column &#39;y_thickness1_adjusted&#39;
 
  Verification:
   Original mean: 23.273212
-  Adjusted mean: 23.271229
-  Mean difference: -0.001984
+  Adjusted mean: 23.268199
+  Mean difference: -0.005013
 </pre></div>
 </div>
-<img alt="../_images/fc6ceb9dea181b55b087c479de3b3c28ad0c696b835533f4bc8d3ea3f8ae42b0.png" src="../_images/fc6ceb9dea181b55b087c479de3b3c28ad0c696b835533f4bc8d3ea3f8ae42b0.png" style="width: 779px; height: 482px;" />
+<img alt="../_images/6f3426c24becdabb3c3997e247e4f02a583eb86feef4dd6ef646c80e18102ca1.png" src="../_images/6f3426c24becdabb3c3997e247e4f02a583eb86feef4dd6ef646c80e18102ca1.png" style="width: 779px; height: 482px;" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Values used for centile calculation in this plot:
 sex: 0
 site: HJDXM
@@ -583,38 +603,58 @@ feature_volume1: 998.3902439376463
 Checking mu parameter...
 Found random effects in mu parameter:
          offset  group
-BCCLF -0.001427  BCCLF
-ESZYC -0.000806  ESZYC
-HJDXM -0.002133  HJDXM
-HLMEG  0.001153  HLMEG
-HSREL -0.002275  HSREL
-KEMUB  0.000650  KEMUB
-TIXLZ  0.005537  TIXLZ
-ZSCPY -0.000698  ZSCPY
+BCCLF -0.004787  BCCLF
+ESZYC -0.002687  ESZYC
+HJDXM -0.005445  HJDXM
+HLMEG  0.003174  HLMEG
+HSREL -0.004600  HSREL
+KEMUB  0.001695  KEMUB
+TIXLZ  0.014594  TIXLZ
+ZSCPY -0.001944  ZSCPY
 
- Using random effects from mu parameter
+Checking sigma parameter...
+Found random effects in sigma parameter:
+             offset  group
+BCCLF  1.750685e-08  BCCLF
+ESZYC  8.567566e-08  ESZYC
+HJDXM -8.668942e-08  HJDXM
+HLMEG  1.065463e-08  HLMEG
+HSREL -5.122056e-08  HSREL
+KEMUB -5.814322e-09  KEMUB
+TIXLZ  3.700854e-08  TIXLZ
+ZSCPY -7.121374e-09  ZSCPY
 
- Using &#39;HJDXM&#39; as reference site (offset = -0.002133)
+Checking nu parameter...
+No random effects in nu
+
+Checking tau parameter...
+No random effects in tau
+
+ Using random effects from mu, sigma parameter(s)
+
+ Using &#39;HJDXM&#39; as reference site (mu offset = -0.005445)
+
+ Using &#39;HJDXM&#39; as reference site (sigma offset = -0.000000)
 
  Applying site corrections:
-  ESZYC: offset = 0.001327, n = 90
-  HSREL: offset = -0.000142, n = 86
-  BCCLF: offset = 0.000707, n = 107
-  HJDXM: offset = 0.000000, n = 94
-  TIXLZ: offset = 0.007670, n = 100
-  HLMEG: offset = 0.003286, n = 4
-  KEMUB: offset = 0.002783, n = 4
-  ZSCPY: offset = 0.001435, n = 5
+  ESZYC: mu offset = 0.002757, sigma offset = 0.000000, n = 90
+  HSREL: mu offset = 0.000844, sigma offset = 0.000000, n = 86
+  BCCLF: mu offset = 0.000657, sigma offset = 0.000000, n = 107
+  HJDXM: mu offset = 0.000000, sigma offset = 0.000000, n = 94
+  TIXLZ: mu offset = 0.020039, sigma offset = 0.000000, n = 100
+  HLMEG: mu offset = 0.008618, sigma offset = 0.000000, n = 4
+  KEMUB: mu offset = 0.007140, sigma offset = 0.000000, n = 4
+  ZSCPY: mu offset = 0.003501, sigma offset = 0.000000, n = 5
 
- Site correction completed. Added column &#39;y_thickness1_adjusted&#39;
+ Site correction completed (centile-preserving). Added column &#39;y_thickness1_adjusted&#39;
 
  Verification:
   Original mean: 23.827809
-  Adjusted mean: 23.825806
-  Mean difference: -0.002003
+  Adjusted mean: 23.822757
+  Mean difference: -0.005052
 </pre></div>
 </div>
-<img alt="../_images/88d06feff4939970907ef18aa2d8ba8202a17a929dca02bd9089e068f9b4eda1.png" src="../_images/88d06feff4939970907ef18aa2d8ba8202a17a929dca02bd9089e068f9b4eda1.png" style="width: 779px; height: 482px;" />
+<img alt="../_images/e4c323a8ee8ada81e74a50900a3218cec705f1fc8430dbaed0a3eeff357c975f.png" src="../_images/e4c323a8ee8ada81e74a50900a3218cec705f1fc8430dbaed0a3eeff357c975f.png" style="width: 779px; height: 482px;" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Values used for centile calculation in this plot:
 sex: 1
 site: HJDXM
@@ -638,7 +678,7 @@ feature_volume1: 998.3902439376463
 feature_volume1: mean = 997.142
 </pre></div>
 </div>
-<img alt="../_images/62ade3f13a6eb54254132a3f052707cd92d4a842259ea77df1da8eb4caa86f68.png" src="../_images/62ade3f13a6eb54254132a3f052707cd92d4a842259ea77df1da8eb4caa86f68.png" style="width: 779px; height: 482px;" />
+<img alt="../_images/7c4b269987b0e572475dd06b65a699a73f81cf2c4807924a42f7b517d5990d23.png" src="../_images/7c4b269987b0e572475dd06b65a699a73f81cf2c4807924a42f7b517d5990d23.png" style="width: 779px; height: 482px;" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Values used for centile calculation in this plot:
 sex: 0
 site: TIXLZ
@@ -649,7 +689,7 @@ Scatter data filtered by:
     sex: 0
 </pre></div>
 </div>
-<img alt="../_images/ee82b808fcd57afab2d72e83f73ae4c8cc95187b82b4ec72730239416ed8689e.png" src="../_images/ee82b808fcd57afab2d72e83f73ae4c8cc95187b82b4ec72730239416ed8689e.png" style="width: 779px; height: 482px;" />
+<img alt="../_images/53ac8131cbbb5e7859b2d847bf659a1e5403c2a2ae083b02ac8a96f54a56c6e3.png" src="../_images/53ac8131cbbb5e7859b2d847bf659a1e5403c2a2ae083b02ac8a96f54a56c6e3.png" style="width: 779px; height: 482px;" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Values used for centile calculation in this plot:
 sex: 1
 site: TIXLZ
@@ -723,7 +763,7 @@ Scatter data filtered by:
   No filtering applied (showing all scatter data)
 </pre></div>
 </div>
-<img alt="../_images/d28ddfe0251841cf79cca43c954c09028c48024a31d86417c67c0962557b3de9.png" src="../_images/d28ddfe0251841cf79cca43c954c09028c48024a31d86417c67c0962557b3de9.png" style="width: 1382px; height: 490px;" />
+<img alt="../_images/d8ea89ce9c7ff40399d574456568a07a8f94a447f7208d52d92a64594b012dd0.png" src="../_images/d8ea89ce9c7ff40399d574456568a07a8f94a447f7208d52d92a64594b012dd0.png" style="width: 1382px; height: 490px;" />
 </div>
 </div>
 </section>

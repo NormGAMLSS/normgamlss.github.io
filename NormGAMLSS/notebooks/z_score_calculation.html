@@ -388,7 +388,7 @@ document.write(`
 <span id="id1"></span><h1>Z-Score Calculation<a class="headerlink" href="#z-score-calculation" title="Link to this heading">#</a></h1>
 <section id="gamlss-main-gamlss-z-score">
 <h2>gamlss_main.Gamlss.<br><strong>z_score</strong><a class="headerlink" href="#gamlss-main-gamlss-z-score" title="Link to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">z_score</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">z_score</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>    Calculates standardized scores showing how many standard deviations each observation is from the expected value. Z-scores are bounded to ensure finite values.</p>
@@ -397,8 +397,8 @@ document.write(`
             DataFrame containing the test data</p>
 <p>        <strong>train_data</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
             DataFrame containing the training data</p>
-<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>default=’SHASH’</em> <br>
-            Distribution type</p>
+<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
+            Distribution family name. If None (default), the model’s own family is used; a different family raises an error</p>
 <p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Returns:</strong></span></p>
 <p>        <strong>z_scores</strong> : <em><strong>numpy.ndarray</strong></em> <br>
             Z-scores for the test data (bounded to approximately ±4.75)</p>
@@ -414,8 +414,8 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Z-score: [-1.38242116  0.6840659  -1.05736225 ... -0.69920243 -1.96120759
- -1.18782186]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Z-score: [-1.36810983  0.65071988 -1.02070605 ... -0.65856687 -2.01200787
+ -1.14076619]
 </pre></div>
 </div>
 </div>

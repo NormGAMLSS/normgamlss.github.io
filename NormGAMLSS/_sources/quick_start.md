@@ -110,7 +110,7 @@ print(results)
 
 ```python
 # Calculate z-scores for outlier detection
-z_scores = model.z_score(test_data, train_data, func_name='SHASH')
+z_scores = model.z_score(test_data, train_data, func_name='SHASH')  # func_name is optional: the model's family
 
 # Plot z-scores colored by condition
 model.plot_z_scores(

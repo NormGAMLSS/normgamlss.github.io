@@ -388,7 +388,7 @@ document.write(`
 <span id="id1"></span><h1>Z-Score Plotting<a class="headerlink" href="#z-score-plotting" title="Link to this heading">#</a></h1>
 <section id="gamlss-main-gamlss-plot-z-scores">
 <h2>gamlss_main.Gamlss.<br><strong>plot_z_scores</strong><a class="headerlink" href="#gamlss-main-gamlss-plot-z-scores" title="Link to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_z_scores</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">,</span> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_z_scores</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
               <span class="n">x_var</span><span class="o">=</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="n">x_var_name</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
               <span class="n">save_image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
               <span class="n">font_size</span><span class="o">=</span><span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">11</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -408,8 +408,8 @@ document.write(`
 <p>        <strong>affected</strong> : <em><strong>numpy.ndarray</strong></em>, <em>optional</em> <br>
             Array indicating affected status for color coding <br>
             <code class="docutils literal notranslate"><span class="pre">'None'</span></code>, NaN and the healthy labels (<code class="docutils literal notranslate"><span class="pre">'healthy'</span></code>, <code class="docutils literal notranslate"><span class="pre">'healthy</span> <span class="pre">control(s)'</span></code>, <code class="docutils literal notranslate"><span class="pre">'control(s)'</span></code>, any case) are drawn as Controls; every other label is drawn as its own group. Labels that mention ‘healthy’ or ‘control’ but are not on this list (e.g. <code class="docutils literal notranslate"><span class="pre">'healthy</span> <span class="pre">subject'</span></code>, <code class="docutils literal notranslate"><span class="pre">'unhealthy'</span></code>) raise an error asking you to rename them.</p>
-<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>default=’SHASH’</em> <br>
-            Distribution type</p>
+<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
+            Distribution family name. If None (default), the model’s own family is used; a different family raises an error</p>
 <p>        <strong>x_var</strong> : <em><strong>str</strong></em>, <em>default=’age’</em> <br>
             Column name for x-axis variable</p>
 <p>        <strong>x_var_name</strong> : <em><strong>str</strong></em>, <em>default=’Age’</em> <br>
@@ -468,8 +468,8 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9efc405c4714bbfd4d2c4408eb5f27aec2ca108549544f83473c0b4ce8a15051.png" src="../_images/9efc405c4714bbfd4d2c4408eb5f27aec2ca108549544f83473c0b4ce8a15051.png" style="width: 781px; height: 482px;" />
-<img alt="../_images/91d930b02aa85a14a5df3e08c6de324fe81c17d4ccd458816f34ed30ade3f0a6.png" src="../_images/91d930b02aa85a14a5df3e08c6de324fe81c17d4ccd458816f34ed30ade3f0a6.png" style="width: 553px; height: 481px;" />
+<img alt="../_images/73451f9a9a7165db8373734dfe31fed8e737d95e5da574f2d180d51f1419666b.png" src="../_images/73451f9a9a7165db8373734dfe31fed8e737d95e5da574f2d180d51f1419666b.png" style="width: 781px; height: 482px;" />
+<img alt="../_images/392ae5424ac162754a38c2455bd9c6a851fe97bc8fbb2087ecc39d584cc81592.png" src="../_images/392ae5424ac162754a38c2455bd9c6a851fe97bc8fbb2087ecc39d584cc81592.png" style="width: 553px; height: 481px;" />
 </div>
 </div>
 <div class="cell config_scroll_outputs docutils container">
@@ -482,7 +482,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AIC: 3101.761139239382, BIC: 3154.6637703625
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AIC: 3065.4773340280535, BIC: 3119.5758178920805
 </pre></div>
 </div>
 </div>

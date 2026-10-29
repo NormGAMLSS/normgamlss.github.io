@@ -390,7 +390,7 @@ document.write(`
 <span id="model-evaluation"></span><h1>Model Evaluation Metrics<a class="headerlink" href="#model-evaluation-metrics" title="Link to this heading">#</a></h1>
 <section id="gamlss-main-gamlss-evaluate">
 <h2>gamlss_main.Gamlss.<br><strong>evaluate</strong><a class="headerlink" href="#gamlss-main-gamlss-evaluate" title="Link to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">,</span> <span class="n">handle_outliers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">handle_outliers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
          <span class="n">affected_col_name</span><span class="o">=</span><span class="s1">&#39;affected&#39;</span><span class="p">,</span> <span class="n">use_transfer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gam_refit_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
          <span class="n">adjustment_covariates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">params_to_adjust</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">treat_missing_as_healthy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
@@ -409,8 +409,8 @@ document.write(`
             DataFrame containing the test data for evaluation</p>
 <p>        <strong>train_data</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
             DataFrame containing the training data used for model fitting</p>
-<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>default=’SHASH’</em> <br>
-            Distribution family name</p>
+<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
+            Distribution family name. If None (default), the model’s own family is used; a different family raises an error</p>
 <p>        <strong>handle_outliers</strong> : <em><strong>bool</strong></em>, <em>default=True</em> <br>
             Whether to apply censoring for extreme values at 1st and 99th percentiles</p>
 <p>        <strong>affected</strong> : <em><strong>array-like</strong></em>, <em>optional</em> <br>
@@ -536,32 +536,32 @@ document.write(`
     <tr>
       <th>1</th>
       <td>Z_Scores_Mean</td>
-      <td>0.042010</td>
+      <td>0.038786</td>
     </tr>
     <tr>
       <th>2</th>
       <td>Z_Scores_SD</td>
-      <td>1.002632</td>
+      <td>0.995145</td>
     </tr>
     <tr>
       <th>3</th>
       <td>Logarithmic_Score</td>
-      <td>-1.474098</td>
+      <td>-1.462897</td>
     </tr>
     <tr>
       <th>4</th>
       <td>Skewness</td>
-      <td>-0.041689</td>
+      <td>-0.019956</td>
     </tr>
     <tr>
       <th>5</th>
       <td>Kurtosis</td>
-      <td>-0.682350</td>
+      <td>-0.520425</td>
     </tr>
     <tr>
       <th>6</th>
       <td>Normality_Test_Statistic</td>
-      <td>0.988805</td>
+      <td>0.992989</td>
     </tr>
   </tbody>
 </table>
@@ -614,32 +614,32 @@ document.write(`
     <tr>
       <th>1</th>
       <td>Z_Scores_Mean</td>
-      <td>0.042010</td>
+      <td>0.038786</td>
     </tr>
     <tr>
       <th>2</th>
       <td>Z_Scores_SD</td>
-      <td>1.002632</td>
+      <td>0.995145</td>
     </tr>
     <tr>
       <th>3</th>
       <td>Logarithmic_Score</td>
-      <td>-1.474098</td>
+      <td>-1.462897</td>
     </tr>
     <tr>
       <th>4</th>
       <td>Skewness</td>
-      <td>-0.041689</td>
+      <td>-0.019956</td>
     </tr>
     <tr>
       <th>5</th>
       <td>Kurtosis</td>
-      <td>-0.682350</td>
+      <td>-0.520425</td>
     </tr>
     <tr>
       <th>6</th>
       <td>Normality_Test_Statistic</td>
-      <td>0.988805</td>
+      <td>0.992989</td>
     </tr>
   </tbody>
 </table>
@@ -745,32 +745,32 @@ document.write(`
     <tr>
       <th>0</th>
       <td>MAE</td>
-      <td>0.944181</td>
+      <td>0.943362</td>
     </tr>
     <tr>
       <th>1</th>
       <td>MSE</td>
-      <td>1.227799</td>
+      <td>1.225695</td>
     </tr>
     <tr>
       <th>2</th>
       <td>RMSE</td>
-      <td>1.108061</td>
+      <td>1.107111</td>
     </tr>
     <tr>
       <th>3</th>
       <td>R_Squared</td>
-      <td>0.418701</td>
+      <td>0.419698</td>
     </tr>
     <tr>
       <th>4</th>
       <td>MAPE</td>
-      <td>3.996934</td>
+      <td>3.993906</td>
     </tr>
     <tr>
       <th>5</th>
       <td>Mean_Error</td>
-      <td>-0.054679</td>
+      <td>-0.050823</td>
     </tr>
   </tbody>
 </table>
@@ -779,7 +779,7 @@ document.write(`
 </section>
 <section id="gamlss-main-gamlss-evaluate-detailed">
 <h2>gamlss_main.Gamlss.<br><strong>evaluate_detailed</strong><a class="headerlink" href="#gamlss-main-gamlss-evaluate-detailed" title="Link to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">evaluate_detailed</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">,</span> <span class="n">handle_outliers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">evaluate_detailed</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">handle_outliers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                   <span class="n">transform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">affected_col_name</span><span class="o">=</span><span class="s1">&#39;affected&#39;</span><span class="p">,</span>
                   <span class="n">use_transfer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gam_refit_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">adjustment_covariates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">params_to_adjust</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">treat_missing_as_healthy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -794,8 +794,8 @@ document.write(`
             DataFrame containing the test data for evaluation</p>
 <p>        <strong>train_data</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
             DataFrame containing the training data used for model fitting</p>
-<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>default=’SHASH’</em> <br>
-            Distribution family name</p>
+<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
+            Distribution family name. If None (default), the model’s own family is used; a different family raises an error</p>
 <p>        <strong>handle_outliers</strong> : <em><strong>bool</strong></em>, <em>default=True</em> <br>
             Whether to apply censoring for extreme values in GAMLSS metrics</p>
 <p>        <strong>transform</strong> : <em><strong>bool</strong></em>, <em>default=True</em> <br>
@@ -879,85 +879,85 @@ Using 370 healthy subjects out of 470 total subjects for evaluation
       <th>0</th>
       <td>GAMLSS</td>
       <td>Z_Scores_Mean</td>
-      <td>0.042010</td>
+      <td>0.038786</td>
     </tr>
     <tr>
       <th>1</th>
       <td>GAMLSS</td>
       <td>Z_Scores_SD</td>
-      <td>1.002632</td>
+      <td>0.995145</td>
     </tr>
     <tr>
       <th>2</th>
       <td>GAMLSS</td>
       <td>Logarithmic_Score</td>
-      <td>-1.474098</td>
+      <td>-1.462897</td>
     </tr>
     <tr>
       <th>3</th>
       <td>GAMLSS</td>
       <td>Skewness</td>
-      <td>-0.041689</td>
+      <td>-0.019956</td>
     </tr>
     <tr>
       <th>4</th>
       <td>GAMLSS</td>
       <td>Kurtosis</td>
-      <td>-0.682350</td>
+      <td>-0.520425</td>
     </tr>
     <tr>
       <th>5</th>
       <td>GAMLSS</td>
       <td>Normality_Test_Statistic</td>
-      <td>0.988805</td>
+      <td>0.992989</td>
     </tr>
     <tr>
       <th>6</th>
       <td>ML</td>
       <td>MAE</td>
-      <td>0.944181</td>
+      <td>0.943362</td>
     </tr>
     <tr>
       <th>7</th>
       <td>ML</td>
       <td>MSE</td>
-      <td>1.227799</td>
+      <td>1.225695</td>
     </tr>
     <tr>
       <th>8</th>
       <td>ML</td>
       <td>RMSE</td>
-      <td>1.108061</td>
+      <td>1.107111</td>
     </tr>
     <tr>
       <th>9</th>
       <td>ML</td>
       <td>R_Squared</td>
-      <td>0.418701</td>
+      <td>0.419698</td>
     </tr>
     <tr>
       <th>10</th>
       <td>ML</td>
       <td>MAPE</td>
-      <td>3.996934</td>
+      <td>3.993906</td>
     </tr>
     <tr>
       <th>11</th>
       <td>ML</td>
       <td>Mean_Error</td>
-      <td>-0.054679</td>
+      <td>-0.050823</td>
     </tr>
     <tr>
       <th>12</th>
       <td>Information_Criteria</td>
       <td>AIC</td>
-      <td>3101.761139</td>
+      <td>3065.477334</td>
     </tr>
     <tr>
       <th>13</th>
       <td>Information_Criteria</td>
       <td>BIC</td>
-      <td>3154.663770</td>
+      <td>3119.575818</td>
     </tr>
   </tbody>
 </table>

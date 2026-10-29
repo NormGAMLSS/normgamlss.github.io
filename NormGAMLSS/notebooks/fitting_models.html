@@ -453,18 +453,24 @@ document.write(`
 <span class="s2">        nu.formula = ~ 1,</span>
 <span class="s2">        tau.formula = ~ 1,</span>
 <span class="s2">        family = SHASH(),</span>
-<span class="s2">        method = RS(50)</span>
+<span class="s2">        method = mixed(10, 100)</span>
 <span class="s2">    )</span>
 <span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
     <span class="n">data</span><span class="o">=</span><span class="n">df_train</span>
 <span class="p">)</span>
 <span class="c1"># family = SHASH(), GG()</span>
 <span class="c1"># method = RS(2), CG(10), mixed(2,10)</span>
+<span class="c1"># mixed(10, 100): 10 RS iterations, then up to 100 CG iterations. With SHASH, RS alone</span>
+<span class="c1"># can need hundreds of iterations here (nu and tau move slowly); check gamlss_model&#39;s</span>
+<span class="c1"># summary or the &#39;Converged&#39; columns of the pipelines.</span>
 <span class="c1"># pvc(x, by=&lt;factor&gt;) fits a separate smooth term per factor level (here: per sex).</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>R[write to console]: There were 22 warnings (use warnings() to see them)
+</pre></div>
+</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GAMLSS-RS iteration 1: Global Deviance = 3517.72 
 GAMLSS-RS iteration 2: Global Deviance = 3438.841 
 GAMLSS-RS iteration 3: Global Deviance = 3380.714 
@@ -475,46 +481,52 @@ GAMLSS-RS iteration 7: Global Deviance = 3251.364
 GAMLSS-RS iteration 8: Global Deviance = 3232.242 
 GAMLSS-RS iteration 9: Global Deviance = 3216.26 
 GAMLSS-RS iteration 10: Global Deviance = 3202.732 
-GAMLSS-RS iteration 11: Global Deviance = 3191.059 
-GAMLSS-RS iteration 12: Global Deviance = 3181.003 
-GAMLSS-RS iteration 13: Global Deviance = 3173.297 
-GAMLSS-RS iteration 14: Global Deviance = 3166.448 
-GAMLSS-RS iteration 15: Global Deviance = 3159.373 
-GAMLSS-RS iteration 16: Global Deviance = 3152.89 
-GAMLSS-RS iteration 17: Global Deviance = 3147.138 
-GAMLSS-RS iteration 18: Global Deviance = 3141.982 
-GAMLSS-RS iteration 19: Global Deviance = 3137.228 
-GAMLSS-RS iteration 20: Global Deviance = 3132.985 
-GAMLSS-RS iteration 21: Global Deviance = 3129.034 
-GAMLSS-RS iteration 22: Global Deviance = 3125.438 
-GAMLSS-RS iteration 23: Global Deviance = 3122.167 
-GAMLSS-RS iteration 24: Global Deviance = 3119.15 
-GAMLSS-RS iteration 25: Global Deviance = 3116.36 
-GAMLSS-RS iteration 26: Global Deviance = 3113.77 
-GAMLSS-RS iteration 27: Global Deviance = 3111.36 
-GAMLSS-RS iteration 28: Global Deviance = 3109.117 
-GAMLSS-RS iteration 29: Global Deviance = 3106.986 
-GAMLSS-RS iteration 30: Global Deviance = 3104.989 
-GAMLSS-RS iteration 31: Global Deviance = 3103.113 
-GAMLSS-RS iteration 32: Global Deviance = 3101.397 
-GAMLSS-RS iteration 33: Global Deviance = 3099.768 
-GAMLSS-RS iteration 34: Global Deviance = 3098.224 
-GAMLSS-RS iteration 35: Global Deviance = 3096.761 
-GAMLSS-RS iteration 36: Global Deviance = 3095.371 
-GAMLSS-RS iteration 37: Global Deviance = 3094.022 
-GAMLSS-RS iteration 38: Global Deviance = 3092.732 
-GAMLSS-RS iteration 39: Global Deviance = 3091.499 
-GAMLSS-RS iteration 40: Global Deviance = 3090.326 
-GAMLSS-RS iteration 41: Global Deviance = 3089.197 
-GAMLSS-RS iteration 42: Global Deviance = 3088.134 
-GAMLSS-RS iteration 43: Global Deviance = 3087.111 
-GAMLSS-RS iteration 44: Global Deviance = 3086.132 
-GAMLSS-RS iteration 45: Global Deviance = 3085.194 
-GAMLSS-RS iteration 46: Global Deviance = 3084.296 
-GAMLSS-RS iteration 47: Global Deviance = 3083.434 
-GAMLSS-RS iteration 48: Global Deviance = 3081.969 
-GAMLSS-RS iteration 49: Global Deviance = 3081.072 
-GAMLSS-RS iteration 50: Global Deviance = 3080.331 
+GAMLSS-CG iteration 1: Global Deviance = 3112.894 
+GAMLSS-CG iteration 2: Global Deviance = 4549.998 
+GAMLSS-CG iteration 3: Global Deviance = 4215.041 
+GAMLSS-CG iteration 4: Global Deviance = 3921.014 
+GAMLSS-CG iteration 5: Global Deviance = 3674.651 
+GAMLSS-CG iteration 6: Global Deviance = 3480.605 
+GAMLSS-CG iteration 7: Global Deviance = 3333.449 
+GAMLSS-CG iteration 8: Global Deviance = 3220.764 
+GAMLSS-CG iteration 9: Global Deviance = 3140.991 
+GAMLSS-CG iteration 10: Global Deviance = 3081.767 
+GAMLSS-CG iteration 11: Global Deviance = 3050.487 
+GAMLSS-CG iteration 12: Global Deviance = 3044.755 
+GAMLSS-CG iteration 13: Global Deviance = 3043.439 
+GAMLSS-CG iteration 14: Global Deviance = 3043.443 
+GAMLSS-CG iteration 15: Global Deviance = 3043.448 
+GAMLSS-CG iteration 16: Global Deviance = 3043.453 
+GAMLSS-CG iteration 17: Global Deviance = 3043.458 
+GAMLSS-CG iteration 18: Global Deviance = 3043.463 
+GAMLSS-CG iteration 19: Global Deviance = 3043.469 
+GAMLSS-CG iteration 20: Global Deviance = 3043.475 
+GAMLSS-CG iteration 21: Global Deviance = 3043.481 
+GAMLSS-CG iteration 22: Global Deviance = 3043.486 
+GAMLSS-CG iteration 23: Global Deviance = 3043.492 
+GAMLSS-CG iteration 24: Global Deviance = 3043.497 
+GAMLSS-CG iteration 25: Global Deviance = 3043.502 
+GAMLSS-CG iteration 26: Global Deviance = 3043.507 
+GAMLSS-CG iteration 27: Global Deviance = 3043.512 
+GAMLSS-CG iteration 28: Global Deviance = 3043.517 
+GAMLSS-CG iteration 29: Global Deviance = 3043.521 
+GAMLSS-CG iteration 30: Global Deviance = 3043.526 
+GAMLSS-CG iteration 31: Global Deviance = 3043.53 
+GAMLSS-CG iteration 32: Global Deviance = 3043.533 
+GAMLSS-CG iteration 33: Global Deviance = 3043.537 
+GAMLSS-CG iteration 34: Global Deviance = 3043.54 
+GAMLSS-CG iteration 35: Global Deviance = 3043.543 
+GAMLSS-CG iteration 36: Global Deviance = 3043.546 
+GAMLSS-CG iteration 37: Global Deviance = 3043.549 
+GAMLSS-CG iteration 38: Global Deviance = 3043.551 
+GAMLSS-CG iteration 39: Global Deviance = 3043.553 
+GAMLSS-CG iteration 40: Global Deviance = 3043.555 
+GAMLSS-CG iteration 41: Global Deviance = 3043.557 
+GAMLSS-CG iteration 42: Global Deviance = 3043.559 
+GAMLSS-CG iteration 43: Global Deviance = 3043.56 
+GAMLSS-CG iteration 44: Global Deviance = 3043.561 
+GAMLSS-CG iteration 45: Global Deviance = 3043.562 
+GAMLSS-CG iteration 46: Global Deviance = 3043.563 
 </pre></div>
 </div>
 </div>

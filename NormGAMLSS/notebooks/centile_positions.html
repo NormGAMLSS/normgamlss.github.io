@@ -388,7 +388,7 @@ document.write(`
 <span id="centile-positions"></span><h1>Centile Position Calculation<a class="headerlink" href="#centile-position-calculation" title="Link to this heading">#</a></h1>
 <section id="gamlss-main-gamlss-get-centile-position">
 <h2>gamlss_main.Gamlss.<br><strong>get_centile_position</strong><a class="headerlink" href="#gamlss-main-gamlss-get-centile-position" title="Link to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">get_centile_position</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">observed_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">get_centile_position</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">observed_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">use_transfer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gam_refit_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">params_to_adjust</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">adjustment_covariates</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
@@ -401,8 +401,8 @@ document.write(`
             DataFrame containing the training data</p>
 <p>        <strong>observed_values</strong> : <em><strong>array-like</strong></em>, <em>optional</em> <br>
             Specific values to calculate centile positions for (if None, uses test_data y values)</p>
-<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>default=’SHASH’</em> <br>
-            Distribution type</p>
+<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
+            Distribution family name. If None (default), the model’s own family is used; a different family raises an error</p>
 <p>        <strong>mode</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
             Calculation method: ‘individual’, ‘matrix’, ‘average’, or None for auto-selection</p>
 <p>        <strong>use_transfer</strong> : <em><strong>bool</strong></em>, <em>default=False</em> <br>
@@ -483,10 +483,10 @@ Shape of average percentiles: (3,)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Values at centiles: [22.71413032 24.14769548 25.60201396]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Values at centiles: [22.70404629 24.16216192 25.63883369]
 Expected centile positions: [10, 50, 90]
-Calculated centile positions: [ 9.99973953 50.         90.00025008]
-Difference: [0.00026047 0.         0.00025008]
+Calculated centile positions: [10.00005061 50.         89.99999664]
+Difference: [5.06078255e-05 0.00000000e+00 3.35895342e-06]
 </pre></div>
 </div>
 </div>

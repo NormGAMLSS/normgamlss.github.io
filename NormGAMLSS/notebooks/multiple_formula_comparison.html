@@ -401,7 +401,7 @@ document.write(`
 <p>        <strong>create_model_func</strong> : <em><strong>callable</strong></em> <br>
             Function to create a GAMLSS model</p>
 <p>        <strong>y_val_columns</strong> : <em><strong>list of str</strong></em> <br>
-            List of y-value column names to model</p>
+            List of y-value column names to model (one outcome may also be given as a string, e.g. <code class="docutils literal notranslate"><span class="pre">'thickness'</span></code>). All outcomes and formulas are checked before anything is fitted, and one error lists every problem found</p>
 <p>        <strong>df_train</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
             Training dataframe</p>
 <p>        <strong>formulas</strong> : <em><strong>list of dict</strong></em> <br>
@@ -415,7 +415,7 @@ document.write(`
 <p>        <strong>num_cores</strong> : <em><strong>int</strong></em>, <em>optional</em> <br>
             Number of CPU cores for multiprocessing (uses 4 if None)</p>
 <p>        <strong>force_overwrite</strong> : <em><strong>bool</strong></em>, <em>default=False</em> <br>
-            Whether to overwrite existing cached results</p>
+            Whether to overwrite existing cached results. If False, a result saved earlier in main_folder is reused only when it was made with the same settings (formulas, model code, data, number of permutations, evaluation data); results made with other settings are computed again, with a warning. The settings are saved next to each result in a small <code class="docutils literal notranslate"><span class="pre">_settings.json</span></code> file</p>
 <p>        <strong>save_models</strong> : <em><strong>bool</strong></em>, <em>default=False</em> <br>
             Whether to save fitted models</p>
 <p>        <strong>use_multiprocessing</strong> : <em><strong>bool</strong></em>, <em>default=True</em> <br>
@@ -425,7 +425,7 @@ document.write(`
 <p>        <strong>eval_data</strong> : <em><strong>pandas.DataFrame</strong></em>, <em>optional</em> <br>
             DataFrame for evaluation</p>
 <p>        <strong>affected</strong> : <em><strong>array-like</strong></em>, <em>optional</em> <br>
-            Array indicating affected status for evaluation. If None, assumes all subjects are healthy</p>
+            Array indicating affected status for evaluation. If None, assumes all subjects are healthy. It must have one value per row of eval_data (checked before anything is fitted)</p>
 <p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
             Distribution family name for evaluation (auto-detected if None)</p>
 <p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Returns:</strong></span></p>
@@ -462,7 +462,7 @@ document.write(`
 <span class="s2">                nu.formula = ~ </span><span class="si">{</span><span class="n">nu_formula</span><span class="si">}</span><span class="s2">,</span>
 <span class="s2">                tau.formula = ~ </span><span class="si">{</span><span class="n">tau_formula</span><span class="si">}</span><span class="s2">,</span>
 <span class="s2">                family = SHASH(),</span>
-<span class="s2">                method = RS(10)</span>
+<span class="s2">                method = mixed(10, 100)</span>
 <span class="s2">            )</span>
 <span class="s2">            &quot;&quot;&quot;</span><span class="p">,</span>
             <span class="n">data</span><span class="o">=</span><span class="n">data</span>
@@ -547,18 +547,17 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-09 13:24:11,283 - INFO - Using multiprocessing for processing
-2026-10-09 13:24:11,284 - INFO - Using 4 cores for multiprocessing
-2026-10-09 13:24:11,290 - INFO - Detected distribution family: SHASH
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-29 18:08:49,972 - INFO - Using multiprocessing for processing
+2026-10-29 18:08:49,974 - INFO - Using 4 cores for multiprocessing
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/4 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-09 13:24:11,378 - INFO - Processing y_thickness2
-2026-10-09 13:24:11,378 - INFO - Processing y_thickness1
-2026-10-09 13:24:11,380 - INFO - Processing y_thickness4
-2026-10-09 13:24:11,380 - INFO - Processing y_thickness3
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-29 18:08:50,193 - INFO - Processing y_thickness1
+2026-10-29 18:08:50,195 - INFO - Processing y_thickness2
+2026-10-29 18:08:50,198 - INFO - Processing y_thickness4
+2026-10-29 18:08:50,198 - INFO - Processing y_thickness3
 GAMLSS-RS iteration 1: Global Deviance = 4164.66 
 GAMLSS-RS iteration 1: Global Deviance = 3594.915 
 GAMLSS-RS iteration 2: Global Deviance = 4119.447 
@@ -568,183 +567,419 @@ GAMLSS-RS iteration 2: Global Deviance = 3509.95
 GAMLSS-RS iteration 3: Global Deviance = 4085.34 
 GAMLSS-RS iteration 4: Global Deviance = 4057.893 
 GAMLSS-RS iteration 5: Global Deviance = 4037.394 
-GAMLSS-RS iteration 3: Global Deviance = 3446.16 
-GAMLSS-RS iteration 2: Global Deviance = 3438.841 
 GAMLSS-RS iteration 2: Global Deviance = 3451.642 
 GAMLSS-RS iteration 6: Global Deviance = 4021.056 
+GAMLSS-RS iteration 2: Global Deviance = 3438.841 
+GAMLSS-RS iteration 3: Global Deviance = 3446.16 
 GAMLSS-RS iteration 7: Global Deviance = 4007.78 
 GAMLSS-RS iteration 8: Global Deviance = 3997.277 
 GAMLSS-RS iteration 9: Global Deviance = 3988.909 
-GAMLSS-RS iteration 4: Global Deviance = 3397.412 
 GAMLSS-RS iteration 10: Global Deviance = 3981.68 
-Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness3_formula1.rds
-Using 370 healthy subjects out of 470 total subjects for evaluation
-Using 370 healthy subjects out of 470 total subjects for evaluation
-2026-10-09 13:24:31,825 - INFO - Successfully evaluated formula1 for y_thickness3
-GAMLSS-RS iteration 3: Global Deviance = 3380.714 
+GAMLSS-RS iteration 4: Global Deviance = 3397.412 
 GAMLSS-RS iteration 3: Global Deviance = 3399.762 
+GAMLSS-RS iteration 3: Global Deviance = 3380.714 
 GAMLSS-RS iteration 5: Global Deviance = 3359.032 
 GAMLSS-RS iteration 6: Global Deviance = 3327.979 
-GAMLSS-RS iteration 1: Global Deviance = 4160.212 
+GAMLSS-CG iteration 1: Global Deviance = 3928.671 
 GAMLSS-RS iteration 7: Global Deviance = 3302.675 
-GAMLSS-RS iteration 8: Global Deviance = 3281.777 
 GAMLSS-RS iteration 4: Global Deviance = 3337 
+GAMLSS-CG iteration 2: Global Deviance = 3923.737 
+GAMLSS-RS iteration 8: Global Deviance = 3281.777 
 GAMLSS-RS iteration 9: Global Deviance = 3264.62 
-GAMLSS-RS iteration 2: Global Deviance = 4116.469 
+GAMLSS-CG iteration 3: Global Deviance = 3923.314 
 GAMLSS-RS iteration 4: Global Deviance = 3358.61 
 GAMLSS-RS iteration 10: Global Deviance = 3249.667 
-Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness4_formula1.rds
+GAMLSS-CG iteration 4: Global Deviance = 3923.313 
+Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness3_formula1.rds
 Using 370 healthy subjects out of 470 total subjects for evaluation
-Using 370 healthy subjects out of 470 total subjects for evaluation
-2026-10-09 13:24:42,621 - INFO - Successfully evaluated formula1 for y_thickness4
-GAMLSS-RS iteration 3: Global Deviance = 4081.91 
 GAMLSS-RS iteration 5: Global Deviance = 3302.682 
+Using 370 healthy subjects out of 470 total subjects for evaluation
+2026-10-29 18:09:30,407 - INFO - Successfully evaluated formula1 for y_thickness3
+GAMLSS-RS iteration 5: Global Deviance = 3325.658 
+GAMLSS-CG iteration 1: Global Deviance = 3163.454 
+GAMLSS-RS iteration 1: Global Deviance = 4160.212 
+GAMLSS-RS iteration 6: Global Deviance = 3274.515 
+GAMLSS-RS iteration 2: Global Deviance = 4116.469 
+GAMLSS-CG iteration 2: Global Deviance = 9688.892 
+GAMLSS-RS iteration 6: Global Deviance = 3298.729 
+GAMLSS-RS iteration 7: Global Deviance = 3251.364 
+GAMLSS-RS iteration 3: Global Deviance = 4081.91 
 GAMLSS-RS iteration 4: Global Deviance = 4054.992 
 GAMLSS-RS iteration 5: Global Deviance = 4034.519 
+GAMLSS-CG iteration 3: Global Deviance = 9259.876 
 GAMLSS-RS iteration 6: Global Deviance = 4018.084 
-GAMLSS-RS iteration 1: Global Deviance = 3591.526 
-GAMLSS-RS iteration 5: Global Deviance = 3325.658 
+GAMLSS-RS iteration 7: Global Deviance = 3276.382 
 GAMLSS-RS iteration 7: Global Deviance = 4005.075 
+GAMLSS-RS iteration 8: Global Deviance = 3232.242 
 GAMLSS-RS iteration 8: Global Deviance = 3994.686 
-GAMLSS-RS iteration 6: Global Deviance = 3274.515 
-GAMLSS-RS iteration 2: Global Deviance = 3510.287 
 GAMLSS-RS iteration 9: Global Deviance = 3985.93 
-GAMLSS-RS iteration 3: Global Deviance = 3447.793 
+GAMLSS-CG iteration 4: Global Deviance = 8864.853 
 GAMLSS-RS iteration 10: Global Deviance = 3978.815 
-GAMLSS-RS iteration 4: Global Deviance = 3398.902 
-GAMLSS-RS iteration 5: Global Deviance = 3360.33 
+GAMLSS-RS iteration 9: Global Deviance = 3216.26 
+GAMLSS-RS iteration 8: Global Deviance = 3257.585 
+GAMLSS-CG iteration 5: Global Deviance = 8514.657 
+GAMLSS-CG iteration 1: Global Deviance = 3924.98 
+GAMLSS-RS iteration 10: Global Deviance = 3202.732 
+GAMLSS-CG iteration 2: Global Deviance = 3921.007 
+GAMLSS-RS iteration 9: Global Deviance = 3241.567 
+GAMLSS-CG iteration 6: Global Deviance = 8215.145 
+GAMLSS-CG iteration 1: Global Deviance = 3112.894 
+GAMLSS-CG iteration 3: Global Deviance = 3920.171 
+GAMLSS-CG iteration 7: Global Deviance = 7962.38 
+GAMLSS-RS iteration 10: Global Deviance = 3227.838 
+GAMLSS-CG iteration 4: Global Deviance = 3920.051 
+GAMLSS-CG iteration 5: Global Deviance = 3920.044 
+GAMLSS-CG iteration 2: Global Deviance = 4549.998 
+GAMLSS-CG iteration 6: Global Deviance = 3920.044 
 Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness3_formula2.rds
 Using 370 healthy subjects out of 470 total subjects for evaluation
-GAMLSS-RS iteration 6: Global Deviance = 3298.729 
 Using 370 healthy subjects out of 470 total subjects for evaluation
-2026-10-09 13:24:55,851 - INFO - Successfully evaluated formula2 for y_thickness3
-GAMLSS-RS iteration 6: Global Deviance = 3328.808 
+2026-10-29 18:10:17,488 - INFO - Successfully evaluated formula2 for y_thickness3
 GAMLSS-RS iteration 1: Global Deviance = 4208.989 
 GAMLSS-RS iteration 2: Global Deviance = 4157.798 
+GAMLSS-CG iteration 8: Global Deviance = 7743.561 
 GAMLSS-RS iteration 3: Global Deviance = 4122.071 
-GAMLSS-RS iteration 7: Global Deviance = 3303.718 
 GAMLSS-RS iteration 4: Global Deviance = 4094.366 
 GAMLSS-RS iteration 5: Global Deviance = 4073.18 
 GAMLSS-RS iteration 6: Global Deviance = 4056.496 
+GAMLSS-CG iteration 3: Global Deviance = 4215.041 
 GAMLSS-RS iteration 7: Global Deviance = 4043.007 
-GAMLSS-RS iteration 7: Global Deviance = 3251.364 
 GAMLSS-RS iteration 8: Global Deviance = 4032.065 
 GAMLSS-RS iteration 9: Global Deviance = 4023.555 
+GAMLSS-CG iteration 1: Global Deviance = 3121.7 
 GAMLSS-RS iteration 10: Global Deviance = 4016.24 
-2026-10-09 13:24:58,918 - WARNING - R[write to console]: In RS(10) :
-2026-10-09 13:24:58,919 - WARNING - R[write to console]:  Algorithm RS has not yet converged
-
+GAMLSS-CG iteration 1: Global Deviance = 3960.678 
+GAMLSS-CG iteration 2: Global Deviance = 3956.586 
+GAMLSS-CG iteration 3: Global Deviance = 3956.477 
+GAMLSS-CG iteration 4: Global Deviance = 3956.479 
+GAMLSS-CG iteration 5: Global Deviance = 3956.481 
+GAMLSS-CG iteration 6: Global Deviance = 3956.484 
+GAMLSS-CG iteration 9: Global Deviance = 7542.538 
+GAMLSS-CG iteration 7: Global Deviance = 3956.486 
+GAMLSS-CG iteration 8: Global Deviance = 3956.489 
+GAMLSS-CG iteration 9: Global Deviance = 3956.492 
+GAMLSS-CG iteration 10: Global Deviance = 3956.495 
+GAMLSS-CG iteration 4: Global Deviance = 3921.014 
+GAMLSS-CG iteration 11: Global Deviance = 3956.499 
+GAMLSS-CG iteration 12: Global Deviance = 3956.503 
+GAMLSS-CG iteration 13: Global Deviance = 3956.506 
+GAMLSS-CG iteration 14: Global Deviance = 3956.51 
+GAMLSS-CG iteration 15: Global Deviance = 3956.514 
+GAMLSS-CG iteration 16: Global Deviance = 3956.518 
+GAMLSS-CG iteration 17: Global Deviance = 3956.522 
+GAMLSS-CG iteration 18: Global Deviance = 3956.526 
+GAMLSS-CG iteration 19: Global Deviance = 3956.53 
+GAMLSS-CG iteration 20: Global Deviance = 3956.534 
+GAMLSS-CG iteration 21: Global Deviance = 3956.538 
+GAMLSS-CG iteration 22: Global Deviance = 3956.543 
+GAMLSS-CG iteration 23: Global Deviance = 3956.547 
+GAMLSS-CG iteration 2: Global Deviance = 5482.335 
+GAMLSS-CG iteration 24: Global Deviance = 3956.551 
+GAMLSS-CG iteration 25: Global Deviance = 3956.555 
+GAMLSS-CG iteration 26: Global Deviance = 3956.559 
+GAMLSS-CG iteration 27: Global Deviance = 3956.563 
+GAMLSS-CG iteration 28: Global Deviance = 3956.567 
+GAMLSS-CG iteration 29: Global Deviance = 3956.571 
+GAMLSS-CG iteration 30: Global Deviance = 3956.575 
+GAMLSS-CG iteration 31: Global Deviance = 3956.579 
+GAMLSS-CG iteration 32: Global Deviance = 3956.583 
+GAMLSS-CG iteration 33: Global Deviance = 3956.587 
+GAMLSS-CG iteration 34: Global Deviance = 3956.591 
+GAMLSS-CG iteration 35: Global Deviance = 3956.594 
+GAMLSS-CG iteration 36: Global Deviance = 3956.598 
+GAMLSS-CG iteration 37: Global Deviance = 3956.602 
+GAMLSS-CG iteration 38: Global Deviance = 3956.605 
+GAMLSS-CG iteration 39: Global Deviance = 3956.608 
+GAMLSS-CG iteration 40: Global Deviance = 3956.612 
+GAMLSS-CG iteration 41: Global Deviance = 3956.615 
+GAMLSS-CG iteration 42: Global Deviance = 3956.619 
+GAMLSS-CG iteration 43: Global Deviance = 3956.622 
+GAMLSS-CG iteration 44: Global Deviance = 3956.625 
+GAMLSS-CG iteration 45: Global Deviance = 3956.628 
+GAMLSS-CG iteration 46: Global Deviance = 3956.631 
+GAMLSS-CG iteration 47: Global Deviance = 3956.634 
+GAMLSS-CG iteration 10: Global Deviance = 7351.523 
+GAMLSS-CG iteration 48: Global Deviance = 3956.637 
+GAMLSS-CG iteration 49: Global Deviance = 3956.64 
+GAMLSS-CG iteration 50: Global Deviance = 3956.642 
+GAMLSS-CG iteration 51: Global Deviance = 3956.645 
+GAMLSS-CG iteration 52: Global Deviance = 3956.648 
+GAMLSS-CG iteration 53: Global Deviance = 3956.65 
+GAMLSS-CG iteration 5: Global Deviance = 3674.651 
+GAMLSS-CG iteration 54: Global Deviance = 3956.653 
+GAMLSS-CG iteration 55: Global Deviance = 3956.655 
+GAMLSS-CG iteration 56: Global Deviance = 3956.657 
+GAMLSS-CG iteration 57: Global Deviance = 3956.66 
+GAMLSS-CG iteration 58: Global Deviance = 3956.662 
+GAMLSS-CG iteration 59: Global Deviance = 3956.664 
+GAMLSS-CG iteration 60: Global Deviance = 3956.666 
+GAMLSS-CG iteration 61: Global Deviance = 3956.669 
+GAMLSS-CG iteration 62: Global Deviance = 3956.671 
+GAMLSS-CG iteration 63: Global Deviance = 3956.673 
+GAMLSS-CG iteration 64: Global Deviance = 3956.674 
+GAMLSS-CG iteration 65: Global Deviance = 3956.676 
+GAMLSS-CG iteration 66: Global Deviance = 3956.678 
+GAMLSS-CG iteration 67: Global Deviance = 3956.68 
+GAMLSS-CG iteration 68: Global Deviance = 3956.682 
+GAMLSS-CG iteration 69: Global Deviance = 3956.683 
+GAMLSS-CG iteration 70: Global Deviance = 3956.685 
+GAMLSS-CG iteration 71: Global Deviance = 3956.686 
+GAMLSS-CG iteration 72: Global Deviance = 3956.688 
+GAMLSS-CG iteration 73: Global Deviance = 3956.689 
+GAMLSS-CG iteration 74: Global Deviance = 3956.691 
+GAMLSS-CG iteration 75: Global Deviance = 3956.692 
+GAMLSS-CG iteration 76: Global Deviance = 3956.694 
+GAMLSS-CG iteration 3: Global Deviance = 5103.514 
+GAMLSS-CG iteration 77: Global Deviance = 3956.695 
+GAMLSS-CG iteration 78: Global Deviance = 3956.696 
+GAMLSS-CG iteration 79: Global Deviance = 3956.698 
+GAMLSS-CG iteration 80: Global Deviance = 3956.699 
+GAMLSS-CG iteration 81: Global Deviance = 3956.7 
+GAMLSS-CG iteration 82: Global Deviance = 3956.701 
+GAMLSS-CG iteration 83: Global Deviance = 3956.702 
+GAMLSS-CG iteration 84: Global Deviance = 3956.704 
+GAMLSS-CG iteration 6: Global Deviance = 3480.605 
+GAMLSS-CG iteration 85: Global Deviance = 3956.704 
+GAMLSS-CG iteration 86: Global Deviance = 3956.706 
+GAMLSS-CG iteration 87: Global Deviance = 3956.707 
 Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness3_formula3.rds
 Using 370 healthy subjects out of 470 total subjects for evaluation
 Using 370 healthy subjects out of 470 total subjects for evaluation
-2026-10-09 13:25:00,231 - INFO - Successfully evaluated formula3 for y_thickness3
+2026-10-29 18:10:36,026 - INFO - Successfully evaluated formula3 for y_thickness3
 GAMLSS-RS iteration 1: Global Deviance = 4208.989 
 GAMLSS-RS iteration 2: Global Deviance = 4157.798 
 GAMLSS-RS iteration 3: Global Deviance = 4122.071 
 GAMLSS-RS iteration 4: Global Deviance = 4094.366 
 GAMLSS-RS iteration 5: Global Deviance = 4073.18 
-GAMLSS-RS iteration 6: Global Deviance = 4056.496 
+GAMLSS-CG iteration GAMLSS-RS iteration 116: Global Deviance = 7168.475: Global Deviance =  
+4056.496 
 GAMLSS-RS iteration 7: Global Deviance = 4043.007 
 GAMLSS-RS iteration 8: Global Deviance = 4032.065 
 GAMLSS-RS iteration 9: Global Deviance = 4023.555 
 GAMLSS-RS iteration 10: Global Deviance = 4016.24 
-2026-10-09 13:25:00,814 - WARNING - R[write to console]: In RS(10) :
-2026-10-09 13:25:00,815 - WARNING - R[write to console]:  Algorithm RS has not yet converged
-
+GAMLSS-CG iteration 1: Global Deviance = 3960.678 
+GAMLSS-CG iteration 2: Global Deviance = 3957.489 
+GAMLSS-CG iteration 3: Global Deviance = 3956.763 
+GAMLSS-CG iteration 4: Global Deviance = 3956.756 
+GAMLSS-CG iteration 5: Global Deviance = 3956.755 
 Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness3_formula4.rds
 Using 370 healthy subjects out of 470 total subjects for evaluation
 Using 370 healthy subjects out of 470 total subjects for evaluation
-2026-10-09 13:25:01,876 - INFO - Successfully evaluated formula4 for y_thickness3
-GAMLSS-RS iteration 8: Global Deviance = 3282.513 
-GAMLSS-RS iteration 7: Global Deviance = 3276.382 
-GAMLSS-RS iteration 8: Global Deviance = 3232.242 
-GAMLSS-RS iteration 9: Global Deviance = 3264.817 
-GAMLSS-RS iteration 10: Global Deviance = 3248.737 
-Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness4_formula2.rds
-Using 370 healthy subjects out of 470 total subjects for evaluation
-Using 370 healthy subjects out of 470 total subjects for evaluation
-2026-10-09 13:25:09,641 - INFO - Successfully evaluated formula2 for y_thickness4
-GAMLSS-RS iteration 8: Global Deviance = 3257.585 
-GAMLSS-RS iteration 1: Global Deviance = 3627.222 
-GAMLSS-RS iteration 2: Global Deviance = 3542.042 
-GAMLSS-RS iteration 3: Global Deviance = 3481.237 
-GAMLSS-RS iteration 9: Global Deviance = 3216.26 
-GAMLSS-RS iteration 4: Global Deviance = 3436.7 
-GAMLSS-RS iteration 5: Global Deviance = 3402.992 
-GAMLSS-RS iteration 6: Global Deviance = 3376.51 
-GAMLSS-RS iteration 7: Global Deviance = 3355.555 
-GAMLSS-RS iteration 8: Global Deviance = 3338.286 
-GAMLSS-RS iteration 9: Global Deviance = 3323.835 
-GAMLSS-RS iteration 10: Global Deviance = 3311.858 
-2026-10-09 13:25:13,157 - WARNING - R[write to console]: In RS(10) :
-2026-10-09 13:25:13,158 - WARNING - R[write to console]:  Algorithm RS has not yet converged
-
-Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness4_formula3.rds
-Using 370 healthy subjects out of 470 total subjects for evaluation
-Using 370 healthy subjects out of 470 total subjects for evaluation
-2026-10-09 13:25:14,332 - INFO - Successfully evaluated formula3 for y_thickness4
-GAMLSS-RS iteration 1: Global Deviance = 3627.222 
-GAMLSS-RS iteration 2: Global Deviance = 3542.042 
-GAMLSS-RS iteration 3: Global Deviance = 3481.237 
-GAMLSS-RS iteration 4: Global Deviance = 3436.7 
-GAMLSS-RS iteration 5: Global Deviance = 3402.992 
-GAMLSS-RS iteration 6: Global Deviance = 3376.51 
-GAMLSS-RS iteration 7: Global Deviance = 3355.555 
-GAMLSS-RS iteration 8: Global Deviance = 3338.286 
-GAMLSS-RS iteration 9: Global Deviance = 3323.835 
-GAMLSS-RS iteration 10: Global Deviance = 3311.858 
-2026-10-09 13:25:15,046 - WARNING - R[write to console]: In RS(10) :
-2026-10-09 13:25:15,047 - WARNING - R[write to console]:  Algorithm RS has not yet converged
-
-Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness4_formula4.rds
-Using 370 healthy subjects out of 470 total subjects for evaluation
-Using 370 healthy subjects out of 470 total subjects for evaluation
-2026-10-09 13:25:15,933 - INFO - Successfully evaluated formula4 for y_thickness4
-GAMLSS-RS iteration 10: Global Deviance = 3202.732 
+2026-10-29 18:10:37,875 - INFO - Successfully evaluated formula4 for y_thickness3
+GAMLSS-CG iteration 4: Global Deviance = 4792.807 
+GAMLSS-CG iteration 7: Global Deviance = 3333.449 
+GAMLSS-CG iteration 5: Global Deviance = 4552.409 
+GAMLSS-CG iteration 12: Global Deviance = 6992.35 
+GAMLSS-CG iteration 8: Global Deviance = 3220.764 
+GAMLSS-CG iteration 6: Global Deviance = 4355.1 
+GAMLSS-CG iteration 9: Global Deviance = 3140.991 
+GAMLSS-CG iteration 13: Global Deviance = 6822.699 
+GAMLSS-CG iteration 7: Global Deviance = 4193.358 
+GAMLSS-CG iteration 10: Global Deviance = 3081.767 
+GAMLSS-CG iteration 14: Global Deviance = 6659.21 
+GAMLSS-CG iteration 8: Global Deviance = 4059.768 
+GAMLSS-CG iteration 11: Global Deviance = 3050.487 
+GAMLSS-CG iteration 15: Global Deviance = 6501.804 
+GAMLSS-CG iteration 9: Global Deviance = 3941.995 
+GAMLSS-CG iteration 12: Global Deviance = 3044.755 
+GAMLSS-CG iteration 16: Global Deviance = 6350.791 
+GAMLSS-CG iteration 13: Global Deviance = 3043.439 
+GAMLSS-CG iteration 10: Global Deviance = 3838.301 
+GAMLSS-CG iteration 17: Global Deviance = 6207.117 
+GAMLSS-CG iteration 11: Global Deviance = 3747.974 
+GAMLSS-CG iteration 14: Global Deviance = 3043.443 
+GAMLSS-CG iteration 15: Global Deviance = 3043.448 
+GAMLSS-CG iteration 18: Global Deviance = 6072.46 
+GAMLSS-CG iteration 12: Global Deviance = 3669.106 
+GAMLSS-CG iteration 16: Global Deviance = 3043.453 
+GAMLSS-CG iteration 19: Global Deviance = 5942.538 
+GAMLSS-CG iteration 13: Global Deviance = 3599.125 
+GAMLSS-CG iteration 17: Global Deviance = 3043.458 
+GAMLSS-CG iteration 20: Global Deviance = 5818.931 
+GAMLSS-CG iteration 14: Global Deviance = 3535.077 
+GAMLSS-CG iteration 18: Global Deviance = 3043.463 
+GAMLSS-CG iteration 21: Global Deviance = 5742.827 
+GAMLSS-CG iteration 15: Global Deviance = 3475.406 
+GAMLSS-CG iteration 19: Global Deviance = 3043.469 
+GAMLSS-CG iteration 22: Global Deviance = 5631.418 
+GAMLSS-CG iteration 16: Global Deviance = 3417.282 
+GAMLSS-CG iteration 23: Global Deviance = 5558.648 
+GAMLSS-CG iteration 20: Global Deviance = 3043.475 
+GAMLSS-CG iteration 24: Global Deviance = 5491.904 
+GAMLSS-CG iteration 17: Global Deviance = 3362.249 
+GAMLSS-CG iteration 21: Global Deviance = 3043.481 
+GAMLSS-CG iteration 25: Global Deviance = 5437.118 
+GAMLSS-CG iteration 26: Global Deviance = 5365.541 
+GAMLSS-CG iteration 18: Global Deviance = 3308.242 
+GAMLSS-CG iteration 22: Global Deviance = 3043.486 
+GAMLSS-CG iteration 27: Global Deviance = 5354.512 
+GAMLSS-CG iteration 19: Global Deviance = 3257.963 
+GAMLSS-CG iteration 23: Global Deviance = 3043.492 
+GAMLSS-CG iteration 28: Global Deviance = 5246.917 
+GAMLSS-CG iteration 20: Global Deviance = 3210.741 
+GAMLSS-CG iteration 24: Global Deviance = 3043.497 
+GAMLSS-CG iteration 29: Global Deviance = 5178.617 
+GAMLSS-CG iteration 21: Global Deviance = 3168.983 
+GAMLSS-CG iteration 25: Global Deviance = 3043.502 
+GAMLSS-CG iteration 30: Global Deviance = 5121.694 
+GAMLSS-CG iteration 31: Global Deviance = 5065.475 
+GAMLSS-CG iteration 26: Global Deviance = 3043.507 
+GAMLSS-CG iteration 22: Global Deviance = 3136.301 
+GAMLSS-CG iteration 32: Global Deviance = 5009.543 
+GAMLSS-CG iteration 33: Global Deviance = 4959.732 
+GAMLSS-CG iteration 27: Global Deviance = 3043.512 
+GAMLSS-CG iteration 23: Global Deviance = 3107.104 
+GAMLSS-CG iteration 34: Global Deviance = 4937.393 
+GAMLSS-CG iteration 28: Global Deviance = 3043.517 
+GAMLSS-CG iteration 24: Global Deviance = 3096.915 
+GAMLSS-CG iteration 35: Global Deviance = 4876.657 
+GAMLSS-CG iteration 29: Global Deviance = 3043.521 
+GAMLSS-CG iteration 25: Global Deviance = 3080.161 
+GAMLSS-CG iteration 26: Global Deviance = 3077.615 
+GAMLSS-CG iteration 36: Global Deviance = 4852.052 
+GAMLSS-CG iteration 30: Global Deviance = 3043.526 
+GAMLSS-CG iteration 27: Global Deviance = 3065.158 
+GAMLSS-CG iteration 37: Global Deviance = 4800.691 
+GAMLSS-CG iteration 31: Global Deviance = 3043.53 
+GAMLSS-CG iteration 28: Global Deviance = 3060.303 
+GAMLSS-CG iteration 29: Global Deviance = 3059.191 
+GAMLSS-CG iteration 38: Global Deviance = 4784.13 
+GAMLSS-CG iteration 32: Global Deviance = 3043.533 
+GAMLSS-CG iteration 39: Global Deviance = 4720.789 
+GAMLSS-CG iteration 30: Global Deviance = 3059.365 
+GAMLSS-CG iteration 33: Global Deviance = 3043.537 
+GAMLSS-CG iteration 40: Global Deviance = 4695.229 
+GAMLSS-CG iteration 41: Global Deviance = 4627.145 
+GAMLSS-CG iteration 31: Global Deviance = 3059.536 
+GAMLSS-CG iteration 34: Global Deviance = 3043.54 
+GAMLSS-CG iteration 42: Global Deviance = 4585.773 
+GAMLSS-CG iteration 35: Global Deviance = 3043.543 
+GAMLSS-CG iteration 32: Global Deviance = 3059.701 
+GAMLSS-CG iteration 43: Global Deviance = 4551.207 
+GAMLSS-CG iteration 36: Global Deviance = 3043.546 
+GAMLSS-CG iteration 33: Global Deviance = 3059.862 
+GAMLSS-CG iteration 44: Global Deviance = 4508.679 
+GAMLSS-CG iteration 37: Global Deviance = 3043.549 
+GAMLSS-CG iteration 34: Global Deviance = 3060.016 
+GAMLSS-CG iteration 38: Global Deviance = 3043.551 
+GAMLSS-CG iteration 45: Global Deviance = 4464.315 
+GAMLSS-CG iteration 39: Global Deviance = 3043.553 
+GAMLSS-CG iteration 35: Global Deviance = 3060.163 
+GAMLSS-CG iteration 46: Global Deviance = 4422.156 
+GAMLSS-CG iteration 40: Global Deviance = 3043.555 
+GAMLSS-CG iteration 36: Global Deviance = 3060.301 
+GAMLSS-CG iteration 47: Global Deviance = 4385.183 
+GAMLSS-CG iteration 37: Global Deviance = 3060.434 
+GAMLSS-CG iteration 41: Global Deviance = 3043.557 
+GAMLSS-CG iteration 42: Global Deviance = 3043.559 
+GAMLSS-CG iteration 48: Global Deviance = 4346.978 
+GAMLSS-CG iteration 38: Global Deviance = 3060.555 
+GAMLSS-CG iteration 43: Global Deviance = 3043.56 
+GAMLSS-CG iteration 49: Global Deviance = 4313.178 
+GAMLSS-CG iteration 39: Global Deviance = 3060.667 
+GAMLSS-CG iteration 44: Global Deviance = 3043.561 
+GAMLSS-CG iteration 50: Global Deviance = 4277.527 
+GAMLSS-CG iteration 40: Global Deviance = 3060.77 
+GAMLSS-CG iteration 45: Global Deviance = 3043.562 
+GAMLSS-CG iteration 51: Global Deviance = 4246.503 
+GAMLSS-CG iteration 41: Global Deviance = 3060.863 
+GAMLSS-CG iteration 42: Global Deviance = 3060.95 
+GAMLSS-CG iteration 46: Global Deviance = 3043.563 
 Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness1_formula1.rds
 Using 370 healthy subjects out of 470 total subjects for evaluation
+GAMLSS-CG iteration 43: Global Deviance = 3061.028 
 Using 370 healthy subjects out of 470 total subjects for evaluation
-2026-10-09 13:25:18,138 - INFO - Successfully evaluated formula1 for y_thickness1
-GAMLSS-RS iteration 9: Global Deviance = 3241.567 
+2026-10-29 18:14:11,870 - INFO - Successfully evaluated formula1 for y_thickness1
+GAMLSS-CG iteration 44: Global Deviance = 3061.098 
+GAMLSS-CG iteration 45: Global Deviance = 3061.161 
+GAMLSS-CG iteration 46: Global Deviance = 3061.216 
+GAMLSS-CG iteration 52: Global Deviance = 4212.475 
+GAMLSS-CG iteration 47: Global Deviance = 3061.265 
+GAMLSS-CG iteration 53: Global Deviance = 4183.293 
+GAMLSS-CG iteration 48: Global Deviance = 3061.309 
 GAMLSS-RS iteration 1: Global Deviance = -812.8626 
 GAMLSS-RS iteration 2: Global Deviance = -866.3102 
-GAMLSS-RS iteration 10: Global Deviance = 3227.838 
-Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness2_formula1.rds
-Using 370 healthy subjects out of 470 total subjects for evaluation
-Using 370 healthy subjects out of 470 total subjects for evaluation
-2026-10-09 13:25:26,703 - INFO - Successfully evaluated formula1 for y_thickness2
+GAMLSS-CG iteration 49: Global Deviance = 3061.345 
+GAMLSS-CG iteration 54: Global Deviance = 4151.489 
 GAMLSS-RS iteration 3: Global Deviance = -886.0028 
+GAMLSS-CG iteration 55: Global Deviance = 4121.199 
 GAMLSS-RS iteration 4: Global Deviance = -900.9205 
-GAMLSS-RS iteration 1: Global Deviance = 3516.928 
+GAMLSS-CG iteration 50: Global Deviance = 3061.377 
+GAMLSS-CG iteration 56: Global Deviance = 4089.999 
+GAMLSS-CG iteration 57: Global Deviance = 4062.691 
 GAMLSS-RS iteration 5: Global Deviance = -912.5283 
+GAMLSS-CG iteration 51: Global Deviance = 3061.404 
 GAMLSS-RS iteration 6: Global Deviance = -921.3676 
-GAMLSS-RS iteration 2: Global Deviance = 3448.371 
+GAMLSS-CG iteration 58: Global Deviance = 4032.81 
 GAMLSS-RS iteration 7: Global Deviance = -928.5963 
+GAMLSS-CG iteration 52: Global Deviance = 3061.428 
 GAMLSS-RS iteration 8: Global Deviance = -934.4957 
 GAMLSS-RS iteration 9: Global Deviance = -939.4455 
+GAMLSS-CG iteration 59: Global Deviance = 4003.895 
 GAMLSS-RS iteration 10: Global Deviance = -943.4824 
+GAMLSS-CG iteration 53: Global Deviance = 3061.449 
+GAMLSS-CG iteration 1: Global Deviance = -962.6524 
+GAMLSS-CG iteration 60: Global Deviance = 3973.432 
+GAMLSS-CG iteration 61: Global Deviance = 3948.898 
+GAMLSS-CG iteration 2: Global Deviance = -965.232 
+GAMLSS-CG iteration 3: Global Deviance = -965.4092 
+GAMLSS-CG iteration 54: Global Deviance = 3061.467 
+GAMLSS-CG iteration 4: Global Deviance = -965.4735 
+GAMLSS-CG iteration 5: Global Deviance = -965.4938 
+GAMLSS-CG iteration 55: Global Deviance = 3061.485 
+GAMLSS-CG iteration 6: Global Deviance = -965.5042 
+GAMLSS-CG iteration 56: Global Deviance = 3061.501 
+GAMLSS-CG iteration 62: Global Deviance = 3919.448 
+GAMLSS-CG iteration 63: Global Deviance = 3894.326 
+GAMLSS-CG iteration 7: Global Deviance = -965.5036 
 Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness1_formula2.rds
 Using 370 healthy subjects out of 470 total subjects for evaluation
 Using 370 healthy subjects out of 470 total subjects for evaluation
-2026-10-09 13:25:46,987 - INFO - Successfully evaluated formula2 for y_thickness1
+GAMLSS-CG iteration 57: Global Deviance = 3061.512 
+2026-10-29 18:15:03,655 - INFO - Successfully evaluated formula2 for y_thickness1
 GAMLSS-RS iteration 1: Global Deviance = 3624.147 
+GAMLSS-CG iteration 64: Global Deviance = 3865.284 
 GAMLSS-RS iteration 2: Global Deviance = 3539.912 
 GAMLSS-RS iteration 3: Global Deviance = 3479.501 
 GAMLSS-RS iteration 4: Global Deviance = 3434.903 
 GAMLSS-RS iteration 5: Global Deviance = 3401.059 
 GAMLSS-RS iteration 6: Global Deviance = 3374.594 
 GAMLSS-RS iteration 7: Global Deviance = 3353.209 
-GAMLSS-RS iteration 3: Global Deviance = 3392.297 
 GAMLSS-RS iteration 8: Global Deviance = 3335.892 
+GAMLSS-CG iteration 65: Global Deviance = 3841.623 
 GAMLSS-RS iteration 9: Global Deviance = 3320.973 
 GAMLSS-RS iteration 10: Global Deviance = 3308.727 
-2026-10-09 13:25:50,179 - WARNING - R[write to console]: In RS(10) :
-2026-10-09 13:25:50,181 - WARNING - R[write to console]:  Algorithm RS has not yet converged
-
+GAMLSS-CG iteration 1: Global Deviance = 3240.442 
+GAMLSS-CG iteration 58: Global Deviance = 3061.521 
+GAMLSS-CG iteration 2: Global Deviance = 3777.074 
+GAMLSS-CG iteration 3: Global Deviance = 3545.803 
+GAMLSS-CG iteration 4: Global Deviance = 3359.479 
+GAMLSS-CG iteration 66: Global Deviance = 3815.141 
+GAMLSS-CG iteration 5: Global Deviance = 3234.911 
+GAMLSS-CG iteration 6: Global Deviance = 3182.137 
+GAMLSS-CG iteration 67: Global Deviance = 3787.249 
+GAMLSS-CG iteration 7: Global Deviance = 3172.763 
+GAMLSS-CG iteration 59: Global Deviance = 3061.528 
+GAMLSS-CG iteration 8: Global Deviance = 3172.513 
+GAMLSS-CG iteration 9: Global Deviance = 3172.397 
+GAMLSS-CG iteration 10: Global Deviance = 3172.303 
+GAMLSS-CG iteration 68: Global Deviance = 3760.075 
+GAMLSS-CG iteration 11: Global Deviance = 3172.219 
+GAMLSS-CG iteration 60: Global Deviance = 3061.535 
+GAMLSS-CG iteration 12: Global Deviance = 3172.144 
+GAMLSS-CG iteration 13: Global Deviance = 3172.076 
+GAMLSS-CG iteration 69: Global Deviance = 3733.47 
+GAMLSS-CG iteration 14: Global Deviance = 3172.015 
+GAMLSS-CG iteration 61: Global Deviance = 3061.54 
+GAMLSS-CG iteration 15: Global Deviance = 3171.959 
+GAMLSS-CG iteration 16: Global Deviance = 3171.914 
+GAMLSS-CG iteration 17: Global Deviance = 3171.912 
+GAMLSS-CG iteration 18: Global Deviance = 3171.91 
+GAMLSS-CG iteration 70: Global Deviance = 3711.998 
 Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness1_formula3.rds
 Using 370 healthy subjects out of 470 total subjects for evaluation
 Using 370 healthy subjects out of 470 total subjects for evaluation
-2026-10-09 13:25:51,356 - INFO - Successfully evaluated formula3 for y_thickness1
+2026-10-29 18:15:34,131 - INFO - Successfully evaluated formula3 for y_thickness1
 GAMLSS-RS iteration 1: Global Deviance = 3624.147 
 GAMLSS-RS iteration 2: Global Deviance = 3539.912 
 GAMLSS-RS iteration 3: Global Deviance = 3479.501 
@@ -755,46 +990,326 @@ GAMLSS-RS iteration 7: Global Deviance = 3353.209
 GAMLSS-RS iteration 8: Global Deviance = 3335.892 
 GAMLSS-RS iteration 9: Global Deviance = 3320.973 
 GAMLSS-RS iteration 10: Global Deviance = 3308.727 
-2026-10-09 13:25:52,066 - WARNING - R[write to console]: In RS(10) :
-2026-10-09 13:25:52,067 - WARNING - R[write to console]:  Algorithm RS has not yet converged
-
+GAMLSS-CG iteration 1: Global Deviance = 3240.442 
+GAMLSS-CG iteration 2: Global Deviance = 3756.017 
+GAMLSS-CG iteration 3: Global Deviance = 3528.929 
+GAMLSS-CG iteration 4: Global Deviance = 3348.253 
+GAMLSS-CG iteration 5: Global Deviance = 3230.761 
+GAMLSS-CG iteration 6: Global Deviance = 3181.191 
+GAMLSS-CG iteration 7: Global Deviance = 3172.708 
+GAMLSS-CG iteration 8: Global Deviance = 3172.482 
+GAMLSS-CG iteration 9: Global Deviance = 3172.373 
+GAMLSS-CG iteration 10: Global Deviance = 3172.281 
+GAMLSS-CG iteration 11: Global Deviance = 3172.199 
+GAMLSS-CG iteration 12: Global Deviance = 3172.126 
+GAMLSS-CG iteration 13: Global Deviance = 3172.06 
+GAMLSS-CG iteration 14: Global Deviance = 3172.001 
+GAMLSS-CG iteration 15: Global Deviance = 3171.946 
+GAMLSS-CG iteration 16: Global Deviance = 3171.926 
+GAMLSS-CG iteration 17: Global Deviance = 3171.924 
+GAMLSS-CG iteration 18: Global Deviance = 3171.923 
+GAMLSS-CG iteration 62: Global Deviance = 3061.545 
 Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness1_formula4.rds
 Using 370 healthy subjects out of 470 total subjects for evaluation
 Using 370 healthy subjects out of 470 total subjects for evaluation
-2026-10-09 13:25:52,954 - INFO - Successfully evaluated formula4 for y_thickness1
+2026-10-29 18:15:36,987 - INFO - Successfully evaluated formula4 for y_thickness1
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 25%|██▌       | 1/4 [01:42&lt;05:06, 102.23s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 25%|██▌       | 1/4 [06:47&lt;20:22, 407.49s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GAMLSS-RS iteration 4: Global Deviance = 3343.595 
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GAMLSS-CG iteration 71: Global Deviance = 3673.505 
+GAMLSS-CG iteration 63: Global Deviance = 3061.548 
+GAMLSS-CG iteration 72: Global Deviance = 3644.023 
+GAMLSS-CG iteration 64: Global Deviance = 3061.55 
+GAMLSS-CG iteration 65: Global Deviance = 3061.555 
+GAMLSS-CG iteration 66: Global Deviance = 3061.558 
+GAMLSS-CG iteration 73: Global Deviance = 3618.227 
+GAMLSS-CG iteration 67: Global Deviance = 3061.559 
+Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness2_formula1.rds
+Using 370 healthy subjects out of 470 total subjects for evaluation
+Using 370 healthy subjects out of 470 total subjects for evaluation
+2026-10-29 18:15:56,922 - INFO - Successfully evaluated formula1 for y_thickness2
+GAMLSS-CG iteration 74: Global Deviance = 3597.511 
+GAMLSS-CG iteration 75: Global Deviance = 3552.104 
+GAMLSS-RS iteration 1: Global Deviance = 3516.928 
+GAMLSS-CG iteration 76: Global Deviance = 3521.728 
+GAMLSS-RS iteration 2: Global Deviance = 3448.371 
+GAMLSS-CG iteration 77: Global Deviance = 3491.227 
+GAMLSS-RS iteration 3: Global Deviance = 3392.297 
+GAMLSS-CG iteration 78: Global Deviance = 3458.053 
+GAMLSS-RS iteration 4: Global Deviance = 3343.595 
+GAMLSS-CG iteration 79: Global Deviance = 3429.178 
 GAMLSS-RS iteration 5: Global Deviance = 3297.542 
+GAMLSS-CG iteration 80: Global Deviance = 3400.057 
 GAMLSS-RS iteration 6: Global Deviance = 3250.043 
+GAMLSS-CG iteration 81: Global Deviance = 3365.397 
 GAMLSS-RS iteration 7: Global Deviance = 3194.299 
+GAMLSS-CG iteration 82: Global Deviance = 3337.676 
 GAMLSS-RS iteration 8: Global Deviance = 3128.427 
 GAMLSS-RS iteration 9: Global Deviance = 3053.878 
+GAMLSS-CG iteration 83: Global Deviance = 3304.538 
+GAMLSS-CG iteration 84: Global Deviance = 3280.416 
 GAMLSS-RS iteration 10: Global Deviance = 2979.143 
+GAMLSS-CG iteration 85: Global Deviance = 3245.026 
+GAMLSS-CG iteration 1: Global Deviance = 22857.71 
+GAMLSS-CG iteration 86: Global Deviance = 3221.089 
+GAMLSS-CG iteration 2: Global Deviance = 22388.38 
+GAMLSS-CG iteration 3: Global Deviance = 21985.16 
+GAMLSS-CG iteration 87: Global Deviance = 3187.651 
+GAMLSS-CG iteration 4: Global Deviance = 21595.58 
+GAMLSS-CG iteration 88: Global Deviance = 3169.698 
+GAMLSS-CG iteration 5: Global Deviance = 21219.09 
+GAMLSS-CG iteration 89: Global Deviance = 3140.705 
+GAMLSS-CG iteration 6: Global Deviance = 20854.35 
+GAMLSS-CG iteration 7: Global Deviance = 20499.72 
+GAMLSS-CG iteration 90: Global Deviance = 3123.018 
+GAMLSS-CG iteration 91: Global Deviance = 3101.569 
+GAMLSS-CG iteration 8: Global Deviance = 20154.87 
+GAMLSS-CG iteration 9: Global Deviance = 19820.31 
+GAMLSS-CG iteration 92: Global Deviance = 3092.099 
+GAMLSS-CG iteration 93: Global Deviance = 3081.106 
+GAMLSS-CG iteration 94: Global Deviance = 3074.207 
+GAMLSS-CG iteration 95: Global Deviance = 3074.226 
+GAMLSS-CG iteration 10: Global Deviance = 19495.45 
+GAMLSS-CG iteration 11: Global Deviance = 19179 
+GAMLSS-CG iteration 96: Global Deviance = 3074.252 
+GAMLSS-CG iteration 12: Global Deviance = 18870.17 
+GAMLSS-CG iteration 97: Global Deviance = 3074.285 
+GAMLSS-CG iteration 13: Global Deviance = 18568.56 
+GAMLSS-CG iteration 98: Global Deviance = 3074.324 
+GAMLSS-CG iteration 14: Global Deviance = 18273.89 
+GAMLSS-CG iteration 15: Global Deviance = 17985.88 
+GAMLSS-CG iteration 99: Global Deviance = 3074.369 
+GAMLSS-CG iteration 16: Global Deviance = 17704.32 
+GAMLSS-CG iteration 100: Global Deviance = 3074.417 
+Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness4_formula1.rds
+Using 370 healthy subjects out of 470 total subjects for evaluation
+Using 370 healthy subjects out of 470 total subjects for evaluation
+2026-10-29 18:18:17,596 - INFO - Successfully evaluated formula1 for y_thickness4
+GAMLSS-CG iteration 17: Global Deviance = 17429.09 
+GAMLSS-RS iteration 1: Global Deviance = 3591.526 
+GAMLSS-CG iteration 18: Global Deviance = 17160.21 
+GAMLSS-RS iteration 2: Global Deviance = 3510.287 
+GAMLSS-RS iteration 3: Global Deviance = 3447.793 
+GAMLSS-CG iteration 19: Global Deviance = 16897.84 
+GAMLSS-RS iteration 4: Global Deviance = 3398.902 
+GAMLSS-RS iteration 5: Global Deviance = 3360.33 
+GAMLSS-RS iteration 6: Global Deviance = 3328.808 
+GAMLSS-RS iteration 7: Global Deviance = 3303.718 
+GAMLSS-CG iteration 20: Global Deviance = 16642.18 
+GAMLSS-RS iteration 8: Global Deviance = 3282.513 
+GAMLSS-CG iteration 21: Global Deviance = 16393.5 
+GAMLSS-RS iteration 9: Global Deviance = 3264.817 
+GAMLSS-RS iteration 10: Global Deviance = 3248.737 
+GAMLSS-CG iteration 22: Global Deviance = 16152.06 
+GAMLSS-CG iteration 23: Global Deviance = 15918.18 
+GAMLSS-CG iteration 1: Global Deviance = 3158.759 
+GAMLSS-CG iteration 24: Global Deviance = 15692.26 
+GAMLSS-CG iteration 2: Global Deviance = 9401.622 
+GAMLSS-CG iteration 25: Global Deviance = 15474.81 
+GAMLSS-CG iteration 3: Global Deviance = 8990.35 
+GAMLSS-CG iteration 26: Global Deviance = 15266.03 
+GAMLSS-CG iteration 4: Global Deviance = 8615.604 
+GAMLSS-CG iteration 27: Global Deviance = 15065.21 
+GAMLSS-CG iteration 28: Global Deviance = 14871.92 
+GAMLSS-CG iteration 5: Global Deviance = 8285.023 
+GAMLSS-CG iteration 29: Global Deviance = 14685.77 
+GAMLSS-CG iteration 6: Global Deviance = 8000.31 
+GAMLSS-CG iteration 30: Global Deviance = 14506.34 
+GAMLSS-CG iteration 31: Global Deviance = 14333.15 
+GAMLSS-CG iteration 7: Global Deviance = 7752.564 
+GAMLSS-CG iteration 32: Global Deviance = 14165.71 
+GAMLSS-CG iteration 8: Global Deviance = 7529.735 
+GAMLSS-CG iteration 33: Global Deviance = 14003.5 
+GAMLSS-CG iteration 9: Global Deviance = 7323.563 
+GAMLSS-CG iteration 34: Global Deviance = 13846.07 
+GAMLSS-CG iteration 35: Global Deviance = 13692.93 
+GAMLSS-CG iteration 10: Global Deviance = 7128.926 
+GAMLSS-CG iteration 36: Global Deviance = 13543.79 
+GAMLSS-CG iteration 11: Global Deviance = 6944.111 
+GAMLSS-CG iteration 37: Global Deviance = 13398.23 
+GAMLSS-CG iteration 12: Global Deviance = 6769.171 
+GAMLSS-CG iteration 38: Global Deviance = 13256.18 
+GAMLSS-CG iteration 39: Global Deviance = 13117.23 
+GAMLSS-CG iteration 13: Global Deviance = 6604.626 
+GAMLSS-CG iteration 40: Global Deviance = 12981.58 
+GAMLSS-CG iteration 14: Global Deviance = 6450.825 
+GAMLSS-CG iteration 41: Global Deviance = 12848.61 
+GAMLSS-CG iteration 15: Global Deviance = 6307.33 
+GAMLSS-CG iteration 42: Global Deviance = 12719.03 
+GAMLSS-CG iteration 16: Global Deviance = 6173.066 
+GAMLSS-CG iteration 43: Global Deviance = 12591.7 
+GAMLSS-CG iteration 44: Global Deviance = 12468.25 
+GAMLSS-CG iteration 17: Global Deviance = 6046.922 
+GAMLSS-CG iteration 45: Global Deviance = 12346.68 
+GAMLSS-CG iteration 18: Global Deviance = 5926.983 
+GAMLSS-CG iteration 46: Global Deviance = 12229.67 
+GAMLSS-CG iteration 19: Global Deviance = 5812.652 
+GAMLSS-CG iteration 47: Global Deviance = 12114.11 
+GAMLSS-CG iteration 48: Global Deviance = 12003.72 
+GAMLSS-CG iteration 20: Global Deviance = 5703.822 
+GAMLSS-CG iteration 49: Global Deviance = 11894.1 
+GAMLSS-CG iteration 21: Global Deviance = 5600.649 
+GAMLSS-CG iteration 50: Global Deviance = 11791.61 
+GAMLSS-CG iteration 22: Global Deviance = 5537.664 
+GAMLSS-CG iteration 23: Global Deviance = 5430.709 
+GAMLSS-CG iteration 51: Global Deviance = 11687.37 
+GAMLSS-CG iteration 24: Global Deviance = 5347.207 
+GAMLSS-CG iteration 52: Global Deviance = 11591.56 
+GAMLSS-CG iteration 25: Global Deviance = 5266.248 
+GAMLSS-CG iteration 26: Global Deviance = 5234.562 
+GAMLSS-CG iteration 53: Global Deviance = 11494.07 
+GAMLSS-CG iteration 27: Global Deviance = 5156.23 
+GAMLSS-CG iteration 54: Global Deviance = 11406.49 
+GAMLSS-CG iteration 28: Global Deviance = 5118.804 
+GAMLSS-CG iteration 55: Global Deviance = 11318.88 
+GAMLSS-CG iteration 56: Global Deviance = 11236.8 
+GAMLSS-CG iteration 29: Global Deviance = 5035.624 
+GAMLSS-CG iteration 57: Global Deviance = 11152.95 
+GAMLSS-CG iteration 30: Global Deviance = 4981.313 
+GAMLSS-CG iteration 58: Global Deviance = 11073.25 
+GAMLSS-CG iteration 31: Global Deviance = 4931.614 
+GAMLSS-CG iteration 59: Global Deviance = 10993.64 
+GAMLSS-CG iteration 32: Global Deviance = 4886.053 
+GAMLSS-CG iteration 60: Global Deviance = 10916.12 
+GAMLSS-CG iteration 33: Global Deviance = 4842.575 
+GAMLSS-CG iteration 61: Global Deviance = 10838.83 
+GAMLSS-CG iteration 34: Global Deviance = 4842.398 
+GAMLSS-CG iteration 35: Global Deviance = 4764.32 
+GAMLSS-CG iteration 62: Global Deviance = 10763.8 
+GAMLSS-CG iteration 63: Global Deviance = 10689.5 
+GAMLSS-CG iteration 36: Global Deviance = 4721.847 
+GAMLSS-CG iteration 64: Global Deviance = 10615.87 
+GAMLSS-CG iteration 37: Global Deviance = 4689.182 
+GAMLSS-CG iteration 38: Global Deviance = 4657.77 
+GAMLSS-CG iteration 65: Global Deviance = 10543.4 
+GAMLSS-CG iteration 39: Global Deviance = 4638.392 
+GAMLSS-CG iteration 40: Global Deviance = 4598.693 
+GAMLSS-CG iteration 66: Global Deviance = 10472.87 
+GAMLSS-CG iteration 41: Global Deviance = 4571.258 
+GAMLSS-CG iteration 67: Global Deviance = 10402.49 
+GAMLSS-CG iteration 42: Global Deviance = 4549.532 
+GAMLSS-CG iteration 68: Global Deviance = 10329.77 
+GAMLSS-CG iteration 43: Global Deviance = 4534.608 
+GAMLSS-CG iteration 44: Global Deviance = 4511.513 
+GAMLSS-CG iteration 69: Global Deviance = 10259.81 
+GAMLSS-CG iteration 45: Global Deviance = 4501.897 
+GAMLSS-CG iteration 70: Global Deviance = 10192.94 
+GAMLSS-CG iteration 46: Global Deviance = 4462.186 
+GAMLSS-CG iteration 71: Global Deviance = 10125.09 
+GAMLSS-CG iteration 47: Global Deviance = 4439.578 
+GAMLSS-CG iteration 48: Global Deviance = 4419.421 
+GAMLSS-CG iteration 72: Global Deviance = 10054.56 
+GAMLSS-CG iteration 49: Global Deviance = 4400.931 
+GAMLSS-CG iteration 73: Global Deviance = 9985.576 
+GAMLSS-CG iteration 50: Global Deviance = 4371.52 
+GAMLSS-CG iteration 74: Global Deviance = 9924.638 
+GAMLSS-CG iteration 51: Global Deviance = 4352.452 
+GAMLSS-CG iteration 75: Global Deviance = 9857.192 
+GAMLSS-CG iteration 52: Global Deviance = 4329.162 
+GAMLSS-CG iteration 76: Global Deviance = 9785.648 
+GAMLSS-CG iteration 53: Global Deviance = 4317.524 
+GAMLSS-CG iteration 77: Global Deviance = 9723.498 
+GAMLSS-CG iteration 54: Global Deviance = 4290.764 
+GAMLSS-CG iteration 78: Global Deviance = 9666.034 
+GAMLSS-CG iteration 55: Global Deviance = 4275.718 
+GAMLSS-CG iteration 56: Global Deviance = 4249.271 
+GAMLSS-CG iteration 79: Global Deviance = 9599.415 
+GAMLSS-CG iteration 57: Global Deviance = 4241.614 
+GAMLSS-CG iteration 80: Global Deviance = 9535.019 
+GAMLSS-CG iteration 58: Global Deviance = 4205.07 
+GAMLSS-CG iteration 81: Global Deviance = 9471.437 
+GAMLSS-CG iteration 59: Global Deviance = 4187.848 
+GAMLSS-CG iteration 60: Global Deviance = 4168.825 
+GAMLSS-CG iteration 82: Global Deviance = 9427.72 
+GAMLSS-CG iteration 61: Global Deviance = 4164.433 
+GAMLSS-CG iteration 83: Global Deviance = 9367.281 
+GAMLSS-CG iteration 62: Global Deviance = 4134.214 
+GAMLSS-CG iteration 84: Global Deviance = 9295.931 
+GAMLSS-CG iteration 63: Global Deviance = 4116.999 
+GAMLSS-CG iteration 85: Global Deviance = 9229.508 
+GAMLSS-CG iteration 64: Global Deviance = 4099.691 
+GAMLSS-CG iteration 86: Global Deviance = 9172.23 
+GAMLSS-CG iteration 65: Global Deviance = 4095.976 
+GAMLSS-CG iteration 87: Global Deviance = 9122.044 
+GAMLSS-CG iteration 88: Global Deviance = 9055.645 
+GAMLSS-CG iteration 66: Global Deviance = 4065.635 
+GAMLSS-CG iteration 89: Global Deviance = 9013.159 
+GAMLSS-CG iteration 67: Global Deviance = 4047.899 
+GAMLSS-CG iteration 68: Global Deviance = 4031.453 
+GAMLSS-CG iteration 90: Global Deviance = 8954.649 
+GAMLSS-CG iteration 69: Global Deviance = 4020.087 
+GAMLSS-CG iteration 70: Global Deviance = 4001.81 
+GAMLSS-CG iteration 91: Global Deviance = 8908.964 
+GAMLSS-CG iteration 71: Global Deviance = 3989.698 
+GAMLSS-CG iteration 92: Global Deviance = 8846.098 
+GAMLSS-CG iteration 72: Global Deviance = 3965.635 
+GAMLSS-CG iteration 93: Global Deviance = 8789.603 
+GAMLSS-CG iteration 73: Global Deviance = 3953.447 
+GAMLSS-CG iteration 94: Global Deviance = 8738.892 
+GAMLSS-CG iteration 95: Global Deviance = 8709.326 
+GAMLSS-CG iteration 74: Global Deviance = 3931.49 
+GAMLSS-CG iteration 96: Global Deviance = 8649.491 
+GAMLSS-CG iteration 75: Global Deviance = 3930.518 
+GAMLSS-CG iteration 76: Global Deviance = 3893.646 
+GAMLSS-CG iteration 97: Global Deviance = 8595.468 
+GAMLSS-CG iteration 77: Global Deviance = 3879.196 
+GAMLSS-CG iteration 98: Global Deviance = 8543.907 
+GAMLSS-CG iteration 78: Global Deviance = 3860.669 
+GAMLSS-CG iteration 99: Global Deviance = 8498.694 
+GAMLSS-CG iteration 79: Global Deviance = 3851.204 
+GAMLSS-CG iteration 80: Global Deviance = 3825.246 
+GAMLSS-CG iteration 100: Global Deviance = 8454.893 
 Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness2_formula2.rds
 Using 370 healthy subjects out of 470 total subjects for evaluation
 Using 370 healthy subjects out of 470 total subjects for evaluation
-2026-10-09 13:26:25,515 - INFO - Successfully evaluated formula2 for y_thickness2
+GAMLSS-CG iteration 81: Global Deviance = 3813.996 
+2026-10-29 18:24:42,928 - INFO - Successfully evaluated formula2 for y_thickness2
 GAMLSS-RS iteration 1: Global Deviance = 3594.557 
 GAMLSS-RS iteration 2: Global Deviance = 3515.163 
+GAMLSS-CG iteration 82: Global Deviance = 3794.216 
+GAMLSS-CG iteration 83: Global Deviance = 3784.518 
 GAMLSS-RS iteration 3: Global Deviance = 3458.398 
 GAMLSS-RS iteration 4: Global Deviance = 3416.46 
+GAMLSS-CG iteration 84: Global Deviance = 3761.93 
 GAMLSS-RS iteration 5: Global Deviance = 3384.453 
 GAMLSS-RS iteration 6: Global Deviance = 3359.281 
+GAMLSS-CG iteration 85: Global Deviance = 3755.205 
 GAMLSS-RS iteration 7: Global Deviance = 3338.642 
 GAMLSS-RS iteration 8: Global Deviance = 3321.68 
 GAMLSS-RS iteration 9: Global Deviance = 3307.275 
+GAMLSS-CG iteration 86: Global Deviance = 3732.481 
 GAMLSS-RS iteration 10: Global Deviance = 3295.131 
-2026-10-09 13:26:44,486 - WARNING - R[write to console]: In RS(10) :
-2026-10-09 13:26:44,487 - WARNING - R[write to console]:  Algorithm RS has not yet converged
-
+GAMLSS-CG iteration 1: Global Deviance = 3224.736 
+GAMLSS-CG iteration 87: Global Deviance = 3717.438 
+GAMLSS-CG iteration 2: Global Deviance = 3615.668 
+GAMLSS-CG iteration 3: Global Deviance = 3414.336 
+GAMLSS-CG iteration 4: Global Deviance = 3268.67 
+GAMLSS-CG iteration 88: Global Deviance = 3697.285 
+GAMLSS-CG iteration 5: Global Deviance = 3190.281 
+GAMLSS-CG iteration 89: Global Deviance = 3682.491 
+GAMLSS-CG iteration 6: Global Deviance = 3165.044 
+GAMLSS-CG iteration 7: Global Deviance = 3161.482 
+GAMLSS-CG iteration 8: Global Deviance = 3161.24 
+GAMLSS-CG iteration 9: Global Deviance = 3161.123 
+GAMLSS-CG iteration 90: Global Deviance = 3665.066 
+GAMLSS-CG iteration 91: Global Deviance = 3651.403 
+GAMLSS-CG iteration 10: Global Deviance = 3161.018 
+GAMLSS-CG iteration 11: Global Deviance = 3160.933 
+GAMLSS-CG iteration 12: Global Deviance = 3160.856 
+GAMLSS-CG iteration 92: Global Deviance = 3635.756 
+GAMLSS-CG iteration 13: Global Deviance = 3160.788 
+GAMLSS-CG iteration 93: Global Deviance = 3623.745 
+GAMLSS-CG iteration 14: Global Deviance = 3160.725 
+GAMLSS-CG iteration 15: Global Deviance = 3160.669 
+GAMLSS-CG iteration 94: Global Deviance = 3609.165 
+GAMLSS-CG iteration 16: Global Deviance = 3160.617 
+GAMLSS-CG iteration 17: Global Deviance = 3160.616 
 Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness2_formula3.rds
 Using 370 healthy subjects out of 470 total subjects for evaluation
 Using 370 healthy subjects out of 470 total subjects for evaluation
-2026-10-09 13:26:45,613 - INFO - Successfully evaluated formula3 for y_thickness2
+2026-10-29 18:25:33,122 - INFO - Successfully evaluated formula3 for y_thickness2
 GAMLSS-RS iteration 1: Global Deviance = 3604.849 
 GAMLSS-RS iteration 2: Global Deviance = 3522.783 
 GAMLSS-RS iteration 3: Global Deviance = 3463.818 
@@ -805,21 +1320,93 @@ GAMLSS-RS iteration 7: Global Deviance = 3339.838
 GAMLSS-RS iteration 8: Global Deviance = 3322.592 
 GAMLSS-RS iteration 9: Global Deviance = 3308.043 
 GAMLSS-RS iteration 10: Global Deviance = 3295.812 
-2026-10-09 13:26:46,285 - WARNING - R[write to console]: In RS(10) :
-2026-10-09 13:26:46,286 - WARNING - R[write to console]:  Algorithm RS has not yet converged
-
+GAMLSS-CG iteration 1: Global Deviance = 3224.601 
+GAMLSS-CG iteration 2: Global Deviance = 3619.449 
+GAMLSS-CG iteration 3: Global Deviance = 3418.174 
+GAMLSS-CG iteration 4: Global Deviance = 3273.84 
+GAMLSS-CG iteration 95: Global Deviance = 3599.093 
+GAMLSS-CG iteration 5: Global Deviance = 3195.846 
+GAMLSS-CG iteration 6: Global Deviance = 3166.916 
+GAMLSS-CG iteration 7: Global Deviance = 3161.492 
+GAMLSS-CG iteration 8: Global Deviance = 3161.226 
+GAMLSS-CG iteration 9: Global Deviance = 3161.115 
+GAMLSS-CG iteration 10: Global Deviance = 3161.014 
+GAMLSS-CG iteration 11: Global Deviance = 3161.013 
 Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness2_formula4.rds
 Using 370 healthy subjects out of 470 total subjects for evaluation
 Using 370 healthy subjects out of 470 total subjects for evaluation
-2026-10-09 13:26:47,143 - INFO - Successfully evaluated formula4 for y_thickness2
+2026-10-29 18:25:35,460 - INFO - Successfully evaluated formula4 for y_thickness2
+GAMLSS-CG iteration 96: Global Deviance = 3583.03 
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 2/4 [02:36&lt;02:27, 73.96s/it] 
-100%|██████████| 4/4 [02:36&lt;00:00, 39.10s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 2/4 [16:46&lt;17:19, 519.88s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-09 13:26:47,875 - INFO - Processing evaluation results...
-2026-10-09 13:26:47,912 - INFO - Evaluation results saved to ../../results/formula_comparison/evaluation_results
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GAMLSS-CG iteration 97: Global Deviance = 3573.437 
+GAMLSS-CG iteration 98: Global Deviance = 3558.089 
+GAMLSS-CG iteration 99: Global Deviance = 3549.233 
+GAMLSS-CG iteration 100: Global Deviance = 3532.472 
+Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness4_formula2.rds
+Using 370 healthy subjects out of 470 total subjects for evaluation
+Using 370 healthy subjects out of 470 total subjects for evaluation
+2026-10-29 18:25:50,326 - INFO - Successfully evaluated formula2 for y_thickness4
+GAMLSS-RS iteration 1: Global Deviance = 3627.222 
+GAMLSS-RS iteration 2: Global Deviance = 3542.042 
+GAMLSS-RS iteration 3: Global Deviance = 3481.237 
+GAMLSS-RS iteration 4: Global Deviance = 3436.7 
+GAMLSS-RS iteration 5: Global Deviance = 3402.992 
+GAMLSS-RS iteration 6: Global Deviance = 3376.51 
+GAMLSS-RS iteration 7: Global Deviance = 3355.555 
+GAMLSS-RS iteration 8: Global Deviance = 3338.286 
+GAMLSS-RS iteration 9: Global Deviance = 3323.835 
+GAMLSS-RS iteration 10: Global Deviance = 3311.858 
+GAMLSS-CG iteration 1: Global Deviance = 3253.629 
+GAMLSS-CG iteration 2: Global Deviance = 3795.262 
+GAMLSS-CG iteration 3: Global Deviance = 3575.626 
+GAMLSS-CG iteration 4: Global Deviance = 3400.872 
+GAMLSS-CG iteration 5: Global Deviance = 3284.515 
+GAMLSS-CG iteration 6: Global Deviance = 3225.989 
+GAMLSS-CG iteration 7: Global Deviance = 3196.198 
+GAMLSS-CG iteration 8: Global Deviance = 3186.001 
+GAMLSS-CG iteration 9: Global Deviance = 3184.205 
+GAMLSS-CG iteration 10: Global Deviance = 3183.868 
+GAMLSS-CG iteration 11: Global Deviance = 3183.867 
+Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness4_formula3.rds
+Using 370 healthy subjects out of 470 total subjects for evaluation
+Using 370 healthy subjects out of 470 total subjects for evaluation
+2026-10-29 18:26:07,696 - INFO - Successfully evaluated formula3 for y_thickness4
+GAMLSS-RS iteration 1: Global Deviance = 3627.222 
+GAMLSS-RS iteration 2: Global Deviance = 3542.042 
+GAMLSS-RS iteration 3: Global Deviance = 3481.237 
+GAMLSS-RS iteration 4: Global Deviance = 3436.7 
+GAMLSS-RS iteration 5: Global Deviance = 3402.992 
+GAMLSS-RS iteration 6: Global Deviance = 3376.51 
+GAMLSS-RS iteration 7: Global Deviance = 3355.555 
+GAMLSS-RS iteration 8: Global Deviance = 3338.286 
+GAMLSS-RS iteration 9: Global Deviance = 3323.835 
+GAMLSS-RS iteration 10: Global Deviance = 3311.858 
+GAMLSS-CG iteration 1: Global Deviance = 3253.629 
+GAMLSS-CG iteration 2: Global Deviance = 3675.108 
+GAMLSS-CG iteration 3: Global Deviance = 3475.85 
+GAMLSS-CG iteration 4: Global Deviance = 3327.913 
+GAMLSS-CG iteration 5: Global Deviance = 3240.497 
+GAMLSS-CG iteration 6: Global Deviance = 3200.466 
+GAMLSS-CG iteration 7: Global Deviance = 3185.673 
+GAMLSS-CG iteration 8: Global Deviance = 3183.981 
+GAMLSS-CG iteration 9: Global Deviance = 3183.895 
+GAMLSS-CG iteration 10: Global Deviance = 3183.817 
+GAMLSS-CG iteration 11: Global Deviance = 3183.817 
+Model saved to ../../results/formula_comparison/model_cache/saved_models/model_y_thickness4_formula4.rds
+Using 370 healthy subjects out of 470 total subjects for evaluation
+Using 370 healthy subjects out of 470 total subjects for evaluation
+2026-10-29 18:26:10,000 - INFO - Successfully evaluated formula4 for y_thickness4
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [17:20&lt;00:00, 260.14s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-29 18:26:10,905 - INFO - Processing evaluation results...
+2026-10-29 18:26:10,946 - INFO - Evaluation results saved to ../../results/formula_comparison/evaluation_results
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -869,58 +1456,58 @@ Using 370 healthy subjects out of 470 total subjects for evaluation
     <tr>
       <th>0</th>
       <td>y_thickness1</td>
-      <td>3225.840790</td>
-      <td>3282.887611</td>
-      <td>-899.242764</td>
-      <td>-790.030204</td>
-      <td>3316.726694</td>
-      <td>3336.475953</td>
-      <td>3318.726693</td>
-      <td>3343.413264</td>
-      <td>formula2 (-899.24)</td>
-      <td>formula2 (-790.03)</td>
+      <td>3065.477334</td>
+      <td>3119.575818</td>
+      <td>-923.125628</td>
+      <td>-818.508863</td>
+      <td>3179.910537</td>
+      <td>3199.659797</td>
+      <td>3181.923009</td>
+      <td>3206.609579</td>
+      <td>formula2 (-923.13)</td>
+      <td>formula2 (-818.51)</td>
     </tr>
     <tr>
       <th>1</th>
       <td>y_thickness2</td>
-      <td>3257.353180</td>
-      <td>3330.216783</td>
-      <td>3017.498921</td>
-      <td>3112.186685</td>
-      <td>3304.799906</td>
-      <td>3328.668887</td>
-      <td>3305.812026</td>
-      <td>3330.498596</td>
-      <td>formula2 (3017.50)</td>
-      <td>formula2 (3112.19)</td>
+      <td>3087.693830</td>
+      <td>3152.212469</td>
+      <td>8604.764373</td>
+      <td>8974.744716</td>
+      <td>3168.616366</td>
+      <td>3188.365629</td>
+      <td>3171.012819</td>
+      <td>3195.699390</td>
+      <td>formula1 (3087.69)</td>
+      <td>formula1 (3152.21)</td>
     </tr>
     <tr>
       <th>2</th>
       <td>y_thickness3</td>
-      <td>4002.630989</td>
-      <td>4054.352387</td>
-      <td>4005.850849</td>
-      <td>4072.592315</td>
-      <td>4024.239885</td>
-      <td>4043.989147</td>
-      <td>4026.239885</td>
-      <td>4050.926455</td>
-      <td>formula1 (4002.63)</td>
-      <td>formula3 (4043.99)</td>
+      <td>3942.367646</td>
+      <td>3989.406086</td>
+      <td>3944.960495</td>
+      <td>4006.470238</td>
+      <td>3964.706568</td>
+      <td>3984.455862</td>
+      <td>3966.755264</td>
+      <td>3991.441834</td>
+      <td>formula1 (3942.37)</td>
+      <td>formula3 (3984.46)</td>
     </tr>
     <tr>
       <th>3</th>
       <td>y_thickness4</td>
-      <td>3268.824048</td>
-      <td>3316.117143</td>
-      <td>3274.029325</td>
-      <td>3336.467222</td>
-      <td>3319.858069</td>
-      <td>3339.607326</td>
-      <td>3321.858069</td>
-      <td>3346.544639</td>
-      <td>formula1 (3268.82)</td>
-      <td>formula1 (3316.12)</td>
+      <td>3094.552055</td>
+      <td>3144.257964</td>
+      <td>3590.670584</td>
+      <td>3734.343305</td>
+      <td>3191.867357</td>
+      <td>3211.616636</td>
+      <td>3193.816725</td>
+      <td>3218.503295</td>
+      <td>formula1 (3094.55)</td>
+      <td>formula1 (3144.26)</td>
     </tr>
   </tbody>
 </table>
@@ -963,33 +1550,33 @@ Using 370 healthy subjects out of 470 total subjects for evaluation
       <th>0</th>
       <td>y_thickness1</td>
       <td>formula2</td>
-      <td>-899.242764</td>
+      <td>-923.125628</td>
       <td>formula2</td>
-      <td>-790.030204</td>
+      <td>-818.508863</td>
     </tr>
     <tr>
       <th>1</th>
       <td>y_thickness2</td>
-      <td>formula2</td>
-      <td>3017.498921</td>
-      <td>formula2</td>
-      <td>3112.186685</td>
+      <td>formula1</td>
+      <td>3087.693830</td>
+      <td>formula1</td>
+      <td>3152.212469</td>
     </tr>
     <tr>
       <th>2</th>
       <td>y_thickness3</td>
       <td>formula1</td>
-      <td>4002.630989</td>
+      <td>3942.367646</td>
       <td>formula3</td>
-      <td>4043.989147</td>
+      <td>3984.455862</td>
     </tr>
     <tr>
       <th>3</th>
       <td>y_thickness4</td>
       <td>formula1</td>
-      <td>3268.824048</td>
+      <td>3094.552055</td>
       <td>formula1</td>
-      <td>3316.117143</td>
+      <td>3144.257964</td>
     </tr>
   </tbody>
 </table>
@@ -1031,34 +1618,34 @@ Using 370 healthy subjects out of 470 total subjects for evaluation
     <tr>
       <th>0</th>
       <td>y_thickness1</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>1</th>
       <td>y_thickness2</td>
+      <td>True</td>
       <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>2</th>
       <td>y_thickness3</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>3</th>
       <td>y_thickness4</td>
       <td>False</td>
       <td>False</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
     </tr>
   </tbody>
 </table>
@@ -1120,114 +1707,114 @@ Using 370 healthy subjects out of 470 total subjects for evaluation
     <tr>
       <th>Z_Scores_Mean</th>
       <td>GAMLSS</td>
-      <td>0.036957</td>
-      <td>0.045969</td>
-      <td>0.066339</td>
-      <td>0.066351</td>
+      <td>0.038786</td>
+      <td>0.051149</td>
+      <td>0.063466</td>
+      <td>0.063457</td>
     </tr>
     <tr>
       <th>Z_Scores_SD</th>
       <td>GAMLSS</td>
-      <td>1.022716</td>
-      <td>1.002222</td>
-      <td>1.003759</td>
-      <td>1.003759</td>
+      <td>0.995145</td>
+      <td>0.970140</td>
+      <td>0.982687</td>
+      <td>0.982684</td>
     </tr>
     <tr>
       <th>Logarithmic_Score</th>
       <td>GAMLSS</td>
-      <td>-1.519019</td>
-      <td>0.460319</td>
-      <td>-1.556559</td>
-      <td>-1.556560</td>
+      <td>-1.462897</td>
+      <td>0.469113</td>
+      <td>-1.527779</td>
+      <td>-1.527781</td>
     </tr>
     <tr>
       <th>Skewness</th>
       <td>GAMLSS</td>
-      <td>-0.066628</td>
-      <td>0.112544</td>
-      <td>-0.014668</td>
-      <td>-0.014668</td>
+      <td>-0.019956</td>
+      <td>0.172875</td>
+      <td>0.145891</td>
+      <td>0.145825</td>
     </tr>
     <tr>
       <th>Kurtosis</th>
       <td>GAMLSS</td>
-      <td>-0.987648</td>
-      <td>-0.629865</td>
-      <td>-0.758236</td>
-      <td>-0.758236</td>
+      <td>-0.520425</td>
+      <td>-0.171350</td>
+      <td>0.120229</td>
+      <td>0.119954</td>
     </tr>
     <tr>
       <th>Normality_Test_Statistic</th>
       <td>GAMLSS</td>
-      <td>0.974247</td>
-      <td>0.989953</td>
-      <td>0.986737</td>
-      <td>0.986737</td>
+      <td>0.992989</td>
+      <td>0.995408</td>
+      <td>0.996300</td>
+      <td>0.996302</td>
     </tr>
     <tr>
       <th>MAE</th>
       <td>ML</td>
-      <td>0.943473</td>
-      <td>0.119516</td>
-      <td>0.962069</td>
-      <td>0.962069</td>
+      <td>0.943362</td>
+      <td>0.118975</td>
+      <td>0.960946</td>
+      <td>0.960946</td>
     </tr>
     <tr>
       <th>MSE</th>
       <td>ML</td>
-      <td>1.228213</td>
-      <td>0.022085</td>
-      <td>1.324287</td>
-      <td>1.324289</td>
+      <td>1.225695</td>
+      <td>0.021875</td>
+      <td>1.318860</td>
+      <td>1.318860</td>
     </tr>
     <tr>
       <th>RMSE</th>
       <td>ML</td>
-      <td>1.108248</td>
-      <td>0.148611</td>
-      <td>1.150777</td>
-      <td>1.150778</td>
+      <td>1.107111</td>
+      <td>0.147901</td>
+      <td>1.148416</td>
+      <td>1.148416</td>
     </tr>
     <tr>
       <th>R_Squared</th>
       <td>ML</td>
-      <td>0.418505</td>
-      <td>0.989544</td>
-      <td>0.373019</td>
-      <td>0.373018</td>
+      <td>0.419698</td>
+      <td>0.989643</td>
+      <td>0.375589</td>
+      <td>0.375589</td>
     </tr>
     <tr>
       <th>MAPE</th>
       <td>ML</td>
-      <td>3.997571</td>
-      <td>0.503404</td>
-      <td>4.059545</td>
-      <td>4.059545</td>
+      <td>3.993906</td>
+      <td>0.501216</td>
+      <td>4.057195</td>
+      <td>4.057196</td>
     </tr>
     <tr>
       <th>Mean_Error</th>
       <td>ML</td>
-      <td>-0.040269</td>
-      <td>-0.007333</td>
-      <td>-0.084750</td>
-      <td>-0.084764</td>
+      <td>-0.050823</td>
+      <td>-0.007143</td>
+      <td>-0.071905</td>
+      <td>-0.071900</td>
     </tr>
     <tr>
       <th>AIC</th>
       <td>Information_Criteria</td>
-      <td>3225.840790</td>
-      <td>-899.242764</td>
-      <td>3316.726694</td>
-      <td>3318.726693</td>
+      <td>3065.477334</td>
+      <td>-923.125628</td>
+      <td>3179.910537</td>
+      <td>3181.923009</td>
     </tr>
     <tr>
       <th>BIC</th>
       <td>Information_Criteria</td>
-      <td>3282.887611</td>
-      <td>-790.030204</td>
-      <td>3336.475953</td>
-      <td>3343.413264</td>
+      <td>3119.575818</td>
+      <td>-818.508863</td>
+      <td>3199.659797</td>
+      <td>3206.609579</td>
     </tr>
   </tbody>
 </table>
@@ -1276,8 +1863,8 @@ Using 370 healthy subjects out of 470 total subjects for evaluation
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Z-score: [ 0.21042904 -1.13933524  1.41284508 ... -0.810563   -0.1629004
-  1.49969811]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Z-score: [ 0.158061   -1.00684254  1.34560406 ... -0.66780727 -0.22300694
+  1.47957539]
 </pre></div>
 </div>
 </div>

@@ -389,7 +389,7 @@ document.write(`
 <span id="id1"></span><h1>Centiles Calculation<a class="headerlink" href="#centiles-calculation" title="Link to this heading">#</a></h1>
 <section id="gamlss-main-gamlss-centiles">
 <h2>gamlss_main.Gamlss.<br><strong>centiles</strong><a class="headerlink" href="#gamlss-main-gamlss-centiles" title="Link to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">centiles</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">centiles</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">97</span><span class="p">],</span> <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">centiles</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">centiles</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">97</span><span class="p">],</span> <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>    Calculates specified centiles for each observation based on the fitted model parameters. Output shape is (number of samples, number of centiles).</p>
@@ -399,9 +399,9 @@ document.write(`
 <p>        <strong>train_data</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
             DataFrame containing the training data</p>
 <p>        <strong>centiles</strong> : <em><strong>list</strong></em>, <em>default=[3, 10, 25, 50, 75, 90, 97]</em> <br>
-            List of centiles to calculate</p>
-<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>default=’SHASH’</em> <br>
-            Distribution type</p>
+            List of centiles to calculate, in percent: between 0 and 100, not 0 or 100 themselves (e.g. 2.5 or 97.5). If all values are below 1 (e.g. 0.03), a warning reminds you that the 3rd centile is 3</p>
+<p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
+            Distribution family name. If None (default), the model’s own family is used; a different family raises an error</p>
 <p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Returns:</strong></span></p>
 <p>        <strong>centile_values</strong> : <em><strong>numpy.ndarray</strong></em> <br>
             Array of shape (n_samples, n_centiles) with centile values</p>
@@ -419,19 +419,19 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of centile scores: (470, 7)
-[[22.22931665 22.71413032 23.32022596 ... 24.98321726 25.60201396
-  26.09884836]
- [22.14905006 22.63392162 23.24008963 ... 24.9032795  25.52215008
-  26.01904381]
- [20.73253284 21.21871566 21.82652296 ... 23.49421067 24.11475489
-  24.61299239]
+[[22.26361183 22.70404629 23.29841832 ... 25.03367042 25.63883369
+  26.08781171]
+ [22.18474533 22.62521059 23.21962418 ... 24.95499763 25.56020321
+  26.00921264]
+ [20.76278981 21.20411026 21.79967795 ... 23.53842074 24.14480137
+  24.59468269]
  ...
- [21.29319489 21.77881086 22.3859095  ... 24.05165283 24.67147355
-  25.16913014]
- [21.14877055 21.63505245 22.24298361 ... 23.91101118 24.53168187
-  25.0300209 ]
- [21.439192   21.92528275 22.53297495 ... 24.20034684 24.82077355
-  25.31891669]]
+ [21.3364953  21.7773827  22.37236599 ... 24.10940262 24.71518824
+  25.16462806]
+ [21.15285185 21.59437228 22.19020985 ... 23.92974055 24.53639596
+  24.98648117]
+ [21.4493725  21.89059435 22.48602897 ... 24.22438328 24.83062844
+  25.28040923]]
 </pre></div>
 </div>
 </div>
@@ -439,17 +439,26 @@ document.write(`
 </section>
 <section id="gamlss-main-gamlss-create-site-adjusted-data">
 <h2>gamlss_main.Gamlss.<br><strong>create_site_adjusted_data</strong><a class="headerlink" href="#gamlss-main-gamlss-create-site-adjusted-data" title="Link to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">create_site_adjusted_data</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">reference_site</span><span class="p">,</span> <span class="n">correction_col_name</span><span class="o">=</span><span class="s1">&#39;site&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">create_site_adjusted_data</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">reference_site</span><span class="p">,</span> <span class="n">correction_col_name</span><span class="o">=</span><span class="s1">&#39;site&#39;</span><span class="p">,</span>
+                          <span class="n">model_train_data</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>    Performs robust site correction by extracting random effects from the fitted GAMLSS model and adjusting data to a reference site. Creates a new column ‘{y_val}_adjusted’ with site-corrected values while preserving all original data.</p>
+<p>    Performs robust site correction by extracting the site random effects (<code class="docutils literal notranslate"><span class="pre">re()</span></code> terms) of every parameter of the fitted GAMLSS model and adjusting data to a reference site. Creates a new column ‘{y_val}_adjusted’ with site-corrected values while preserving all original data.</p>
+<p>    How the values are moved depends on the model:</p>
+<ul class="simple">
+<li><p><strong>Site only in mu, identity link, location family</strong> (e.g. NO, SHASH, TF): each value is shifted by the difference between its site’s effect and the reference site’s effect. This is a plain shift.</p></li>
+<li><p><strong>Otherwise</strong> (site also in sigma, nu or tau, a log link, or a family where mu is not a location, e.g. GA): each value keeps its centile. A value on the 80th centile of its own site’s distribution moves to the 80th centile of the reference site’s distribution.</p></li>
+</ul>
+<p>    If the model has no <code class="docutils literal notranslate"><span class="pre">re()</span></code> site term, a warning is given and nothing is adjusted.</p>
 <p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Parameters:</strong></span></p>
 <p>        <strong>train_data</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
             Original training data containing the site/group information</p>
 <p>        <strong>reference_site</strong> : <em><strong>str</strong></em> <br>
-            Site to use as reference (all other sites adjusted to this baseline)</p>
+            Site to use as reference (all other sites adjusted to this baseline). It must be one of the model’s sites; any other value raises an error</p>
 <p>        <strong>correction_col_name</strong> : <em><strong>str</strong></em>, <em>default=’site’</em> <br>
             Name of the column containing site/group information for correction</p>
+<p>        <strong>model_train_data</strong> : <em><strong>pandas.DataFrame</strong></em>, <em>optional</em> <br>
+            The data the model was fitted on. Only needed when <code class="docutils literal notranslate"><span class="pre">train_data</span></code> is other data than the model’s own training data and the adjustment is not a plain shift (the centile mapping needs the model’s predictions for those rows). <code class="docutils literal notranslate"><span class="pre">plot_centiles(site_correction=True)</span></code> passes it for you</p>
 <p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Returns:</strong></span></p>
 <p>        <strong>adjusted_data</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
             Same as input with additional ‘{y_val}_adjusted’ column containing site-corrected values</p>
@@ -477,35 +486,55 @@ document.write(`
 Checking mu parameter...
 Found random effects in mu parameter:
          offset  group
-BCCLF -0.001427  BCCLF
-ESZYC -0.000806  ESZYC
-HJDXM -0.002133  HJDXM
-HLMEG  0.001153  HLMEG
-HSREL -0.002275  HSREL
-KEMUB  0.000650  KEMUB
-TIXLZ  0.005537  TIXLZ
-ZSCPY -0.000698  ZSCPY
+BCCLF -0.004787  BCCLF
+ESZYC -0.002687  ESZYC
+HJDXM -0.005445  HJDXM
+HLMEG  0.003174  HLMEG
+HSREL -0.004600  HSREL
+KEMUB  0.001695  KEMUB
+TIXLZ  0.014594  TIXLZ
+ZSCPY -0.001944  ZSCPY
 
- Using random effects from mu parameter
+Checking sigma parameter...
+Found random effects in sigma parameter:
+             offset  group
+BCCLF  1.750685e-08  BCCLF
+ESZYC  8.567566e-08  ESZYC
+HJDXM -8.668942e-08  HJDXM
+HLMEG  1.065463e-08  HLMEG
+HSREL -5.122056e-08  HSREL
+KEMUB -5.814322e-09  KEMUB
+TIXLZ  3.700854e-08  TIXLZ
+ZSCPY -7.121374e-09  ZSCPY
 
- Using &#39;HJDXM&#39; as reference site (offset = -0.002133)
+Checking nu parameter...
+No random effects in nu
+
+Checking tau parameter...
+No random effects in tau
+
+ Using random effects from mu, sigma parameter(s)
+
+ Using &#39;HJDXM&#39; as reference site (mu offset = -0.005445)
+
+ Using &#39;HJDXM&#39; as reference site (sigma offset = -0.000000)
 
  Applying site corrections:
-  HJDXM: offset = 0.000000, n = 210
-  BCCLF: offset = 0.000707, n = 213
-  ESZYC: offset = 0.001327, n = 193
-  HSREL: offset = -0.000142, n = 176
-  TIXLZ: offset = 0.007670, n = 208
-  HLMEG: offset = 0.003286, n = 11
-  KEMUB: offset = 0.002783, n = 9
-  ZSCPY: offset = 0.001435, n = 10
+  HJDXM: mu offset = 0.000000, sigma offset = 0.000000, n = 210
+  BCCLF: mu offset = 0.000657, sigma offset = 0.000000, n = 213
+  ESZYC: mu offset = 0.002757, sigma offset = 0.000000, n = 193
+  HSREL: mu offset = 0.000844, sigma offset = 0.000000, n = 176
+  TIXLZ: mu offset = 0.020039, sigma offset = 0.000000, n = 208
+  HLMEG: mu offset = 0.008618, sigma offset = 0.000000, n = 11
+  KEMUB: mu offset = 0.007140, sigma offset = 0.000000, n = 9
+  ZSCPY: mu offset = 0.003501, sigma offset = 0.000000, n = 10
 
- Site correction completed. Added column &#39;y_thickness1_adjusted&#39;
+ Site correction completed (centile-preserving). Added column &#39;y_thickness1_adjusted&#39;
 
  Verification:
   Original mean: 23.537049
-  Adjusted mean: 23.535057
-  Mean difference: -0.001993
+  Adjusted mean: 23.532018
+  Mean difference: -0.005032
 Original columns: [&#39;age&#39;, &#39;sex&#39;, &#39;site&#39;, &#39;feature_volume1&#39;, &#39;y_thickness1&#39;]
 Adjusted columns: [&#39;site&#39;, &#39;sex&#39;, &#39;age&#39;, &#39;feature_volume1&#39;, &#39;feature_volume2&#39;, &#39;feature_volume3&#39;, &#39;feature_volume4&#39;, &#39;feature_volume5&#39;, &#39;y_thickness1&#39;, &#39;y_thickness2&#39;, &#39;y_thickness3&#39;, &#39;y_thickness4&#39;, &#39;y_thickness1_adjusted&#39;]
 New column: y_thickness1_adjusted

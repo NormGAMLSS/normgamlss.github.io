@@ -415,6 +415,23 @@ smooths: <code class="docutils literal notranslate"><span class="pre">pb()</span
 warns about this, but the fit is still a single curve, so use <code class="docutils literal notranslate"><span class="pre">pvc()</span></code> for
 per-group curves), and <code class="docutils literal notranslate"><span class="pre">pvc(...,</span> <span class="pre">by=...,</span> <span class="pre">df=&lt;fixed&gt;)</span></code> used to fail when
 predicting on new data (patched automatically by this package).</p>
+<p><strong>Q: Can I write <code class="docutils literal notranslate"><span class="pre">log(y)</span></code> (or another transform of the outcome) in the formula?</strong></p>
+<p>A: No, transform the column instead. NormGAMLSS reads the outcome column itself (<code class="docutils literal notranslate"><span class="pre">y</span></code>)
+when it calculates z-scores, centiles and evaluation metrics, so with <code class="docutils literal notranslate"><span class="pre">log(y)</span></code> in the
+formula it would compare the raw values with a distribution fitted to <code class="docutils literal notranslate"><span class="pre">log(y)</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This gives wrong z-scores and centiles</span>
+<span class="n">log</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">~</span> <span class="n">pvc</span><span class="p">(</span><span class="n">age</span><span class="p">)</span> <span class="o">+</span> <span class="n">re</span><span class="p">(</span><span class="n">random</span><span class="o">=~</span><span class="mi">1</span><span class="o">|</span><span class="k">as</span><span class="o">.</span><span class="n">factor</span><span class="p">(</span><span class="n">site</span><span class="p">))</span>
+
+<span class="c1"># Do this instead: a new column, fitted as log_y ~ pvc(age) + ..., with y_val=&#39;log_y&#39;</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;log_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><strong>Q: Which distribution families are supported?</strong></p>
+<p>A: The continuous and count families of <code class="docutils literal notranslate"><span class="pre">gamlss.dist</span></code> (e.g. NO, SHASH, BCT, GA, NBI).
+Binomial families (BI, BB, ZIBI, ZABI, ZIBB, ZABB, DBI) are not supported, because
+they need the number of trials (binomial denominator) for every observation, which
+NormGAMLSS does not pass on. Multinomial families (MN3, MN4, MN5, MULTIN) have no
+centiles or z-scores.</p>
 </section>
 <section id="interpretation">
 <h2>Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading">#</a></h2>
@@ -434,6 +451,17 @@ predicting on new data (patched automatically by this package).</p>
 kurtosis; <code class="docutils literal notranslate"><span class="pre">evaluate()</span></code> reports <em>excess</em> kurtosis, whose target is ≈ 0)</p></li>
 </ul>
 <p>See the <a class="reference internal" href="diagnostic_plot_summary.html"><span class="doc std std-doc">Diagnostic Plots Interpretation</span></a> page for details.</p>
+<p><strong>Q: Which value does <code class="docutils literal notranslate"><span class="pre">evaluate_ml()</span></code> use as the prediction?</strong></p>
+<p>A: The fitted <code class="docutils literal notranslate"><span class="pre">mu</span></code> of each person. For symmetric families such as NO, mu is the mean.
+For skewed families such as SHASH, mu is the location, not the mean, so MAE, RMSE and
+R² there describe the distance from the location. Use the z-score metrics of
+<code class="docutils literal notranslate"><span class="pre">evaluate()</span></code> to judge the fit of the whole distribution.</p>
+<p><strong>Q: How small can a permutation p-value be?</strong></p>
+<p>A: <code class="docutils literal notranslate"><span class="pre">run_models_with_permutation()</span></code> calculates p = (1 + k) / (1 + n), where n is the
+number of permutations that fitted and k the number with a difference at least as
+large as the original one. p is never 0. The smallest possible value is 1 / (n + 1):
+0.0196 with 50 permutations, 0.001 with 999. When you test many regions and correct
+for multiple testing, use 1000 or more permutations.</p>
 </section>
 <section id="technical-issues">
 <h2>Technical Issues<a class="headerlink" href="#technical-issues" title="Link to this heading">#</a></h2>
@@ -444,6 +472,20 @@ kurtosis; <code class="docutils literal notranslate"><span class="pre">evaluate(
 <span class="n">grdevices</span><span class="o">.</span><span class="n">dev_off</span><span class="p">()</span>
 </pre></div>
 </div>
+<p><strong>Q: Can I share my model without sharing the training data?</strong></p>
+<p>A: Yes, with a slim copy. A model saved by <code class="docutils literal notranslate"><span class="pre">save_model()</span></code> (or by the pipelines) holds
+every training participant’s outcome and fitted values, and it needs the training data
+to predict. <code class="docutils literal notranslate"><span class="pre">export_slim()</span></code> writes a small copy without any participant data that predicts
+on its own (<code class="docutils literal notranslate"><span class="pre">train_data=None</span></code>); only diagnostics (residuals, QQ and worm plots) need the
+full model. See <em>Sharing a model without the training data</em> in
+<a class="reference internal" href="notebooks/saving_loading_models.html"><span class="doc std std-doc">Saving and Loading Models</span></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">Gamlss</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="s1">&#39;saved_models/thick_formula3.rds&#39;</span><span class="p">)</span>        <span class="c1"># the full model</span>
+<span class="n">m</span><span class="o">.</span><span class="n">export_slim</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="s1">&#39;share/thick_formula3_slim.rds&#39;</span><span class="p">)</span>        <span class="c1"># once, with its training data</span>
+
+<span class="n">slim</span> <span class="o">=</span> <span class="n">Gamlss</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="s1">&#39;thick_formula3_slim.rds&#39;</span><span class="p">)</span>              <span class="c1"># anywhere, no data needed</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">slim</span><span class="o">.</span><span class="n">z_score</span><span class="p">(</span><span class="n">new_data</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
 <p><strong>Q: How do I handle new sites?</strong></p>
 <p>A: Use the site transfer function in <code class="docutils literal notranslate"><span class="pre">site_transfer_utils</span></code> (it is a module-level function, not a method of <code class="docutils literal notranslate"><span class="pre">Gamlss</span></code>):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">normgamlss.site_transfer_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">site_transfer</span>
@@ -452,14 +494,21 @@ kurtosis; <code class="docutils literal notranslate"><span class="pre">evaluate(
                        <span class="n">selected_site</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y_val</span><span class="o">=</span><span class="n">y_val</span><span class="p">,</span> <span class="n">x_vals</span><span class="o">=</span><span class="n">x_vals</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>See the function’s docstring for the sampling strategy, <code class="docutils literal notranslate"><span class="pre">params_to_adjust</span></code> and <code class="docutils literal notranslate"><span class="pre">adjustment_covariates</span></code> options.</p>
+<p>See the function’s docstring for the sampling strategy, <code class="docutils literal notranslate"><span class="pre">params_to_adjust</span></code> and <code class="docutils literal notranslate"><span class="pre">adjustment_covariates</span></code> options.
+With a numeric adjustment covariate and a small calibration sample (e.g. 40 people), put
+the covariate on the location only, <code class="docutils literal notranslate"><span class="pre">covariate_params=['mu']</span></code>: by default it goes into
+every adjusted parameter, which can overfit and widen the z-scores.</p>
 </section>
 <section id="model-selection">
 <h2>Model Selection<a class="headerlink" href="#model-selection" title="Link to this heading">#</a></h2>
 <p><strong>Q: Which distribution should I use?</strong></p>
 <p>A: Start with SHASH for flexibility, use <code class="docutils literal notranslate"><span class="pre">fitDist()</span></code> for data-driven selection.</p>
 <p><strong>Q: How many iterations do I need?</strong></p>
-<p>A: Start with RS(50), increase to RS(100) if convergence issues.</p>
+<p>A: Check whether the fit converged (the model summary, or the ‘Converged’ columns of
+the pipelines). RS alone can need hundreds of iterations, for example with SHASH, whose
+shape parameters move slowly. <code class="docutils literal notranslate"><span class="pre">method</span> <span class="pre">=</span> <span class="pre">mixed(10,</span> <span class="pre">100)</span></code> (10 RS iterations, then CG)
+usually converges in far fewer iterations; in the tutorial data RS(50) and RS(200) did
+not converge, while mixed(10, 100) converged within 50 iterations.</p>
 </section>
 <section id="getting-help">
 <h2>Getting Help<a class="headerlink" href="#getting-help" title="Link to this heading">#</a></h2>
