@@ -122,6 +122,10 @@
   .fig{margin-top:auto; border:1px solid var(--border-soft); border-radius:9px; overflow:hidden;
     background:#fff;}
   .fig img{width:100%; display:block;}
+  /* full-width card: text beside the figure, stacked on narrow screens */
+  .fcard.fwide{flex:1 1 100%; flex-direction:row; flex-wrap:wrap; align-items:center; gap:22px;}
+  .fwide .fhead{flex:1 1 300px; margin-bottom:0;}
+  .fwide .fig{flex:0 1 460px; margin-top:0;}
   .more-note{margin-top:34px; padding:22px 24px; border:1px dashed var(--border);
     border-radius:12px; background:var(--paper-2); font-size:14px; color:var(--muted); line-height:1.6;}
   .more-note b{color:var(--ink); font-weight:600;}
@@ -266,7 +270,7 @@
   <div class="wrap">
     <div class="eyebrow">Architecture</div>
     <h2 class="section-title">Built for the real shape of your data</h2>
-    <p class="section-sub">Six of the things the package does, each shown with output from its own tutorial.</p>
+    <p class="section-sub">Seven of the things the package does, most shown with output from its own tutorial.</p>
 
     <div class="fgrid">
       <div class="fcard">
@@ -329,6 +333,16 @@
         </div>
         <div class="fig"><img src="images/fig_diagnostics.svg" alt="Diagnostics after every fit"/></div>
       </div>
+      <div class="fcard fwide">
+        <div class="fhead">
+          <div class="ficon"><img src="images/icon_share.svg" alt=""/></div>
+          <div>
+            <div class="ftitle">Share models, not data</div>
+            <div class="fdesc">Export a slim copy of a fitted model with no participant data in it. Anyone can use it for centiles and z-scores without the training data, with practically the same results — for a large cohort about 500&#215; smaller and 10&#215; faster.</div>
+          </div>
+        </div>
+        <div class="fig"><img src="images/fig_share.svg" alt="Share models, not data"/></div>
+      </div>
     </div>
 
     <div class="more-note">
@@ -345,18 +359,24 @@
     <div style="display:flex; gap:24px; flex-wrap:wrap; align-items:stretch;">
       <div style="flex:1.3 1 460px; min-width:0; background:#0c0c14; border-radius:12px; padding:24px 28px;">
         <pre class="mono" style="margin:0; color:#d8d8e0; font-size:12.5px; line-height:1.8; white-space:pre; overflow-x:auto;">from normgamlss import Gamlss
+from normgamlss.site_transfer_utils import site_transfer
 
-<span style="color:#7a7a94;"># fit — location, scale, skew, kurtosis jointly</span>
-model = Gamlss(<span style="color:#f0b46a;">"m1"</span>, [<span style="color:#a3d9c9;">"age"</span>,<span style="color:#a3d9c9;">"sex"</span>,<span style="color:#a3d9c9;">"site"</span>], <span style="color:#a3d9c9;">"thickness"</span>)
-model.fit(r_code=<span style="color:#a3d9c9;">"gamlss(y~pvc(age)+site, SHASH())"</span>,
-          data=train)
+<span style="color:#7a7a94;"># fit once — location, scale, skew, kurtosis jointly</span>
+model = Gamlss(<span style="color:#f0b46a;">"m1"</span>, [<span style="color:#a3d9c9;">"age"</span>, <span style="color:#a3d9c9;">"sex"</span>, <span style="color:#a3d9c9;">"site"</span>], <span style="color:#a3d9c9;">"thickness"</span>)
+model.fit(<span style="color:#a3d9c9;">"model &lt;- gamlss(y ~ pvc(age) + "</span>
+          <span style="color:#a3d9c9;">"re(random=~1|as.factor(site)), family=SHASH())"</span>, train)
+model.export_slim(train, <span style="color:#a3d9c9;">"m1_slim.rds"</span>)  <span style="color:#7a7a94;"># no participant data in it</span>
 
-<span style="color:#7a7a94;"># reference curves + deviation scores</span>
-z = model.z_score(test, train)
-model.plot_centiles(test, train)
+<span style="color:#7a7a94;"># share the slim model — no training data needed from here on</span>
+slim = Gamlss.load_model(<span style="color:#a3d9c9;">"m1_slim.rds"</span>)
+z = slim.z_score(test, None)
+slim.plot_centiles(test, None)
 
-<span style="color:#7a7a94;"># adapt to a new scanner, no retraining</span>
-adj = site_transfer(model, train, new_site)</pre>
+<span style="color:#7a7a94;"># adapt to a new scanner from 20 people, no retraining</span>
+adj = site_transfer(<span style="color:#a3d9c9;">"m1_slim.rds"</span>, None, new_data,
+                    new_site=<span style="color:#a3d9c9;">"S7"</span>, selected_site=<span style="color:#a3d9c9;">"S1"</span>,
+                    sample_size=20, y_val=<span style="color:#a3d9c9;">"thickness"</span>,
+                    x_vals=[<span style="color:#a3d9c9;">"age"</span>, <span style="color:#a3d9c9;">"sex"</span>, <span style="color:#a3d9c9;">"site"</span>])</pre>
       </div>
       <div style="flex:0.9 1 300px; min-width:280px; background:#fff; border:1px solid var(--border); border-radius:12px; padding:14px; display:flex; align-items:center; justify-content:center;">
         <img src="images/demo_anim.svg" alt="Centile bands drawn, with one individual flagged" style="width:100%;height:auto;"/>
