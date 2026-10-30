@@ -235,7 +235,7 @@
   <div class="wrap">
     <div class="eyebrow">Validation</div>
     <h2 class="section-title">One model, several modalities</h2>
-    <p class="section-sub">Developed and validated with the <a href="https://mhm-lab.github.io/" target="_blank" rel="noopener" style="color:var(--teal);">Laboratory for Mental Health Mapping</a> — each modality backed by its own publication below.</p>
+    <p class="section-sub">Developed and validated with the <a href="https://mhm-lab.github.io/" target="_blank" rel="noopener" style="color:var(--teal);">Laboratory for Mental Health Mapping</a>, each modality backed by its own publication below.</p>
     <div class="modgrid">
       <div class="modcard">
         <div class="modicon"><img src="images/icon_mri.svg" alt=""/></div>
@@ -278,7 +278,7 @@
           <div class="ficon"><img src="images/icon_distribution.svg" alt=""/></div>
           <div>
             <div class="ftitle">Model the full distribution</div>
-            <div class="fdesc">Location, scale, skew and kurtosis (μ, σ, ν, τ) fitted jointly as smooth functions of age, sex and site — not collapsed to a single mean trend.</div>
+            <div class="fdesc">Location, scale, skew and kurtosis (μ, σ, ν, τ) fitted jointly as smooth functions of age, sex and site, not collapsed to a single mean trend.</div>
           </div>
         </div>
         <div class="fig"><img src="images/fig_distribution.svg" alt="Model the full distribution"/></div>
@@ -288,7 +288,7 @@
           <div class="ficon"><img src="images/icon_centiles.svg" alt=""/></div>
           <div>
             <div class="ftitle">Reference curves &amp; outlier detection</div>
-            <div class="fdesc">Continuous, age-dependent centile bands plus an exact deviation (Z-)score per individual — outliers judged against a proper reference, not a fixed cutoff.</div>
+            <div class="fdesc">Continuous, age-dependent centile bands plus an exact deviation (Z-)score per individual, so outliers are judged against a proper reference, not a fixed cutoff.</div>
           </div>
         </div>
         <div class="fig"><img src="images/fig_reference.svg" alt="Reference curves &amp; outlier detection"/></div>
@@ -298,7 +298,7 @@
           <div class="ficon"><img src="images/icon_permutation.svg" alt=""/></div>
           <div>
             <div class="ftitle">Permutation testing</div>
-            <div class="fdesc">Non-parametric p-values that test whether a covariate genuinely improves the fit — not just whether AIC happened to move.</div>
+            <div class="fdesc">Non-parametric p-values that test whether a covariate genuinely improves the fit, not just whether AIC happened to move.</div>
           </div>
         </div>
         <div class="fig"><img src="images/fig_permutation.svg" alt="Permutation testing"/></div>
@@ -318,7 +318,7 @@
           <div class="ficon"><img src="images/icon_site_transfer.svg" alt=""/></div>
           <div>
             <div class="ftitle">Zero-shot site transfer</div>
-            <div class="fdesc">Recalibrate a reference model onto an entirely new scanner from a small calibration sample — the curves shift to the site, no full retrain.</div>
+            <div class="fdesc">Recalibrate a reference model onto an entirely new scanner from a small calibration sample. The curves shift to the site without a full retrain.</div>
           </div>
         </div>
         <div class="fig"><img src="images/fig_transfer.svg" alt="Zero-shot site transfer"/></div>
@@ -338,7 +338,7 @@
           <div class="ficon"><img src="images/icon_share.svg" alt=""/></div>
           <div>
             <div class="ftitle">Share models, not data</div>
-            <div class="fdesc">Export a slim copy of a fitted model with no participant data in it. Anyone can use it for centiles and z-scores without the training data, with practically the same results — for a large cohort about 500&#215; smaller and 10&#215; faster.</div>
+            <div class="fdesc">Export a slim copy of a fitted model with no participant data in it. Anyone can use it for centiles and z-scores without the training data, with practically the same results. For a large cohort it is about 500&#215; smaller and 10&#215; faster.</div>
           </div>
         </div>
         <div class="fig"><img src="images/fig_share.svg" alt="Share models, not data"/></div>
@@ -346,7 +346,7 @@
     </div>
 
     <div class="more-note">
-      <b>Beyond the highlights.</b> The package also handles data preprocessing and structuring, multiple-formula model comparison, evaluation metrics, continuous centiles with uncertainty, centile-position lookup, saving and reloading fitted models, transfer across several new sites at once, and parallel batch fitting with caching — each <a href="NormGAMLSS/">documented in full</a>.
+      <b>Beyond the highlights.</b> The package also handles data preprocessing and structuring, multiple-formula model comparison, evaluation metrics, continuous centiles with uncertainty, centile-position lookup, saving and reloading fitted models, transfer across several new sites at once, and parallel batch fitting with caching, each <a href="NormGAMLSS/">documented in full</a>.
     </div>
   </div>
 </section>
@@ -361,13 +361,13 @@
         <pre class="mono" style="margin:0; color:#d8d8e0; font-size:12.5px; line-height:1.8; white-space:pre; overflow-x:auto;">from normgamlss import Gamlss
 from normgamlss.site_transfer_utils import site_transfer
 
-<span style="color:#7a7a94;"># fit once — location, scale, skew, kurtosis jointly</span>
+<span style="color:#7a7a94;"># fit once: location, scale, skew and kurtosis jointly</span>
 model = Gamlss(<span style="color:#f0b46a;">"m1"</span>, [<span style="color:#a3d9c9;">"age"</span>, <span style="color:#a3d9c9;">"sex"</span>, <span style="color:#a3d9c9;">"site"</span>], <span style="color:#a3d9c9;">"thickness"</span>)
 model.fit(<span style="color:#a3d9c9;">"model &lt;- gamlss(y ~ pvc(age) + "</span>
           <span style="color:#a3d9c9;">"re(random=~1|as.factor(site)), family=SHASH())"</span>, train)
 model.export_slim(train, <span style="color:#a3d9c9;">"m1_slim.rds"</span>)  <span style="color:#7a7a94;"># no participant data in it</span>
 
-<span style="color:#7a7a94;"># share the slim model — no training data needed from here on</span>
+<span style="color:#7a7a94;"># share the slim model, no training data needed from here on</span>
 slim = Gamlss.load_model(<span style="color:#a3d9c9;">"m1_slim.rds"</span>)
 z = slim.z_score(test, None)
 slim.plot_centiles(test, None)
@@ -389,7 +389,7 @@ adj = site_transfer(<span style="color:#a3d9c9;">"m1_slim.rds"</span>, None, new
   <div class="wrap">
     <div class="eyebrow">Publications — please cite</div>
     <h2 class="section-title">Validated across five modalities</h2>
-    <p class="section-sub">Presented at OHBM 2026 (Jun 14–18). Status shown per paper — some are still in preparation.</p>
+    <p class="section-sub">Presented at OHBM 2026 (Jun 14–18). Status is shown per paper; some are still in preparation.</p>
 
     <div class="paper-grid">
       <div class="paper-card">
