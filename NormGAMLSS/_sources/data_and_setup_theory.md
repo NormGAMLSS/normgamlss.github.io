@@ -21,8 +21,8 @@ Beyond the core `gamlss`, `base`, and `stats` packages, several additional R pac
 
 **Core GAMLSS Packages:**
 - `gamlss.dist`: 100+ distribution families (gamma, Weibull, beta, etc.)
-- `gamlss.add`: Additional additive terms (penalized splines, neural networks)
-- `gamlss.mx`: Mixed effects GAMLSS models
+- `gamlss.add`: Extra smooth functions: tensor products, neural networks and decision trees
+  (penalized splines such as `pb()` and `pvc()` are part of `gamlss` itself)
 - `gamlss.tr`: Truncated versions of distributions
 - `gamlss.cens`: Tools for censored response variables
 - `gamlss.data`: Example datasets
@@ -69,8 +69,9 @@ robjects.r['BIC'](robjects.r[model_name])
 from rpy2.robjects import pandas2ri
 from rpy2.robjects.conversion import localconverter
 
+bic_r = robjects.r['BIC'](robjects.r[model_name])   # call R outside the converter block
 with localconverter(robjects.default_converter + pandas2ri.converter):
-    result = robjects.conversion.rpy2py(robjects.r['BIC'](robjects.r[model_name]))
+    result = robjects.conversion.rpy2py(bic_r)
 ```
 
 ## Plotting R Graphics in Python

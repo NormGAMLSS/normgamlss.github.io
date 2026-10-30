@@ -57,13 +57,15 @@ centiles or z-scores.
 
 **Q: How do I get actual parameter values from coefficients?**
 
-A: Apply the inverse link function:
+A: Apply the inverse link function to the linear predictor, i.e. the sum of all terms for a
+person, not to each coefficient (exp(intercept) is the value only when there are no other
+terms). `model.predict_all()` does this for you:
 ```python
 # For log link (sigma, nu, tau)
-actual_value = exp(coefficient)
+actual_value = exp(linear_predictor)
 
 # For identity link (mu)
-actual_value = coefficient
+actual_value = linear_predictor
 ```
 
 **Q: What do the diagnostic statistics mean?**
@@ -143,8 +145,10 @@ A: Start with SHASH for flexibility, use `fitDist()` for data-driven selection.
 A: Check whether the fit converged (the model summary, or the 'Converged' columns of
 the pipelines). RS alone can need hundreds of iterations, for example with SHASH, whose
 shape parameters move slowly. `method = mixed(10, 100)` (10 RS iterations, then CG)
-usually converges in far fewer iterations; in the tutorial data RS(50) and RS(200) did
-not converge, while mixed(10, 100) converged within 50 iterations.
+often converges in far fewer iterations; in the tutorial data RS(50) and RS(200) did
+not converge, while mixed(10, 100) converged within 50 iterations. It does not always win:
+on the Quick Start data RS converged in 56 iterations and mixed(10, 100) did not. If one
+does not converge, try the other.
 
 ## Getting Help
 

@@ -405,7 +405,7 @@ document.write(`
 <p>This chapter provides detailed guidance for interpreting GAMLSS model outputs, summary statistics, and diagnostic plots to assess model quality and validity.</p>
 <section id="understanding-model-summary-output">
 <h2>Understanding Model Summary Output<a class="headerlink" href="#understanding-model-summary-output" title="Link to this heading">#</a></h2>
-<p>The GAMLSS model summary provides comprehensive information about your fitted model. Using the default <code class="docutils literal notranslate"><span class="pre">type=&quot;vcov&quot;</span></code>, the variance covariance matrix is calculated using the inverse of the numerical second derivatives of the observed information matrix, which is more reliable since it takes into account the inter-correlation between all parameters.</p>
+<p>The GAMLSS model summary provides comprehensive information about your fitted model. Using the default <code class="docutils literal notranslate"><span class="pre">type=&quot;vcov&quot;</span></code>, the variance covariance matrix is calculated using the inverse of the numerical second derivatives of the observed information matrix, which is more reliable since it takes into account the inter-correlation between all parameters. If this fails, R warns “summary: vcov has failed, option qr is used instead” and uses the QR decomposition of each parameter’s fit instead.</p>
 <section id="family-and-call-information">
 <h3>Family and Call Information<a class="headerlink" href="#family-and-call-information" title="Link to this heading">#</a></h3>
 <p><strong>Family</strong>: Specifies the distribution used (e.g., “SHASH”, “NO”, “GA”)</p>
@@ -425,10 +425,12 @@ document.write(`
 <h3>Fitting Method<a class="headerlink" href="#fitting-method" title="Link to this heading">#</a></h3>
 <p><strong>Common Methods</strong>:</p>
 <ul class="simple">
-<li><p><strong>RS()</strong>: Rigby-Stasinopoulos algorithm (robust, recommended)</p></li>
-<li><p><strong>CG()</strong>: Cole-Green algorithm (faster convergence)</p></li>
-<li><p><strong>mixed()</strong>: Combination approach</p></li>
+<li><p><strong>RS()</strong>: Rigby-Stasinopoulos algorithm (the default, stable)</p></li>
+<li><p><strong>CG()</strong>: Cole-Green algorithm (uses the cross-derivatives between parameters)</p></li>
+<li><p><strong>mixed(n1, n2)</strong>: n1 RS iterations, then up to n2 CG iterations</p></li>
 </ul>
+<p>If the model has not converged, try more RS iterations or <code class="docutils literal notranslate"><span class="pre">mixed(10,</span> <span class="pre">100)</span></code>; neither always
+wins (see the <a class="reference internal" href="faq.html"><span class="doc std std-doc">FAQ</span></a>).</p>
 <p>The number in parentheses (e.g., RS(50)) indicates maximum iterations. More iterations generally improve convergence but increase computation time.</p>
 </section>
 <section id="parameter-specific-sections">
@@ -461,7 +463,7 @@ document.write(`
 <li><p>Measures how many standard errors the estimate is from zero</p></li>
 <li><p>Values &gt; 2 or &lt; -2 typically indicate significance</p></li>
 </ul>
-<p><strong>p-value (Pr(&gt;|t|))</strong>: Probability of observing this t-value under null hypothesis</p>
+<p><strong>p-value (Pr(&gt;|t|))</strong>: Probability of a |t| at least this large if the true coefficient were 0</p>
 <ul class="simple">
 <li><p><strong>&lt; 0.001</strong>: Highly significant (***)</p></li>
 <li><p><strong>&lt; 0.01</strong>: Very significant (**)</p></li>
@@ -527,8 +529,12 @@ document.write(`
 <h3>Notes and Warnings<a class="headerlink" href="#notes-and-warnings" title="Link to this heading">#</a></h3>
 <p><strong>Smoothing Terms Warning</strong>:</p>
 <blockquote>
-<div><p>“Standard errors for smoothers are for linear effect only”</p>
+<div><p>“NOTE: Additive smoothing terms exist in the formulas:
+i) Std. Error for smoothers are for the linear effect only.
+ii) Std. Error for the linear terms maybe are not accurate.”</p>
 </div></blockquote>
+<p>When R has fallen back to the QR method (see above), the second line reads “ii) Std. Error for
+the linear terms may not be reliable.”</p>
 <p>This means:</p>
 <ul class="simple">
 <li><p>Standard errors may not capture full uncertainty for smooth terms</p></li>

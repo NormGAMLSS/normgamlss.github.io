@@ -11,6 +11,9 @@ Complete reference for working with R functions and packages through rpy2 in the
 - `plot()`: Diagnostic plots for GAMLSS models
 - `getSmo()`: Extract smoothing parameters
 - `predictAll()`: Generate predictions for new data
+- `fitDist()`: Fit parametric distributions to data
+- `histDist()`: Histogram with fitted distribution overlay
+- `pdf.plot()`: Plot probability density functions
 
 ### From `stats` package:
 - `AIC()`: Akaike Information Criterion
@@ -23,11 +26,6 @@ Complete reference for working with R functions and packages through rpy2 in the
 ### From `base` package:
 - `summary()`: Model summary statistics
 - `plot()`: Basic diagnostic plots
-
-### From `gamlss.dist` package:
-- `fitDist()`: Fit parametric distributions to data
-- `histDist()`: Histogram with fitted distribution overlay
-- `pdfplot()`: Plot probability density functions
 
 ## Accessing Model Parameters
 
@@ -68,28 +66,19 @@ converged = robjects.r[model_name].rx2('converged')[0]
 ## Advanced R Integration Techniques
 
 ### Checking Random Effects Implementation
+
+Seeing `random` in the model call is no proof that a random effect was fitted: a
+`random = ~1|site` argument to `gamlss()` appears in the call but is ignored. Compare the
+model with and without the site term instead (`model_no_site` is the same model fitted
+without it); a working site term lowers the global deviance and usually AIC/BIC:
 ```python
-# Create comprehensive model analysis
-comparison = robjects.r(f'''
-list(
-    # Lambda value - high indicates random effects shrinkage
-    lambda = {model_name}$mu.lambda,
-    
-    # Effective degrees of freedom
-    mu_df = {model_name}$mu.df,
-    
-    # Number of site parameters vs effective df
-    site_params = length({model_name}$mu.coefficients[grep("site", names({model_name}$mu.coefficients))]),
-    
-    # Site coefficient values (to check shrinkage)
-    site_values = {model_name}$mu.coefficients[grep("site", names({model_name}$mu.coefficients))],
-    
-    # Whether random effects were specified
-    random_specified = grepl("random", capture.output({model_name}$call))
-)
-''')
-print(comparison)
+for name in [model_name, 'model_no_site']:
+    m = robjects.r[name]
+    print(name, 'deviance', m.rx2('G.deviance')[0], 'df', m.rx2('df.fit')[0],
+          'AIC', m.rx2('aic')[0], 'BIC', m.rx2('sbc')[0])
 ```
+For a `re()` term, the value stored in `mu.lambda` is not a shrinkage parameter, so do not use
+it for this check.
 
 ### Using R Graphics in Python Notebooks
 ```python

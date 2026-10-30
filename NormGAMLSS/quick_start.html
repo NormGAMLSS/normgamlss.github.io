@@ -485,13 +485,14 @@ document.write(`
 <span class="s2">        nu.formula = ~ 1,</span>
 <span class="s2">        tau.formula = ~ 1,</span>
 <span class="s2">        family = SHASH(),</span>
-<span class="s2">        method = RS(50)</span>
+<span class="s2">        method = RS(100)</span>
 <span class="s2">    )</span>
 <span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
     <span class="n">data</span><span class="o">=</span><span class="n">train_data</span>
 <span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Model fitted successfully!&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Converged:&quot;</span><span class="p">,</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">rx2</span><span class="p">(</span><span class="s1">&#39;converged&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>   <span class="c1"># with RS(50) this model had not yet converged</span>
 </pre></div>
 </div>
 </section>
@@ -654,11 +655,11 @@ document.write(`
 <p><strong>Q: How do I use my own data?</strong><br />
 A: Replace the sample data creation with <code class="docutils literal notranslate"><span class="pre">pd.read_csv('your_data.csv')</span></code>. Ensure you have columns for predictors and outcome variable.</p>
 <p><strong>Q: My model won’t converge - what should I do?</strong><br />
-A: Start with a simpler model (fewer predictors), increase iterations <code class="docutils literal notranslate"><span class="pre">RS(100)</span></code>, or check the <a class="reference internal" href="troubleshooting.html"><span class="std std-doc">Troubleshooting Guide</span></a>.</p>
+A: Try more RS iterations (e.g. <code class="docutils literal notranslate"><span class="pre">RS(300)</span></code>) or <code class="docutils literal notranslate"><span class="pre">mixed(10,</span> <span class="pre">100)</span></code>; neither always wins, so check <code class="docutils literal notranslate"><span class="pre">converged</span></code> after each. You can also start with a simpler model (fewer predictors) or see the <a class="reference internal" href="convergence_problems.html"><span class="std std-doc">Convergence Problems</span></a> page.</p>
 <p><strong>Q: How do I interpret the diagnostic plots?</strong><br />
 A: See the <a class="reference internal" href="notebooks/model_diagnostics.html"><span class="std std-doc">Model Diagnostics</span></a> notebook for detailed interpretation guidelines.</p>
 <p><strong>Q: Can I use different distributions?</strong><br />
-A: Yes! Try <code class="docutils literal notranslate"><span class="pre">family</span> <span class="pre">=</span> <span class="pre">NO()</span></code> for normal, <code class="docutils literal notranslate"><span class="pre">family</span> <span class="pre">=</span> <span class="pre">GA()</span></code> for gamma, or <code class="docutils literal notranslate"><span class="pre">family</span> <span class="pre">=</span> <span class="pre">GG()</span></code> for generalized gamma. Pass the same name as <code class="docutils literal notranslate"><span class="pre">func_name</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">func_name='NO'</span></code>) to <code class="docutils literal notranslate"><span class="pre">z_score</span></code>, <code class="docutils literal notranslate"><span class="pre">evaluate</span></code>, <code class="docutils literal notranslate"><span class="pre">centiles</span></code> and the plotting methods, which default to <code class="docutils literal notranslate"><span class="pre">'SHASH'</span></code>.</p>
+A: Yes! Try <code class="docutils literal notranslate"><span class="pre">family</span> <span class="pre">=</span> <span class="pre">NO()</span></code> for normal, <code class="docutils literal notranslate"><span class="pre">family</span> <span class="pre">=</span> <span class="pre">GA()</span></code> for gamma, or <code class="docutils literal notranslate"><span class="pre">family</span> <span class="pre">=</span> <span class="pre">GG()</span></code> for generalized gamma. <code class="docutils literal notranslate"><span class="pre">z_score</span></code>, <code class="docutils literal notranslate"><span class="pre">evaluate</span></code>, <code class="docutils literal notranslate"><span class="pre">centiles</span></code> and the plotting methods use the model’s own family automatically (<code class="docutils literal notranslate"><span class="pre">func_name=None</span></code>); passing a different family as <code class="docutils literal notranslate"><span class="pre">func_name</span></code> raises an error.</p>
 <hr class="docutils" />
 <p>Ready to dive deeper? The full documentation provides comprehensive coverage of every feature, complete with real-world examples and best practices.</p>
 </section>

@@ -19,6 +19,14 @@ GAMLSS diagnostic plots check the normalized (randomized for discrete distributi
 - Add polynomial or smoothing terms for non-linearity
 - Consider data transformation
 
+**Also plot the residuals against age**: in normative models the mean is often U-shaped in age,
+so a spread that grows with age may not show against the fitted values at all. In a toy test
+with sigma left unmodelled, the funnel was invisible here but clear against age:
+```python
+r = model.get_residuals()          # same rows and order as the training data
+plt.scatter(train_data['age'], r, s=5); plt.axhline(0, ls='--')
+```
+
 ## 2. Against Index Plot
 **Purpose**: Identify temporal patterns or systematic data collection issues
 
@@ -31,6 +39,9 @@ GAMLSS diagnostic plots check the normalized (randomized for discrete distributi
 - **Time trends**: Systematic increase/decrease
 - **Cyclical patterns**: Regular oscillations
 - **Clustering**: Groups of similar residuals
+
+The order of the rows matters here. If the data are sorted by site, steps or blocks in this
+plot mean a site effect is missing: add `re(random=~1|as.factor(site))`.
 
 **Actions for problems**:
 - Include time variables in model
@@ -64,30 +75,41 @@ GAMLSS diagnostic plots check the normalized (randomized for discrete distributi
 - Slight deviation at extremes is acceptable
 
 **Problematic patterns**:
-- **S-shaped curve**: Indicates skewness
-- **Curved at ends**: Heavy or light tails
+- **Bow or banana shape** (both ends bend the same way): skewness. Both ends above the line
+  means right skew, both below means left skew
+- **S shape** (the ends bend in opposite directions): heavy tails when the lowest points fall
+  below the line and the highest above it; light tails when it is the other way round
 - **Systematic deviations**: Non-normality
 
 **Interpretation guidance**: Departure from normality may be important depending on analysis purpose - especially critical when estimating centiles in the tails
 
 ## Summary Statistics for Residuals
-When running diagnostic plots, GAMLSS provides summary statistics for the quantile residuals:
+When running diagnostic plots, GAMLSS provides summary statistics for the quantile residuals.
+
+On the training data the mean and the variance are close to 0 and 1 almost by construction,
+even for a poor model: in toy tests with a missed age curve, unmodelled sigma, skewed or
+heavy-tailed data they stayed at 0.00 and 1.00. There, the plots, the skewness, the kurtosis
+and the Filliben coefficient show the problems. Mean and variance are most useful on new data,
+for example the z-scores of a test set.
 
 ### Mean
 **Ideal value**: ≈ 0
-**Interpretation**: 
+
+**Interpretation**:
 - Values close to zero indicate unbiased model
 - Systematic deviation suggests model bias
 
 ### Variance
 **Ideal value**: ≈ 1
+
 **Interpretation**:
 - Values close to 1 indicate proper scaling
-- Much larger values suggest underdispersion modeling
-- Much smaller values suggest overdispersion
+- Above 1: the model's spread is too small (the data vary more than modelled)
+- Below 1: the model's spread is too large
 
 ### Coefficient of Skewness
 **Ideal value**: ≈ 0
+
 **Interpretation**:
 - Positive values: Right-skewed residuals
 - Negative values: Left-skewed residuals  
@@ -98,6 +120,7 @@ When running diagnostic plots, GAMLSS provides summary statistics for the quanti
 
 *Note:* this is R's plain kurtosis. The `Kurtosis` metric from `evaluate()` is *excess*
 kurtosis (kurtosis − 3), so its target is ≈ 0.
+
 **Interpretation**:
 - Values > 3: Heavy-tailed (more extreme values)
 - Values < 3: Light-tailed (fewer extreme values)
@@ -105,10 +128,14 @@ kurtosis (kurtosis − 3), so its target is ≈ 0.
 
 ### Filliben Correlation Coefficient
 **Ideal value**: ≈ 1 (close to 1)
+
 **Interpretation**:
 - Measures correlation between residuals and normal quantiles
-- Values < 0.95 may indicate normality violations
-- Lower values suggest need for different distribution
+- What counts as low depends on the sample size. With a correct model, 95% of simulated
+  samples gave at least 0.977 (n = 50), 0.988 (n = 100), 0.997 (n = 500) and 0.9985
+  (n = 1000). Values below these suggest a different distribution: a fixed cut-off such as
+  0.95 is too lax (in toy tests with n = 1000, heavy-tailed data gave 0.954 and light-tailed
+  data 0.978)
 
 ## Model Assessment Guidelines
 ### When the Model is Performing Well
@@ -116,7 +143,7 @@ kurtosis (kurtosis − 3), so its target is ≈ 0.
 - All diagnostic plots show random scatter
 - Summary statistics near ideal values
 - Residual variance ≈ 1 and mean ≈ 0
-- Filliben correlation > 0.99
+- Filliben correlation above the values for your sample size (see above)
 - No systematic patterns in any plot
 
 ### When the Model Needs Improvement
@@ -136,7 +163,6 @@ kurtosis (kurtosis − 3), so its target is ≈ 0.
 **For non-linearity**:
 1. Add smoothing terms `pvc(x)` or `cs(x)`
 2. Include polynomial terms
-3. Try tensor product smooths `te(x1, x2)`
 
 **For distribution issues**:
 1. Try more flexible families (SHASH, GG, BCT)
@@ -157,7 +183,7 @@ When using smoothing terms like `pvc(age)`:
 
 ### Random Effects Assessment
 For models with random effects:
-- Check lambda values (indicates shrinkage)
+- Check that the term matters: compare AIC/BIC of the model with and without it
 - Compare degrees of freedom to number of groups
 - Verify random effects are actually being applied
 

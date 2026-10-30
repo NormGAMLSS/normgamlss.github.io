@@ -431,6 +431,13 @@ document.write(`
 <li><p>Add polynomial or smoothing terms for non-linearity</p></li>
 <li><p>Consider data transformation</p></li>
 </ul>
+<p><strong>Also plot the residuals against age</strong>: in normative models the mean is often U-shaped in age,
+so a spread that grows with age may not show against the fitted values at all. In a toy test
+with sigma left unmodelled, the funnel was invisible here but clear against age:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_residuals</span><span class="p">()</span>          <span class="c1"># same rows and order as the training data</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">train_data</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">],</span> <span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 <section id="against-index-plot">
 <h2>2. Against Index Plot<a class="headerlink" href="#against-index-plot" title="Link to this heading">#</a></h2>
@@ -447,6 +454,8 @@ document.write(`
 <li><p><strong>Cyclical patterns</strong>: Regular oscillations</p></li>
 <li><p><strong>Clustering</strong>: Groups of similar residuals</p></li>
 </ul>
+<p>The order of the rows matters here. If the data are sorted by site, steps or blocks in this
+plot mean a site effect is missing: add <code class="docutils literal notranslate"><span class="pre">re(random=~1|as.factor(site))</span></code>.</p>
 <p><strong>Actions for problems</strong>:</p>
 <ul class="simple">
 <li><p>Include time variables in model</p></li>
@@ -487,19 +496,26 @@ document.write(`
 </ul>
 <p><strong>Problematic patterns</strong>:</p>
 <ul class="simple">
-<li><p><strong>S-shaped curve</strong>: Indicates skewness</p></li>
-<li><p><strong>Curved at ends</strong>: Heavy or light tails</p></li>
+<li><p><strong>Bow or banana shape</strong> (both ends bend the same way): skewness. Both ends above the line
+means right skew, both below means left skew</p></li>
+<li><p><strong>S shape</strong> (the ends bend in opposite directions): heavy tails when the lowest points fall
+below the line and the highest above it; light tails when it is the other way round</p></li>
 <li><p><strong>Systematic deviations</strong>: Non-normality</p></li>
 </ul>
 <p><strong>Interpretation guidance</strong>: Departure from normality may be important depending on analysis purpose - especially critical when estimating centiles in the tails</p>
 </section>
 <section id="summary-statistics-for-residuals">
 <h2>Summary Statistics for Residuals<a class="headerlink" href="#summary-statistics-for-residuals" title="Link to this heading">#</a></h2>
-<p>When running diagnostic plots, GAMLSS provides summary statistics for the quantile residuals:</p>
+<p>When running diagnostic plots, GAMLSS provides summary statistics for the quantile residuals.</p>
+<p>On the training data the mean and the variance are close to 0 and 1 almost by construction,
+even for a poor model: in toy tests with a missed age curve, unmodelled sigma, skewed or
+heavy-tailed data they stayed at 0.00 and 1.00. There, the plots, the skewness, the kurtosis
+and the Filliben coefficient show the problems. Mean and variance are most useful on new data,
+for example the z-scores of a test set.</p>
 <section id="mean">
 <h3>Mean<a class="headerlink" href="#mean" title="Link to this heading">#</a></h3>
-<p><strong>Ideal value</strong>: ≈ 0
-<strong>Interpretation</strong>:</p>
+<p><strong>Ideal value</strong>: ≈ 0</p>
+<p><strong>Interpretation</strong>:</p>
 <ul class="simple">
 <li><p>Values close to zero indicate unbiased model</p></li>
 <li><p>Systematic deviation suggests model bias</p></li>
@@ -507,18 +523,18 @@ document.write(`
 </section>
 <section id="variance">
 <h3>Variance<a class="headerlink" href="#variance" title="Link to this heading">#</a></h3>
-<p><strong>Ideal value</strong>: ≈ 1
-<strong>Interpretation</strong>:</p>
+<p><strong>Ideal value</strong>: ≈ 1</p>
+<p><strong>Interpretation</strong>:</p>
 <ul class="simple">
 <li><p>Values close to 1 indicate proper scaling</p></li>
-<li><p>Much larger values suggest underdispersion modeling</p></li>
-<li><p>Much smaller values suggest overdispersion</p></li>
+<li><p>Above 1: the model’s spread is too small (the data vary more than modelled)</p></li>
+<li><p>Below 1: the model’s spread is too large</p></li>
 </ul>
 </section>
 <section id="coefficient-of-skewness">
 <h3>Coefficient of Skewness<a class="headerlink" href="#coefficient-of-skewness" title="Link to this heading">#</a></h3>
-<p><strong>Ideal value</strong>: ≈ 0
-<strong>Interpretation</strong>:</p>
+<p><strong>Ideal value</strong>: ≈ 0</p>
+<p><strong>Interpretation</strong>:</p>
 <ul class="simple">
 <li><p>Positive values: Right-skewed residuals</p></li>
 <li><p>Negative values: Left-skewed residuals</p></li>
@@ -529,8 +545,8 @@ document.write(`
 <h3>Coefficient of Kurtosis<a class="headerlink" href="#coefficient-of-kurtosis" title="Link to this heading">#</a></h3>
 <p><strong>Ideal value</strong>: ≈ 3 (normal distribution)</p>
 <p><em>Note:</em> this is R’s plain kurtosis. The <code class="docutils literal notranslate"><span class="pre">Kurtosis</span></code> metric from <code class="docutils literal notranslate"><span class="pre">evaluate()</span></code> is <em>excess</em>
-kurtosis (kurtosis − 3), so its target is ≈ 0.
-<strong>Interpretation</strong>:</p>
+kurtosis (kurtosis − 3), so its target is ≈ 0.</p>
+<p><strong>Interpretation</strong>:</p>
 <ul class="simple">
 <li><p>Values &gt; 3: Heavy-tailed (more extreme values)</p></li>
 <li><p>Values &lt; 3: Light-tailed (fewer extreme values)</p></li>
@@ -539,12 +555,15 @@ kurtosis (kurtosis − 3), so its target is ≈ 0.
 </section>
 <section id="filliben-correlation-coefficient">
 <h3>Filliben Correlation Coefficient<a class="headerlink" href="#filliben-correlation-coefficient" title="Link to this heading">#</a></h3>
-<p><strong>Ideal value</strong>: ≈ 1 (close to 1)
-<strong>Interpretation</strong>:</p>
+<p><strong>Ideal value</strong>: ≈ 1 (close to 1)</p>
+<p><strong>Interpretation</strong>:</p>
 <ul class="simple">
 <li><p>Measures correlation between residuals and normal quantiles</p></li>
-<li><p>Values &lt; 0.95 may indicate normality violations</p></li>
-<li><p>Lower values suggest need for different distribution</p></li>
+<li><p>What counts as low depends on the sample size. With a correct model, 95% of simulated
+samples gave at least 0.977 (n = 50), 0.988 (n = 100), 0.997 (n = 500) and 0.9985
+(n = 1000). Values below these suggest a different distribution: a fixed cut-off such as
+0.95 is too lax (in toy tests with n = 1000, heavy-tailed data gave 0.954 and light-tailed
+data 0.978)</p></li>
 </ul>
 </section>
 </section>
@@ -557,7 +576,7 @@ kurtosis (kurtosis − 3), so its target is ≈ 0.
 <li><p>All diagnostic plots show random scatter</p></li>
 <li><p>Summary statistics near ideal values</p></li>
 <li><p>Residual variance ≈ 1 and mean ≈ 0</p></li>
-<li><p>Filliben correlation &gt; 0.99</p></li>
+<li><p>Filliben correlation above the values for your sample size (see above)</p></li>
 <li><p>No systematic patterns in any plot</p></li>
 </ul>
 </section>
@@ -584,7 +603,6 @@ kurtosis (kurtosis − 3), so its target is ≈ 0.
 <ol class="arabic simple">
 <li><p>Add smoothing terms <code class="docutils literal notranslate"><span class="pre">pvc(x)</span></code> or <code class="docutils literal notranslate"><span class="pre">cs(x)</span></code></p></li>
 <li><p>Include polynomial terms</p></li>
-<li><p>Try tensor product smooths <code class="docutils literal notranslate"><span class="pre">te(x1,</span> <span class="pre">x2)</span></code></p></li>
 </ol>
 <p><strong>For distribution issues</strong>:</p>
 <ol class="arabic simple">
@@ -615,7 +633,7 @@ kurtosis (kurtosis − 3), so its target is ≈ 0.
 <h3>Random Effects Assessment<a class="headerlink" href="#random-effects-assessment" title="Link to this heading">#</a></h3>
 <p>For models with random effects:</p>
 <ul class="simple">
-<li><p>Check lambda values (indicates shrinkage)</p></li>
+<li><p>Check that the term matters: compare AIC/BIC of the model with and without it</p></li>
 <li><p>Compare degrees of freedom to number of groups</p></li>
 <li><p>Verify random effects are actually being applied</p></li>
 </ul>

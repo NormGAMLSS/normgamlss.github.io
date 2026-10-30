@@ -376,7 +376,6 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-gamlss-package">From <code class="docutils literal notranslate"><span class="pre">gamlss</span></code> package:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-stats-package">From <code class="docutils literal notranslate"><span class="pre">stats</span></code> package:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-base-package">From <code class="docutils literal notranslate"><span class="pre">base</span></code> package:</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-gamlss-dist-package">From <code class="docutils literal notranslate"><span class="pre">gamlss.dist</span></code> package:</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accessing-model-parameters">Accessing Model Parameters</a></li>
@@ -417,6 +416,9 @@ document.write(`
 <li><p><code class="docutils literal notranslate"><span class="pre">plot()</span></code>: Diagnostic plots for GAMLSS models</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">getSmo()</span></code>: Extract smoothing parameters</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">predictAll()</span></code>: Generate predictions for new data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fitDist()</span></code>: Fit parametric distributions to data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">histDist()</span></code>: Histogram with fitted distribution overlay</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pdf.plot()</span></code>: Plot probability density functions</p></li>
 </ul>
 </section>
 <section id="from-stats-package">
@@ -435,14 +437,6 @@ document.write(`
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">summary()</span></code>: Model summary statistics</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">plot()</span></code>: Basic diagnostic plots</p></li>
-</ul>
-</section>
-<section id="from-gamlss-dist-package">
-<h3>From <code class="docutils literal notranslate"><span class="pre">gamlss.dist</span></code> package:<a class="headerlink" href="#from-gamlss-dist-package" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">fitDist()</span></code>: Fit parametric distributions to data</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">histDist()</span></code>: Histogram with fitted distribution overlay</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">pdfplot()</span></code>: Plot probability density functions</p></li>
 </ul>
 </section>
 </section>
@@ -486,28 +480,18 @@ document.write(`
 <h2>Advanced R Integration Techniques<a class="headerlink" href="#advanced-r-integration-techniques" title="Link to this heading">#</a></h2>
 <section id="checking-random-effects-implementation">
 <h3>Checking Random Effects Implementation<a class="headerlink" href="#checking-random-effects-implementation" title="Link to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create comprehensive model analysis</span>
-<span class="n">comparison</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">list(</span>
-<span class="s1">    # Lambda value - high indicates random effects shrinkage</span>
-<span class="s1">    lambda = </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">$mu.lambda,</span>
-<span class="s1">    </span>
-<span class="s1">    # Effective degrees of freedom</span>
-<span class="s1">    mu_df = </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">$mu.df,</span>
-<span class="s1">    </span>
-<span class="s1">    # Number of site parameters vs effective df</span>
-<span class="s1">    site_params = length(</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">$mu.coefficients[grep(&quot;site&quot;, names(</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">$mu.coefficients))]),</span>
-<span class="s1">    </span>
-<span class="s1">    # Site coefficient values (to check shrinkage)</span>
-<span class="s1">    site_values = </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">$mu.coefficients[grep(&quot;site&quot;, names(</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">$mu.coefficients))],</span>
-<span class="s1">    </span>
-<span class="s1">    # Whether random effects were specified</span>
-<span class="s1">    random_specified = grepl(&quot;random&quot;, capture.output(</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">$call))</span>
-<span class="s1">)</span>
-<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">comparison</span><span class="p">)</span>
+<p>Seeing <code class="docutils literal notranslate"><span class="pre">random</span></code> in the model call is no proof that a random effect was fitted: a
+<code class="docutils literal notranslate"><span class="pre">random</span> <span class="pre">=</span> <span class="pre">~1|site</span></code> argument to <code class="docutils literal notranslate"><span class="pre">gamlss()</span></code> appears in the call but is ignored. Compare the
+model with and without the site term instead (<code class="docutils literal notranslate"><span class="pre">model_no_site</span></code> is the same model fitted
+without it); a working site term lowers the global deviance and usually AIC/BIC:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="n">model_name</span><span class="p">,</span> <span class="s1">&#39;model_no_site&#39;</span><span class="p">]:</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;deviance&#39;</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">rx2</span><span class="p">(</span><span class="s1">&#39;G.deviance&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">rx2</span><span class="p">(</span><span class="s1">&#39;df.fit&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+          <span class="s1">&#39;AIC&#39;</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">rx2</span><span class="p">(</span><span class="s1">&#39;aic&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;BIC&#39;</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">rx2</span><span class="p">(</span><span class="s1">&#39;sbc&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
+<p>For a <code class="docutils literal notranslate"><span class="pre">re()</span></code> term, the value stored in <code class="docutils literal notranslate"><span class="pre">mu.lambda</span></code> is not a shrinkage parameter, so do not use
+it for this check.</p>
 </section>
 <section id="using-r-graphics-in-python-notebooks">
 <h3>Using R Graphics in Python Notebooks<a class="headerlink" href="#using-r-graphics-in-python-notebooks" title="Link to this heading">#</a></h3>
@@ -675,7 +659,6 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-gamlss-package">From <code class="docutils literal notranslate"><span class="pre">gamlss</span></code> package:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-stats-package">From <code class="docutils literal notranslate"><span class="pre">stats</span></code> package:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-base-package">From <code class="docutils literal notranslate"><span class="pre">base</span></code> package:</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-gamlss-dist-package">From <code class="docutils literal notranslate"><span class="pre">gamlss.dist</span></code> package:</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accessing-model-parameters">Accessing Model Parameters</a></li>

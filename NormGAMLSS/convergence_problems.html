@@ -447,17 +447,23 @@ document.write(`
 </section>
 <section id="step-3-increase-iterations">
 <h2>Step 3: Increase Iterations<a class="headerlink" href="#step-3-increase-iterations" title="Link to this heading">#</a></h2>
-<p><strong>Most convergence issues resolve with more iterations:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Default RS(50) is often insufficient</span>
-<span class="n">method</span> <span class="o">=</span> <span class="n">RS</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>    <span class="c1"># 300 iterations usually sufficient</span>
-<span class="n">method</span> <span class="o">=</span> <span class="n">RS</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>    <span class="c1"># For stubborn models</span>
+<p><strong>Many convergence issues resolve with more iterations or a different method:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The default is RS(20), often too few for SHASH</span>
+<span class="n">method</span> <span class="o">=</span> <span class="n">RS</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>          <span class="c1"># more RS iterations</span>
+<span class="n">method</span> <span class="o">=</span> <span class="n">mixed</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>   <span class="c1"># 10 RS iterations, then up to 100 CG iterations</span>
 </pre></div>
 </div>
-<p><strong>Note:</strong> RS(100) means 100 iterations, recommend 300-500 for complex models.</p>
+<p><strong>Note:</strong> RS(100) means at most 100 iterations. Neither more RS iterations nor <code class="docutils literal notranslate"><span class="pre">mixed()</span></code> always
+wins: on a toy SHASH model RS(300) needed 207 iterations and <code class="docutils literal notranslate"><span class="pre">mixed(10,</span> <span class="pre">100)</span></code> 47, while on the
+Quick Start data RS converged in 56 and <code class="docutils literal notranslate"><span class="pre">mixed(10,</span> <span class="pre">100)</span></code> did not converge. Check <code class="docutils literal notranslate"><span class="pre">converged</span></code>
+after each.</p>
 </section>
 <section id="step-4-check-data-scaling-issues">
 <h2>Step 4: Check Data Scaling Issues<a class="headerlink" href="#step-4-check-data-scaling-issues" title="Link to this heading">#</a></h2>
-<p><strong>If model still won’t converge, check variable ranges:</strong></p>
+<p><strong>If model still won’t converge, or R reports numerical errors, check variable ranges.</strong>
+Large values on their own are not usually the problem: in a toy test, an outcome around 9,500
+and a predictor around 60,000 converged in the same number of iterations as their rescaled
+versions, with the same z-scores. Rescaling is a cheap thing to try, not a guaranteed fix.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Essential diagnosis - first examine your data scales  </span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">,</span> <span class="s1">&#39;brain_volume&#39;</span><span class="p">,</span> <span class="s1">&#39;target_thickness&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
 </pre></div>
@@ -478,7 +484,7 @@ document.write(`
 <li><p><code class="docutils literal notranslate"><span class="pre">income</span></code>: 30,000-90,000 (range ~60,000) ← <strong>1000x larger than age</strong></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">target_thickness</span></code>: 7,800-12,000 (range ~4,200) ← <strong>70x larger than age</strong></p></li>
 </ul>
-<p><strong>Rule of thumb:</strong> When variables differ by 100x or more in range, scaling is needed for numerical stability.</p>
+<p><strong>Rule of thumb:</strong> When variables differ by 100x or more in range, scaling may help numerical stability.</p>
 <section id="simple-scaling-solution">
 <h3>Simple Scaling Solution<a class="headerlink" href="#simple-scaling-solution" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply scaling based on the actual range differences identified above</span>
@@ -597,8 +603,8 @@ document.write(`
 <h3>Distribution Family Options<a class="headerlink" href="#distribution-family-options" title="Link to this heading">#</a></h3>
 <p><strong>Try simpler distributions if SHASH fails:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">family</span> <span class="o">=</span> <span class="n">NO</span><span class="p">()</span>     <span class="c1"># Gaussian (2 parameters) - start here</span>
-<span class="n">family</span> <span class="o">=</span> <span class="n">GA</span><span class="p">()</span>     <span class="c1"># Gamma (2 parameters)  </span>
-<span class="n">family</span> <span class="o">=</span> <span class="n">BCT</span><span class="p">()</span>    <span class="c1"># Box-Cox t (4 parameters)</span>
+<span class="n">family</span> <span class="o">=</span> <span class="n">GA</span><span class="p">()</span>     <span class="c1"># Gamma (2 parameters, positive outcomes only)  </span>
+<span class="n">family</span> <span class="o">=</span> <span class="n">BCT</span><span class="p">()</span>    <span class="c1"># Box-Cox t (4 parameters, positive outcomes only)</span>
 <span class="n">family</span> <span class="o">=</span> <span class="n">SHASH</span><span class="p">()</span>  <span class="c1"># Most flexible (4 parameters) - end goal</span>
 </pre></div>
 </div>
@@ -607,10 +613,11 @@ document.write(`
 <section id="step-6-algorithm-alternatives">
 <h2>Step 6: Algorithm Alternatives<a class="headerlink" href="#step-6-algorithm-alternatives" title="Link to this heading">#</a></h2>
 <p><strong>If RS() doesn’t work, try different optimization:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">method</span> <span class="o">=</span> <span class="n">CG</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>        <span class="c1"># Cole-Green algorithm</span>
-<span class="n">method</span> <span class="o">=</span> <span class="n">mixed</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span> <span class="c1"># Mixed approach: 100 RS + 200 CG</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">method</span> <span class="o">=</span> <span class="n">mixed</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>   <span class="c1"># 10 RS iterations, then up to 100 CG iterations</span>
 </pre></div>
 </div>
+<p>CG on its own is not recommended: in a toy SHASH test <code class="docutils literal notranslate"><span class="pre">CG(50)</span></code> diverged (global deviance in
+the millions), while RS and <code class="docutils literal notranslate"><span class="pre">mixed()</span></code> converged.</p>
 </section>
 <section id="data-quality-diagnostics">
 <h2>Data Quality Diagnostics<a class="headerlink" href="#data-quality-diagnostics" title="Link to this heading">#</a></h2>
@@ -722,12 +729,13 @@ document.write(`
 <ul class="simple">
 <li><p><strong>Check convergence status first</strong> - don’t assume failure</p></li>
 <li><p><strong>Start simple, add complexity gradually</strong> - build up from basic model</p></li>
-<li><p><strong>Scale based on actual range differences</strong> - apply appropriate scaling ratios</p></li>
-<li><p><strong>Scale consistently</strong> - apply identical transformations to train and test data</p></li>
-<li><p><strong>Use enough iterations</strong> - 300-500 for complex models</p></li>
+<li><p><strong>Use enough iterations, or mixed()</strong> - check <code class="docutils literal notranslate"><span class="pre">converged</span></code> after each</p></li>
+<li><p><strong>If you rescale, scale consistently</strong> - apply identical transformations to train and test data</p></li>
 <li><p><strong>Keep interpretations in scaled units</strong> - much simpler than converting back</p></li>
 </ul>
-<p>Most convergence issues stem from variable scaling problems or overly complex initial model specifications. Working through this checklist in order – convergence status, formula complexity, iterations, scaling, model structure, algorithm – covers the great majority of cases seen in practice.</p>
+<p>In our tests, the number of iterations and the fitting method mattered most; rescaling large
+values did not change convergence. Working through this checklist in order (convergence
+status, formula complexity, iterations and method, scaling, model structure) covers most cases.</p>
 </section>
 </section>
 

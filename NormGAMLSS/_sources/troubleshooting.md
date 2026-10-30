@@ -22,10 +22,12 @@ random(as.factor(site))
 ```
 
 **How to verify random effects are working:**
-1. Check degrees of freedom - should be much lower with random effects
-2. Compare global deviance between fixed and random effects models
-3. Look for shrinkage in site coefficient values
-4. Verify lambda values are estimated (indicates shrinkage)
+1. Compare the model with and without the site term: a working term lowers the global
+   deviance and usually AIC/BIC. With `random = ~ 1|site` the fit is identical to the model
+   without site, even though `random` appears in the call
+2. Do not rely on the degrees of freedom alone: with few sites and many people per site,
+   `re()` uses almost as many as a fixed site effect (in a toy test with 6 sites of 150
+   people: 11.5 vs 11.9)
 
 ### Problem: Site variables not properly encoded
 **Issue**: Numeric site IDs treated as continuous rather than categorical.
@@ -44,25 +46,22 @@ y ~ pvc(age) + as.factor(scanner_id)
 ### Model fails to converge
 **Try these approaches in order:**
 
-1. **Increase iterations**: 
+1. **Increase iterations or change the method**: neither always wins, so check `converged`
+   after each:
    ```r
-   method = RS(100)  # instead of RS(50)
+   method = RS(300)         # more RS iterations
+   method = mixed(10, 100)  # 10 RS iterations, then up to 100 CG iterations
    ```
+   CG on its own is not recommended: in a toy SHASH test `CG(50)` diverged.
 
-2. **Change optimization method**:
-   ```r
-   method = CG(50)     # Cole-Green algorithm
-   method = mixed(10, 50)  # Mixed approach
-   ```
-
-3. **Simplify model temporarily**:
+2. **Simplify model temporarily**:
    ```r
    # Start with simpler model
    y ~ pvc(age) + as.factor(sex)
    # Add complexity gradually
    ```
 
-4. **Check data quality**:
+3. **Check data quality**:
    ```python
    # Look for outliers
    df.describe()
@@ -72,7 +71,8 @@ y ~ pvc(age) + as.factor(scanner_id)
    np.isinf(df.select_dtypes(include=[np.number])).sum()
    ```
 
-5. **Scale predictors**:
+4. **Scale predictors** (if R reports numerical errors; in a toy test, rescaling an outcome
+   around 9,500 and a predictor around 60,000 did not change convergence):
    ```python
    # Standardize continuous variables
    from sklearn.preprocessing import StandardScaler
@@ -149,8 +149,9 @@ df_clean = df_clean[~np.isinf(df_clean.select_dtypes(include=[np.number])).any(a
 
 3. **Use random effects instead of fixed effects**:
    ```r
-   # Instead of: as.factor(site) (uses many parameters)
-   # Use: re(random=~1|as.factor(site)) (uses fewer parameters)
+   # Instead of: as.factor(site) (one parameter per site)
+   # Use: re(random=~1|as.factor(site)) (fewer effective parameters when sites are small;
+   # with large sites the saving is small)
    ```
 
 ### Non-significant predictors
@@ -236,10 +237,11 @@ print("Test age range:", test_data['age'].min(), "-", test_data['age'].max())
 
 3. **Restart Python session**: Sometimes clears connection issues
 
-4. **Set environment variables** (if needed):
+4. **Set environment variables** (if needed), before importing `rpy2` or `normgamlss`:
    ```python
    import os
    os.environ["R_HOME"] = "/path/to/R"  # if needed
+   import rpy2.robjects as robjects     # only now
    ```
 
 ### Graphics issues

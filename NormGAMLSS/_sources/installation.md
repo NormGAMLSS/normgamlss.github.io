@@ -6,7 +6,7 @@ This guide walks you through setting up the NormGAMLSS package and its dependenc
 
 - **Python**: 3.10 (the only version currently tested and supported)
 - **R**: Version 4.1.2 or higher
-- **Operating System**: Windows, macOS, or Linux
+- **Operating System**: tested on Linux (macOS and Windows are untested)
 
 ---
 
@@ -53,7 +53,7 @@ R -q -e "install.packages('gamlss', repos='https://cloud.r-project.org')"
 Optional additional R packages:
 
 ```bash
-R -q -e "install.packages(c('gamlss.dist', 'gamlss.add', 'gamlss.mx'), repos='https://cloud.r-project.org')"
+R -q -e "install.packages(c('gamlss.dist', 'gamlss.add'), repos='https://cloud.r-project.org')"
 ```
 
 ### Step 5: (Optional) Jupyter Support
@@ -87,7 +87,7 @@ R version 4.x.x (...)
 >
 > This method is intended for users who already have a working Python environment with a compatible rpy2 version installed. It is **not a general-purpose alternative** to Method 1.
 >
-> **Tested configuration:** Python 3.10, rpy2 3.5.11, R 4.1.2+. Other combinations are untested and may not work.
+> **Tested configuration:** Python 3.10, rpy2 3.5.x (the conda environment pins 3.5.11; the package's test suite ran on 3.5.17), R 4.1.2+. Other combinations are untested and may not work.
 >
 > Running `pip install -e .` in a shared environment can silently overwrite existing package versions and break other projects. If you are working in an environment used by multiple projects, use Method 1 instead and keep them isolated.
 >
@@ -141,7 +141,7 @@ install.packages("gamlss.dist")
 install.packages("gamlss.add")
 
 # Optional
-install.packages(c("gamlss.mx", "gamlss.tr", "gamlss.cens"))
+install.packages(c("gamlss.tr", "gamlss.cens"))
 
 # Verify
 library(gamlss)
@@ -209,6 +209,7 @@ NormGAMLSS/
 │   ├── gamlss_main.py         # Core GAMLSS class
 │   ├── utils.py               # Utility functions
 │   ├── model_utils.py         # Model comparison tools
+│   ├── direct_predict.py      # Predictions from slim models (no training data)
 │   ├── plot_style.py          # Shared figure style and plot helpers
 │   └── site_transfer_utils.py # Multi-site transfer functions
 ├── gamlss_python/             # Old package name (alias of normgamlss, shows a warning)
@@ -266,9 +267,12 @@ pip install rpy2==3.5.11
 
 ### R packages not found
 
+Set the library path before importing `rpy2` or `normgamlss`; once R has started, changing it has no effect:
+
 ```python
 import os
 os.environ["R_LIBS_USER"] = "/path/to/R/library"
+import rpy2.robjects as robjects      # only now
 ```
 
 Or set it before launching Python:

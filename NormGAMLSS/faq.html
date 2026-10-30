@@ -436,12 +436,14 @@ centiles or z-scores.</p>
 <section id="interpretation">
 <h2>Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading">#</a></h2>
 <p><strong>Q: How do I get actual parameter values from coefficients?</strong></p>
-<p>A: Apply the inverse link function:</p>
+<p>A: Apply the inverse link function to the linear predictor, i.e. the sum of all terms for a
+person, not to each coefficient (exp(intercept) is the value only when there are no other
+terms). <code class="docutils literal notranslate"><span class="pre">model.predict_all()</span></code> does this for you:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For log link (sigma, nu, tau)</span>
-<span class="n">actual_value</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">coefficient</span><span class="p">)</span>
+<span class="n">actual_value</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">linear_predictor</span><span class="p">)</span>
 
 <span class="c1"># For identity link (mu)</span>
-<span class="n">actual_value</span> <span class="o">=</span> <span class="n">coefficient</span>
+<span class="n">actual_value</span> <span class="o">=</span> <span class="n">linear_predictor</span>
 </pre></div>
 </div>
 <p><strong>Q: What do the diagnostic statistics mean?</strong></p>
@@ -509,8 +511,10 @@ parameters) usually gives the bigger benefit.</p>
 <p>A: Check whether the fit converged (the model summary, or the ‘Converged’ columns of
 the pipelines). RS alone can need hundreds of iterations, for example with SHASH, whose
 shape parameters move slowly. <code class="docutils literal notranslate"><span class="pre">method</span> <span class="pre">=</span> <span class="pre">mixed(10,</span> <span class="pre">100)</span></code> (10 RS iterations, then CG)
-usually converges in far fewer iterations; in the tutorial data RS(50) and RS(200) did
-not converge, while mixed(10, 100) converged within 50 iterations.</p>
+often converges in far fewer iterations; in the tutorial data RS(50) and RS(200) did
+not converge, while mixed(10, 100) converged within 50 iterations. It does not always win:
+on the Quick Start data RS converged in 56 iterations and mixed(10, 100) did not. If one
+does not converge, try the other.</p>
 </section>
 <section id="getting-help">
 <h2>Getting Help<a class="headerlink" href="#getting-help" title="Link to this heading">#</a></h2>

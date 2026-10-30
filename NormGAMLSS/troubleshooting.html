@@ -440,10 +440,12 @@ document.write(`
 </div>
 <p><strong>How to verify random effects are working:</strong></p>
 <ol class="arabic simple">
-<li><p>Check degrees of freedom - should be much lower with random effects</p></li>
-<li><p>Compare global deviance between fixed and random effects models</p></li>
-<li><p>Look for shrinkage in site coefficient values</p></li>
-<li><p>Verify lambda values are estimated (indicates shrinkage)</p></li>
+<li><p>Compare the model with and without the site term: a working term lowers the global
+deviance and usually AIC/BIC. With <code class="docutils literal notranslate"><span class="pre">random</span> <span class="pre">=</span> <span class="pre">~</span> <span class="pre">1|site</span></code> the fit is identical to the model
+without site, even though <code class="docutils literal notranslate"><span class="pre">random</span></code> appears in the call</p></li>
+<li><p>Do not rely on the degrees of freedom alone: with few sites and many people per site,
+<code class="docutils literal notranslate"><span class="pre">re()</span></code> uses almost as many as a fixed site effect (in a toy test with 6 sites of 150
+people: 11.5 vs 11.9)</p></li>
 </ol>
 </section>
 <section id="problem-site-variables-not-properly-encoded">
@@ -465,16 +467,13 @@ document.write(`
 <h3>Model fails to converge<a class="headerlink" href="#model-fails-to-converge" title="Link to this heading">#</a></h3>
 <p><strong>Try these approaches in order:</strong></p>
 <ol class="arabic">
-<li><p><strong>Increase iterations</strong>:</p>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">RS</span><span class="p">(</span><span class="m">100</span><span class="p">)</span><span class="w">  </span><span class="c1"># instead of RS(50)</span>
+<li><p><strong>Increase iterations or change the method</strong>: neither always wins, so check <code class="docutils literal notranslate"><span class="pre">converged</span></code>
+after each:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">RS</span><span class="p">(</span><span class="m">300</span><span class="p">)</span><span class="w">         </span><span class="c1"># more RS iterations</span>
+<span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">mixed</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="m">100</span><span class="p">)</span><span class="w">  </span><span class="c1"># 10 RS iterations, then up to 100 CG iterations</span>
 </pre></div>
 </div>
-</li>
-<li><p><strong>Change optimization method</strong>:</p>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">CG</span><span class="p">(</span><span class="m">50</span><span class="p">)</span><span class="w">     </span><span class="c1"># Cole-Green algorithm</span>
-<span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">mixed</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="m">50</span><span class="p">)</span><span class="w">  </span><span class="c1"># Mixed approach</span>
-</pre></div>
-</div>
+<p>CG on its own is not recommended: in a toy SHASH test <code class="docutils literal notranslate"><span class="pre">CG(50)</span></code> diverged.</p>
 </li>
 <li><p><strong>Simplify model temporarily</strong>:</p>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start with simpler model</span>
@@ -493,7 +492,8 @@ document.write(`
 </pre></div>
 </div>
 </li>
-<li><p><strong>Scale predictors</strong>:</p>
+<li><p><strong>Scale predictors</strong> (if R reports numerical errors; in a toy test, rescaling an outcome
+around 9,500 and a predictor around 60,000 did not change convergence):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Standardize continuous variables</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
 <span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
@@ -582,8 +582,9 @@ document.write(`
 </ul>
 </li>
 <li><p><strong>Use random effects instead of fixed effects</strong>:</p>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Instead of: as.factor(site) (uses many parameters)</span>
-<span class="c1"># Use: re(random=~1|as.factor(site)) (uses fewer parameters)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Instead of: as.factor(site) (one parameter per site)</span>
+<span class="c1"># Use: re(random=~1|as.factor(site)) (fewer effective parameters when sites are small;</span>
+<span class="c1"># with large sites the saving is small)</span>
 </pre></div>
 </div>
 </li>
@@ -683,9 +684,10 @@ document.write(`
 </div>
 </li>
 <li><p><strong>Restart Python session</strong>: Sometimes clears connection issues</p></li>
-<li><p><strong>Set environment variables</strong> (if needed):</p>
+<li><p><strong>Set environment variables</strong> (if needed), before importing <code class="docutils literal notranslate"><span class="pre">rpy2</span></code> or <code class="docutils literal notranslate"><span class="pre">normgamlss</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;R_HOME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;/path/to/R&quot;</span>  <span class="c1"># if needed</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rpy2.robjects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">robjects</span>     <span class="c1"># only now</span>
 </pre></div>
 </div>
 </li>

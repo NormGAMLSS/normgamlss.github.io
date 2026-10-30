@@ -4,7 +4,7 @@ This chapter provides detailed guidance for interpreting GAMLSS model outputs, s
 
 ## Understanding Model Summary Output
 
-The GAMLSS model summary provides comprehensive information about your fitted model. Using the default `type="vcov"`, the variance covariance matrix is calculated using the inverse of the numerical second derivatives of the observed information matrix, which is more reliable since it takes into account the inter-correlation between all parameters.
+The GAMLSS model summary provides comprehensive information about your fitted model. Using the default `type="vcov"`, the variance covariance matrix is calculated using the inverse of the numerical second derivatives of the observed information matrix, which is more reliable since it takes into account the inter-correlation between all parameters. If this fails, R warns "summary: vcov has failed, option qr is used instead" and uses the QR decomposition of each parameter's fit instead.
 
 ### Family and Call Information
 
@@ -21,9 +21,12 @@ The GAMLSS model summary provides comprehensive information about your fitted mo
 ### Fitting Method
 
 **Common Methods**:
-- **RS()**: Rigby-Stasinopoulos algorithm (robust, recommended)
-- **CG()**: Cole-Green algorithm (faster convergence) 
-- **mixed()**: Combination approach
+- **RS()**: Rigby-Stasinopoulos algorithm (the default, stable)
+- **CG()**: Cole-Green algorithm (uses the cross-derivatives between parameters)
+- **mixed(n1, n2)**: n1 RS iterations, then up to n2 CG iterations
+
+If the model has not converged, try more RS iterations or `mixed(10, 100)`; neither always
+wins (see the [FAQ](faq)).
 
 The number in parentheses (e.g., RS(50)) indicates maximum iterations. More iterations generally improve convergence but increase computation time.
 
@@ -53,7 +56,7 @@ For each parameter section, examine:
 - Measures how many standard errors the estimate is from zero
 - Values > 2 or < -2 typically indicate significance
 
-**p-value (Pr(>|t|))**: Probability of observing this t-value under null hypothesis
+**p-value (Pr(>|t|))**: Probability of a |t| at least this large if the true coefficient were 0
 - **< 0.001**: Highly significant (***)
 - **< 0.01**: Very significant (**)
 - **< 0.05**: Significant (*)
@@ -103,7 +106,12 @@ The asterisk system provides quick visual assessment:
 ### Notes and Warnings
 
 **Smoothing Terms Warning**: 
-> "Standard errors for smoothers are for linear effect only"
+> "NOTE: Additive smoothing terms exist in the formulas:
+> i) Std. Error for smoothers are for the linear effect only.
+> ii) Std. Error for the linear terms maybe are not accurate."
+
+When R has fallen back to the QR method (see above), the second line reads "ii) Std. Error for
+the linear terms may not be reliable."
 
 This means:
 - Standard errors may not capture full uncertainty for smooth terms

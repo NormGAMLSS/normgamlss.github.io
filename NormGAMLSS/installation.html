@@ -426,7 +426,7 @@ document.write(`
 <ul class="simple">
 <li><p><strong>Python</strong>: 3.10 (the only version currently tested and supported)</p></li>
 <li><p><strong>R</strong>: Version 4.1.2 or higher</p></li>
-<li><p><strong>Operating System</strong>: Windows, macOS, or Linux</p></li>
+<li><p><strong>Operating System</strong>: tested on Linux (macOS and Windows are untested)</p></li>
 </ul>
 </section>
 <hr class="docutils" />
@@ -470,7 +470,7 @@ conda<span class="w"> </span>activate<span class="w"> </span>gamlss
 </pre></div>
 </div>
 <p>Optional additional R packages:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>R<span class="w"> </span>-q<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;install.packages(c(&#39;gamlss.dist&#39;, &#39;gamlss.add&#39;, &#39;gamlss.mx&#39;), repos=&#39;https://cloud.r-project.org&#39;)&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>R<span class="w"> </span>-q<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;install.packages(c(&#39;gamlss.dist&#39;, &#39;gamlss.add&#39;), repos=&#39;https://cloud.r-project.org&#39;)&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -502,7 +502,7 @@ R version 4.x.x (...)
 <blockquote>
 <div><p>⚠️ <strong>Read this section carefully before proceeding.</strong></p>
 <p>This method is intended for users who already have a working Python environment with a compatible rpy2 version installed. It is <strong>not a general-purpose alternative</strong> to Method 1.</p>
-<p><strong>Tested configuration:</strong> Python 3.10, rpy2 3.5.11, R 4.1.2+. Other combinations are untested and may not work.</p>
+<p><strong>Tested configuration:</strong> Python 3.10, rpy2 3.5.x (the conda environment pins 3.5.11; the package’s test suite ran on 3.5.17), R 4.1.2+. Other combinations are untested and may not work.</p>
 <p>Running <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code> in a shared environment can silently overwrite existing package versions and break other projects. If you are working in an environment used by multiple projects, use Method 1 instead and keep them isolated.</p>
 <p>If you encounter any issues with this method, switch to <strong>Method 1 — it is the only fully supported path.</strong></p>
 </div></blockquote>
@@ -549,7 +549,7 @@ your_venv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate
 <span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;gamlss.add&quot;</span><span class="p">)</span>
 
 <span class="c1"># Optional</span>
-<span class="nf">install.packages</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;gamlss.mx&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;gamlss.tr&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;gamlss.cens&quot;</span><span class="p">))</span>
+<span class="nf">install.packages</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;gamlss.tr&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;gamlss.cens&quot;</span><span class="p">))</span>
 
 <span class="c1"># Verify</span>
 <span class="nf">library</span><span class="p">(</span><span class="n">gamlss</span><span class="p">)</span>
@@ -636,6 +636,7 @@ your_venv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate
 │   ├── gamlss_main.py         # Core GAMLSS class
 │   ├── utils.py               # Utility functions
 │   ├── model_utils.py         # Model comparison tools
+│   ├── direct_predict.py      # Predictions from slim models (no training data)
 │   ├── plot_style.py          # Shared figure style and plot helpers
 │   └── site_transfer_utils.py # Multi-site transfer functions
 ├── gamlss_python/             # Old package name (alias of normgamlss, shows a warning)
@@ -689,8 +690,10 @@ pip<span class="w"> </span>install<span class="w"> </span><span class="nv">rpy2<
 </section>
 <section id="r-packages-not-found">
 <h3>R packages not found<a class="headerlink" href="#r-packages-not-found" title="Link to this heading">#</a></h3>
+<p>Set the library path before importing <code class="docutils literal notranslate"><span class="pre">rpy2</span></code> or <code class="docutils literal notranslate"><span class="pre">normgamlss</span></code>; once R has started, changing it has no effect:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;R_LIBS_USER&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;/path/to/R/library&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rpy2.robjects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">robjects</span>      <span class="c1"># only now</span>
 </pre></div>
 </div>
 <p>Or set it before launching Python:</p>

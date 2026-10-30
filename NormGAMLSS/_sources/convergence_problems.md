@@ -41,19 +41,25 @@ gamlss_model.fit(
 
 ## Step 3: Increase Iterations
 
-**Most convergence issues resolve with more iterations:**
+**Many convergence issues resolve with more iterations or a different method:**
 
 ```python
-# Default RS(50) is often insufficient
-method = RS(300)    # 300 iterations usually sufficient
-method = RS(500)    # For stubborn models
+# The default is RS(20), often too few for SHASH
+method = RS(300)          # more RS iterations
+method = mixed(10, 100)   # 10 RS iterations, then up to 100 CG iterations
 ```
 
-**Note:** RS(100) means 100 iterations, recommend 300-500 for complex models.
+**Note:** RS(100) means at most 100 iterations. Neither more RS iterations nor `mixed()` always
+wins: on a toy SHASH model RS(300) needed 207 iterations and `mixed(10, 100)` 47, while on the
+Quick Start data RS converged in 56 and `mixed(10, 100)` did not converge. Check `converged`
+after each.
 
 ## Step 4: Check Data Scaling Issues
 
-**If model still won't converge, check variable ranges:**
+**If model still won't converge, or R reports numerical errors, check variable ranges.**
+Large values on their own are not usually the problem: in a toy test, an outcome around 9,500
+and a predictor around 60,000 converged in the same number of iterations as their rescaled
+versions, with the same z-scores. Rescaling is a cheap thing to try, not a guaranteed fix.
 
 ```python
 # Essential diagnosis - first examine your data scales  
@@ -76,7 +82,7 @@ max           80        90000          1400            12000
 - `income`: 30,000-90,000 (range ~60,000) ← **1000x larger than age**
 - `target_thickness`: 7,800-12,000 (range ~4,200) ← **70x larger than age**
 
-**Rule of thumb:** When variables differ by 100x or more in range, scaling is needed for numerical stability.
+**Rule of thumb:** When variables differ by 100x or more in range, scaling may help numerical stability.
 
 ### Simple Scaling Solution
 
@@ -171,8 +177,8 @@ model <- gamlss(y ~ pvc(age) + as.factor(sex) + re(random=~1|as.factor(site)),
 
 ```python
 family = NO()     # Gaussian (2 parameters) - start here
-family = GA()     # Gamma (2 parameters)  
-family = BCT()    # Box-Cox t (4 parameters)
+family = GA()     # Gamma (2 parameters, positive outcomes only)  
+family = BCT()    # Box-Cox t (4 parameters, positive outcomes only)
 family = SHASH()  # Most flexible (4 parameters) - end goal
 ```
 
@@ -181,9 +187,11 @@ family = SHASH()  # Most flexible (4 parameters) - end goal
 **If RS() doesn't work, try different optimization:**
 
 ```python
-method = CG(300)        # Cole-Green algorithm
-method = mixed(100, 200) # Mixed approach: 100 RS + 200 CG
+method = mixed(10, 100)   # 10 RS iterations, then up to 100 CG iterations
 ```
+
+CG on its own is not recommended: in a toy SHASH test `CG(50)` diverged (global deviance in
+the millions), while RS and `mixed()` converged.
 
 ## Data Quality Diagnostics
 
@@ -286,9 +294,10 @@ gamlss_model.plot_z_scores(test_data, df, x_var='age', x_var_name='Age')
 
 - **Check convergence status first** - don't assume failure
 - **Start simple, add complexity gradually** - build up from basic model
-- **Scale based on actual range differences** - apply appropriate scaling ratios
-- **Scale consistently** - apply identical transformations to train and test data
-- **Use enough iterations** - 300-500 for complex models
+- **Use enough iterations, or mixed()** - check `converged` after each
+- **If you rescale, scale consistently** - apply identical transformations to train and test data
 - **Keep interpretations in scaled units** - much simpler than converting back
 
-Most convergence issues stem from variable scaling problems or overly complex initial model specifications. Working through this checklist in order -- convergence status, formula complexity, iterations, scaling, model structure, algorithm -- covers the great majority of cases seen in practice.
+In our tests, the number of iterations and the fitting method mattered most; rescaling large
+values did not change convergence. Working through this checklist in order (convergence
+status, formula complexity, iterations and method, scaling, model structure) covers most cases.

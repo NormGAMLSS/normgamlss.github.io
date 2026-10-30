@@ -531,11 +531,10 @@ document.write(`
 <section id="why-re-is-preferred">
 <h3>Why <code class="docutils literal notranslate"><span class="pre">re()</span></code> is Preferred<a class="headerlink" href="#why-re-is-preferred" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>More effective in fitting the model</p></li>
-<li><p>Yields lower degrees of freedom</p></li>
-<li><p>Better model performance</p></li>
-<li><p>Allows use of full capabilities of the lme package</p></li>
-<li><p>Enables stronger priors for random effects</p></li>
+<li><p>In a toy test <code class="docutils literal notranslate"><span class="pre">re()</span></code> and <code class="docutils literal notranslate"><span class="pre">random()</span></code> gave the same fit, but <code class="docutils literal notranslate"><span class="pre">re()</span></code> used one degree of
+freedom less (AIC 2 lower)</p></li>
+<li><p>It passes the term to <code class="docutils literal notranslate"><span class="pre">lme</span></code> (package nlme), so it also supports random slopes
+(<code class="docutils literal notranslate"><span class="pre">re(random=~age|as.factor(site))</span></code>) and several grouping factors</p></li>
 </ul>
 </section>
 </section>
@@ -599,7 +598,6 @@ it is harmless, but not required.</p>
 <ul class="simple">
 <li><p><strong>P-splines</strong>: <code class="docutils literal notranslate"><span class="pre">pvc(x)</span></code> - Penalized B-splines (most common; also handles <code class="docutils literal notranslate"><span class="pre">by=</span></code> group-varying smooths, unlike the older <code class="docutils literal notranslate"><span class="pre">pb(x)</span></code>)</p></li>
 <li><p><strong>Cubic splines</strong>: <code class="docutils literal notranslate"><span class="pre">cs(x)</span></code> - Cubic smoothing splines</p></li>
-<li><p><strong>Neural networks</strong>: <code class="docutils literal notranslate"><span class="pre">nn(x)</span></code> - Neural network smoothers</p></li>
 </ul>
 </section>
 <section id="random-effects-patterns">
@@ -624,14 +622,14 @@ it is harmless, but not required.</p>
 <li><p><strong>SHASH</strong>: Flexible 4-parameter distribution (handles skewness + kurtosis)</p></li>
 <li><p><strong>NO</strong>: Normal distribution (2 parameters: mu, sigma)</p></li>
 <li><p><strong>GA</strong>: Gamma distribution (positive continuous data)</p></li>
-<li><p><strong>GG</strong>: Generalized Gamma (very flexible)</p></li>
+<li><p><strong>GG</strong>: Generalized Gamma (3 parameters, positive outcomes only)</p></li>
 </ul>
 </section>
 <section id="family-examples">
 <h3>Family Examples<a class="headerlink" href="#family-examples" title="Link to this heading">#</a></h3>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">family</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">SHASH</span><span class="p">()</span><span class="w">    </span><span class="c1"># General purpose, very flexible</span>
 <span class="n">family</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">NO</span><span class="p">()</span><span class="w">       </span><span class="c1"># When normality is reasonable</span>
-<span class="n">family</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">GG</span><span class="p">()</span><span class="w">       </span><span class="c1"># Alternative flexible option</span>
+<span class="n">family</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">GG</span><span class="p">()</span><span class="w">       </span><span class="c1"># Skewed positive outcomes (fails if any value is &lt;= 0)</span>
 </pre></div>
 </div>
 </section>
@@ -641,18 +639,20 @@ it is harmless, but not required.</p>
 <section id="available-methods">
 <h3>Available Methods<a class="headerlink" href="#available-methods" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p><strong>RS()</strong>: Rigby and Stasinopoulos algorithm (robust, recommended)</p></li>
-<li><p><strong>CG()</strong>: Cole and Green algorithm (faster, may need more iterations)</p></li>
-<li><p><strong>mixed()</strong>: Combination approach</p></li>
+<li><p><strong>RS()</strong>: Rigby and Stasinopoulos algorithm (the default, stable)</p></li>
+<li><p><strong>CG()</strong>: Cole and Green algorithm (uses the cross-derivatives between parameters; on its
+own it can diverge: in a toy SHASH test CG(50) did, while RS and mixed converged)</p></li>
+<li><p><strong>mixed()</strong>: RS iterations first, then CG</p></li>
 </ul>
 </section>
 <section id="method-examples">
 <h3>Method Examples<a class="headerlink" href="#method-examples" title="Link to this heading">#</a></h3>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">RS</span><span class="p">(</span><span class="m">50</span><span class="p">)</span><span class="w">        </span><span class="c1"># 50 iterations, robust</span>
-<span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">CG</span><span class="p">(</span><span class="m">10</span><span class="p">)</span><span class="w">        </span><span class="c1"># Faster convergence</span>
-<span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">mixed</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="m">20</span><span class="p">)</span><span class="w">  </span><span class="c1"># 5 RS iterations + 20 CG iterations</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">RS</span><span class="p">(</span><span class="m">50</span><span class="p">)</span><span class="w">          </span><span class="c1"># at most 50 iterations (the default is RS(20))</span>
+<span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">mixed</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="m">100</span><span class="p">)</span><span class="w">  </span><span class="c1"># 10 RS iterations, then up to 100 CG iterations</span>
 </pre></div>
 </div>
+<p>If the model has not converged, try more RS iterations or <code class="docutils literal notranslate"><span class="pre">mixed(10,</span> <span class="pre">100)</span></code>; neither always
+wins, so check <code class="docutils literal notranslate"><span class="pre">converged</span></code> after each.</p>
 </section>
 </section>
 <section id="link-functions">
@@ -678,7 +678,8 @@ it is harmless, but not required.</p>
 </div>
 <ul class="simple">
 <li><p>Ensures positive values: log(parameter) = linear predictor</p></li>
-<li><p>To get actual value: parameter = exp(estimate)</p></li>
+<li><p>To get actual value: parameter = exp(linear predictor), i.e. exp of the sum of all terms,
+not of each coefficient (exp(intercept) is the value only when there are no other terms)</p></li>
 <li><p>Used for scale parameters (sigma, tau)</p></li>
 </ul>
 </section>
@@ -686,14 +687,14 @@ it is harmless, but not required.</p>
 <section id="important-note">
 <h3>Important Note<a class="headerlink" href="#important-note" title="Link to this heading">#</a></h3>
 <p><strong>Always apply inverse link to get actual parameter values:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For log link</span>
-<span class="n">actual_sigma</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">coefficient_estimate</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For log link (linear_predictor = intercept + all other terms for that person)</span>
+<span class="n">actual_sigma</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">linear_predictor</span><span class="p">)</span>
 
 <span class="c1"># For identity link  </span>
-<span class="n">actual_mu</span> <span class="o">=</span> <span class="n">coefficient_estimate</span>
+<span class="n">actual_mu</span> <span class="o">=</span> <span class="n">linear_predictor</span>
 </pre></div>
 </div>
-<p>This is automatically handled in the <code class="docutils literal notranslate"><span class="pre">predict_all</span></code> function, but important to know for interpretation.</p>
+<p>This is automatically handled in the <code class="docutils literal notranslate"><span class="pre">predict_all</span></code> method (<code class="docutils literal notranslate"><span class="pre">transform=True</span></code>, the default), but important to know for interpretation.</p>
 </section>
 </section>
 </section>

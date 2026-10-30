@@ -92,11 +92,10 @@ model <- gamlss(y ~ pvc(age, by = as.factor(sex)) + re(random=~1|as.factor(site)
 ```
 
 ### Why `re()` is Preferred
-- More effective in fitting the model
-- Yields lower degrees of freedom
-- Better model performance
-- Allows use of full capabilities of the lme package
-- Enables stronger priors for random effects
+- In a toy test `re()` and `random()` gave the same fit, but `re()` used one degree of
+  freedom less (AIC 2 lower)
+- It passes the term to `lme` (package nlme), so it also supports random slopes
+  (`re(random=~age|as.factor(site))`) and several grouping factors
 
 ## Understanding Formula Components
 
@@ -156,7 +155,6 @@ it is harmless, but not required.
 ### Common Smoothing Terms
 - **P-splines**: `pvc(x)` - Penalized B-splines (most common; also handles `by=` group-varying smooths, unlike the older `pb(x)`)
 - **Cubic splines**: `cs(x)` - Cubic smoothing splines  
-- **Neural networks**: `nn(x)` - Neural network smoothers
 
 ### Random Effects Patterns
 ```r
@@ -176,28 +174,31 @@ re(random=~1|as.factor(site)) + re(random=~1|as.factor(scanner))
 - **SHASH**: Flexible 4-parameter distribution (handles skewness + kurtosis)
 - **NO**: Normal distribution (2 parameters: mu, sigma)
 - **GA**: Gamma distribution (positive continuous data)
-- **GG**: Generalized Gamma (very flexible)
+- **GG**: Generalized Gamma (3 parameters, positive outcomes only)
 
 ### Family Examples
 ```r
 family = SHASH()    # General purpose, very flexible
 family = NO()       # When normality is reasonable
-family = GG()       # Alternative flexible option
+family = GG()       # Skewed positive outcomes (fails if any value is <= 0)
 ```
 
 ## Optimization Methods
 
 ### Available Methods
-- **RS()**: Rigby and Stasinopoulos algorithm (robust, recommended)
-- **CG()**: Cole and Green algorithm (faster, may need more iterations)
-- **mixed()**: Combination approach
+- **RS()**: Rigby and Stasinopoulos algorithm (the default, stable)
+- **CG()**: Cole and Green algorithm (uses the cross-derivatives between parameters; on its
+  own it can diverge: in a toy SHASH test CG(50) did, while RS and mixed converged)
+- **mixed()**: RS iterations first, then CG
 
 ### Method Examples
 ```r
-method = RS(50)        # 50 iterations, robust
-method = CG(10)        # Faster convergence
-method = mixed(5, 20)  # 5 RS iterations + 20 CG iterations
+method = RS(50)          # at most 50 iterations (the default is RS(20))
+method = mixed(10, 100)  # 10 RS iterations, then up to 100 CG iterations
 ```
+
+If the model has not converged, try more RS iterations or `mixed(10, 100)`; neither always
+wins, so check `converged` after each.
 
 ## Link Functions
 
@@ -219,7 +220,8 @@ Mu link function: identity
 Sigma link function: log
 ```
 - Ensures positive values: log(parameter) = linear predictor
-- To get actual value: parameter = exp(estimate)
+- To get actual value: parameter = exp(linear predictor), i.e. exp of the sum of all terms,
+  not of each coefficient (exp(intercept) is the value only when there are no other terms)
 - Used for scale parameters (sigma, tau)
 
 ### Important Note
@@ -227,11 +229,11 @@ Sigma link function: log
 **Always apply inverse link to get actual parameter values:**
 
 ```python
-# For log link
-actual_sigma = exp(coefficient_estimate)
+# For log link (linear_predictor = intercept + all other terms for that person)
+actual_sigma = exp(linear_predictor)
 
 # For identity link  
-actual_mu = coefficient_estimate
+actual_mu = linear_predictor
 ```
 
-This is automatically handled in the `predict_all` function, but important to know for interpretation.
+This is automatically handled in the `predict_all` method (`transform=True`, the default), but important to know for interpretation.

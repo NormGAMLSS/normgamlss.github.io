@@ -78,13 +78,14 @@ model.fit(
         nu.formula = ~ 1,
         tau.formula = ~ 1,
         family = SHASH(),
-        method = RS(50)
+        method = RS(100)
     )
     """,
     data=train_data
 )
 
 print("✅ Model fitted successfully!")
+print("Converged:", robjects.r[model_name].rx2('converged')[0])   # with RS(50) this model had not yet converged
 ```
 
 ### Step 4: Check Model Quality
@@ -222,13 +223,13 @@ Now that you've seen GAMLSS in action, explore these areas:
 A: Replace the sample data creation with `pd.read_csv('your_data.csv')`. Ensure you have columns for predictors and outcome variable.
 
 **Q: My model won't converge - what should I do?**  
-A: Start with a simpler model (fewer predictors), increase iterations `RS(100)`, or check the [Troubleshooting Guide](troubleshooting.md).
+A: Try more RS iterations (e.g. `RS(300)`) or `mixed(10, 100)`; neither always wins, so check `converged` after each. You can also start with a simpler model (fewer predictors) or see the [Convergence Problems](convergence_problems.md) page.
 
 **Q: How do I interpret the diagnostic plots?**  
 A: See the [Model Diagnostics](notebooks/model_diagnostics.ipynb) notebook for detailed interpretation guidelines.
 
 **Q: Can I use different distributions?**  
-A: Yes! Try `family = NO()` for normal, `family = GA()` for gamma, or `family = GG()` for generalized gamma. Pass the same name as `func_name` (e.g. `func_name='NO'`) to `z_score`, `evaluate`, `centiles` and the plotting methods, which default to `'SHASH'`.
+A: Yes! Try `family = NO()` for normal, `family = GA()` for gamma, or `family = GG()` for generalized gamma. `z_score`, `evaluate`, `centiles` and the plotting methods use the model's own family automatically (`func_name=None`); passing a different family as `func_name` raises an error.
 
 ---
 
