@@ -3873,7 +3873,6 @@ We need to change the site name of the <code class="docutils literal notranslate
 <span class="c1"># Set up plot parameters</span>
 <span class="n">plot_params</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;centiles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">97</span><span class="p">],</span>
-    <span class="s1">&#39;func_name&#39;</span><span class="p">:</span> <span class="s1">&#39;SHASH&#39;</span><span class="p">,</span>
     <span class="s1">&#39;affected&#39;</span><span class="p">:</span> <span class="n">test_site_df_proxy</span><span class="p">[</span><span class="s1">&#39;affected&#39;</span><span class="p">],</span>
     <span class="s1">&#39;x_axis&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="s1">&#39;Age (years)&#39;</span><span class="p">},</span>
     <span class="s1">&#39;figsize&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
@@ -3986,7 +3985,6 @@ Scatter data filtered by:
     <span class="n">test_data</span><span class="o">=</span><span class="n">test_site_df_proxy</span><span class="p">,</span>
     <span class="n">train_data</span><span class="o">=</span><span class="n">train_data1</span><span class="p">,</span>
     <span class="n">affected</span><span class="o">=</span><span class="n">test_site_df_proxy</span><span class="p">[</span><span class="s1">&#39;affected&#39;</span><span class="p">],</span>
-    <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">,</span>
     <span class="n">x_var</span><span class="o">=</span><span class="s1">&#39;age&#39;</span><span class="p">,</span>
     <span class="n">x_var_name</span><span class="o">=</span><span class="s1">&#39;Age (years)&#39;</span><span class="p">,</span>
     <span class="n">use_transfer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># ← No adjustment</span>
@@ -4004,7 +4002,6 @@ Scatter data filtered by:
     <span class="n">test_data</span><span class="o">=</span><span class="n">test_site_df_proxy</span><span class="p">,</span>
     <span class="n">train_data</span><span class="o">=</span><span class="n">train_data1</span><span class="p">,</span>
     <span class="n">affected</span><span class="o">=</span><span class="n">test_site_df_proxy</span><span class="p">[</span><span class="s1">&#39;affected&#39;</span><span class="p">],</span>
-    <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">,</span>
     <span class="n">x_var</span><span class="o">=</span><span class="s1">&#39;age&#39;</span><span class="p">,</span>
     <span class="n">x_var_name</span><span class="o">=</span><span class="s1">&#39;Age (years)&#39;</span><span class="p">,</span>
     <span class="n">use_transfer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># ← With adjustment</span>
@@ -4063,7 +4060,7 @@ Figure saved to ../../results/site_transfer_results_nonlinear/zscores_ZSCPY_afte
 <span class="n">test_site_df_proxy</span> <span class="o">=</span> <span class="n">test_site_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">test_site_df_proxy</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">proxy_site</span>
 
-<span class="n">z_before</span> <span class="o">=</span> <span class="n">main_model_nonlinear</span><span class="o">.</span><span class="n">z_score</span><span class="p">(</span><span class="n">test_site_df_proxy</span><span class="p">,</span> <span class="n">train_data1</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">)</span>
+<span class="n">z_before</span> <span class="o">=</span> <span class="n">main_model_nonlinear</span><span class="o">.</span><span class="n">z_score</span><span class="p">(</span><span class="n">test_site_df_proxy</span><span class="p">,</span> <span class="n">train_data1</span><span class="p">)</span>
 <span class="n">healthy_before</span> <span class="o">=</span> <span class="n">test_site_df_proxy</span><span class="p">[</span><span class="s1">&#39;affected&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;None&#39;</span>
 <span class="n">z_healthy_before</span> <span class="o">=</span> <span class="n">z_before</span><span class="p">[</span><span class="n">healthy_before</span><span class="p">]</span>
 <span class="n">outliers_before</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">z_healthy_before</span> <span class="o">&gt;</span> <span class="mf">1.96</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">z_healthy_before</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1.96</span><span class="p">))</span>
@@ -4158,7 +4155,6 @@ Improvement: 95.9% reduction in false positives
 <span class="n">gamlss_before</span> <span class="o">=</span> <span class="n">main_model_nonlinear</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
     <span class="n">test_data</span><span class="o">=</span><span class="n">test_site_df_proxy</span><span class="p">,</span>
     <span class="n">train_data</span><span class="o">=</span><span class="n">train_data1</span><span class="p">,</span>
-    <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">,</span>
     <span class="n">handle_outliers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">affected</span><span class="o">=</span><span class="n">test_site_df</span><span class="p">[</span><span class="s1">&#39;affected&#39;</span><span class="p">],</span>
     <span class="n">use_transfer</span><span class="o">=</span><span class="kc">False</span>  <span class="c1"># ← No adjustment</span>
@@ -4171,7 +4167,6 @@ Improvement: 95.9% reduction in false positives
 <span class="n">gamlss_after</span> <span class="o">=</span> <span class="n">main_model_nonlinear</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
     <span class="n">test_data</span><span class="o">=</span><span class="n">test_site_df_proxy</span><span class="p">,</span>
     <span class="n">train_data</span><span class="o">=</span><span class="n">train_data1</span><span class="p">,</span>
-    <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">,</span>
     <span class="n">handle_outliers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">affected</span><span class="o">=</span><span class="n">test_site_df</span><span class="p">[</span><span class="s1">&#39;affected&#39;</span><span class="p">],</span>
     <span class="n">use_transfer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># ← With adjustment</span>

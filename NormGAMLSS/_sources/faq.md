@@ -76,6 +76,15 @@ A: Target values for well-calibrated quantile residuals:
 
 See the [Diagnostic Plots Interpretation](diagnostic_plot_summary) page for details.
 
+**Q: Do I need to pass `func_name`?**
+
+A: No. `z_score`, `centiles`, `evaluate`, the plots, the transfer functions and the pipelines
+always use the model's own family. Before version 0.2.0 they assumed SHASH unless `func_name`
+was given, so non-SHASH models (NO, BCT, GA, ...) got wrong z-scores and centiles without any
+warning. `func_name` is still accepted so that older code keeps working (a different family
+than the model's raises an error), but passing it shows a FutureWarning, and it will be removed
+in the next version. Leaving it out does not make the pipelines compute saved results again.
+
 **Q: Which value does `evaluate_ml()` use as the prediction?**
 
 A: The fitted `mu` of each person. For symmetric families such as NO, mu is the mean.

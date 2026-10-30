@@ -453,6 +453,13 @@ terms). <code class="docutils literal notranslate"><span class="pre">model.predi
 kurtosis; <code class="docutils literal notranslate"><span class="pre">evaluate()</span></code> reports <em>excess</em> kurtosis, whose target is ≈ 0)</p></li>
 </ul>
 <p>See the <a class="reference internal" href="diagnostic_plot_summary.html"><span class="doc std std-doc">Diagnostic Plots Interpretation</span></a> page for details.</p>
+<p><strong>Q: Do I need to pass <code class="docutils literal notranslate"><span class="pre">func_name</span></code>?</strong></p>
+<p>A: No. <code class="docutils literal notranslate"><span class="pre">z_score</span></code>, <code class="docutils literal notranslate"><span class="pre">centiles</span></code>, <code class="docutils literal notranslate"><span class="pre">evaluate</span></code>, the plots, the transfer functions and the pipelines
+always use the model’s own family. Before version 0.2.0 they assumed SHASH unless <code class="docutils literal notranslate"><span class="pre">func_name</span></code>
+was given, so non-SHASH models (NO, BCT, GA, …) got wrong z-scores and centiles without any
+warning. <code class="docutils literal notranslate"><span class="pre">func_name</span></code> is still accepted so that older code keeps working (a different family
+than the model’s raises an error), but passing it shows a FutureWarning, and it will be removed
+in the next version. Leaving it out does not make the pipelines compute saved results again.</p>
 <p><strong>Q: Which value does <code class="docutils literal notranslate"><span class="pre">evaluate_ml()</span></code> use as the prediction?</strong></p>
 <p>A: The fitted <code class="docutils literal notranslate"><span class="pre">mu</span></code> of each person. For symmetric families such as NO, mu is the mean.
 For skewed families such as SHASH, mu is the location, not the mean, so MAE, RMSE and

@@ -111,7 +111,7 @@ print(results)
 
 ```python
 # Calculate z-scores for outlier detection
-z_scores = model.z_score(test_data, train_data, func_name='SHASH')  # func_name is optional: the model's family
+z_scores = model.z_score(test_data, train_data)   # uses the model's own family (SHASH)
 
 # Plot z-scores colored by condition
 model.plot_z_scores(
@@ -229,7 +229,7 @@ A: Try more RS iterations (e.g. `RS(300)`) or `mixed(10, 100)`; neither always w
 A: See the [Model Diagnostics](notebooks/model_diagnostics.ipynb) notebook for detailed interpretation guidelines.
 
 **Q: Can I use different distributions?**  
-A: Yes! Try `family = NO()` for normal, `family = GA()` for gamma, or `family = GG()` for generalized gamma. `z_score`, `evaluate`, `centiles` and the plotting methods use the model's own family automatically (`func_name=None`); passing a different family as `func_name` raises an error.
+A: Yes! Try `family = NO()` for normal, `family = GA()` for gamma, or `family = GG()` for generalized gamma. `z_score`, `evaluate`, `centiles` and the plotting methods use the model's own family automatically, so `func_name` is no longer needed: leave it out. It is still accepted so older code keeps working, but passing it shows a warning, and it will be removed in the next version.
 
 ---
 

@@ -277,7 +277,7 @@ print(f"Final convergence status: {converged}")
 
 ```python
 # Z-scores and centiles work normally with scaled data
-z_scores = gamlss_model.z_score(test_data, df, func_name='SHASH')  # func_name is optional: the model's family
+z_scores = gamlss_model.z_score(test_data, df)   # uses the model's own family
 gamlss_model.plot_z_scores(test_data, df, x_var='age', x_var_name='Age')
 # Y-axis shows scaled values - note this in interpretation
 ```

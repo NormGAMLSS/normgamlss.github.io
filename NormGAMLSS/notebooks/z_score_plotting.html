@@ -409,7 +409,7 @@ document.write(`
             Array indicating affected status for color coding <br>
             <code class="docutils literal notranslate"><span class="pre">'None'</span></code>, NaN and the healthy labels (<code class="docutils literal notranslate"><span class="pre">'healthy'</span></code>, <code class="docutils literal notranslate"><span class="pre">'healthy</span> <span class="pre">control(s)'</span></code>, <code class="docutils literal notranslate"><span class="pre">'control(s)'</span></code>, any case) are drawn as Controls; every other label is drawn as its own group. Labels that mention ‘healthy’ or ‘control’ but are not on this list (e.g. <code class="docutils literal notranslate"><span class="pre">'healthy</span> <span class="pre">subject'</span></code>, <code class="docutils literal notranslate"><span class="pre">'unhealthy'</span></code>) raise an error asking you to rename them.</p>
 <p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
-            Distribution family name. If None (default), the model’s own family is used; a different family raises an error</p>
+            Not needed; leave it out (the model’s own family is always used). Still accepted so that older code keeps working (a different family raises an error); passing it shows a FutureWarning and it will be removed in the next version</p>
 <p>        <strong>x_var</strong> : <em><strong>str</strong></em>, <em>default=’age’</em> <br>
             Column name for x-axis variable</p>
 <p>        <strong>x_var_name</strong> : <em><strong>str</strong></em>, <em>default=’Age’</em> <br>
@@ -462,7 +462,7 @@ document.write(`
 <span class="kn">import</span><span class="w"> </span><span class="nn">rpy2.robjects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">robjects</span>
 <span class="n">stats</span> <span class="o">=</span> <span class="n">importr</span><span class="p">(</span><span class="s1">&#39;stats&#39;</span><span class="p">)</span>
 
-<span class="n">gamlss_model</span><span class="o">.</span><span class="n">plot_z_scores</span><span class="p">(</span><span class="n">test_data1</span><span class="p">,</span> <span class="n">df_train</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="n">test_data1</span><span class="p">[</span><span class="s1">&#39;affected&#39;</span><span class="p">],</span>
+<span class="n">gamlss_model</span><span class="o">.</span><span class="n">plot_z_scores</span><span class="p">(</span><span class="n">test_data1</span><span class="p">,</span> <span class="n">df_train</span><span class="p">,</span> <span class="n">affected</span><span class="o">=</span><span class="n">test_data1</span><span class="p">[</span><span class="s1">&#39;affected&#39;</span><span class="p">],</span>
                             <span class="n">font_size</span><span class="o">=</span><span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">11</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Z-scores vs. Age&quot;</span><span class="p">);</span>
 </pre></div>
 </div>

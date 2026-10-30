@@ -428,7 +428,7 @@ document.write(`
 <p>        <strong>affected</strong> : <em><strong>array-like</strong></em>, <em>optional</em> <br>
             Array indicating affected status for evaluation. If None, assumes all subjects are healthy. It must have one value per row of eval_data (checked before anything is fitted)</p>
 <p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
-            Distribution family name for evaluation (auto-detected if None)</p>
+            Not needed; leave it out (the model’s own family is always used). Still accepted so that older code keeps working (a different family raises an error); passing it shows a FutureWarning and it will be removed in the next version</p>
 <p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Returns:</strong></span></p>
 <p>        <strong>comparison_df</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
             AIC and BIC values for base and target models with differences</p>

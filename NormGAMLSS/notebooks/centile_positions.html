@@ -402,7 +402,7 @@ document.write(`
 <p>        <strong>observed_values</strong> : <em><strong>array-like</strong></em>, <em>optional</em> <br>
             Specific values to calculate centile positions for (if None, uses test_data y values)</p>
 <p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
-            Distribution family name. If None (default), the model’s own family is used; a different family raises an error</p>
+            Not needed; leave it out (the model’s own family is always used). Still accepted so that older code keeps working (a different family raises an error); passing it shows a FutureWarning and it will be removed in the next version</p>
 <p>        <strong>mode</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
             Calculation method: ‘individual’, ‘matrix’, ‘average’, or None for auto-selection</p>
 <p>        <strong>use_transfer</strong> : <em><strong>bool</strong></em>, <em>default=False</em> <br>
@@ -457,7 +457,6 @@ Shape of average percentiles: (3,)
 <span class="c1"># Calculate specific centiles (e.g., 10th, 50th, 90th)</span>
 <span class="n">test_centiles</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">90</span><span class="p">]</span>
 <span class="n">centile_values</span> <span class="o">=</span> <span class="n">gamlss_model</span><span class="o">.</span><span class="n">centiles</span><span class="p">(</span><span class="n">df_test</span><span class="p">,</span> <span class="n">df_train</span><span class="p">,</span> 
-                                      <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">,</span> 
                                       <span class="n">centiles</span><span class="o">=</span><span class="n">test_centiles</span><span class="p">)</span>
 
 <span class="c1"># Select a single test sample for simplicity</span>
@@ -468,7 +467,6 @@ Shape of average percentiles: (3,)
 <span class="n">calculated_positions</span> <span class="o">=</span> <span class="n">gamlss_model</span><span class="o">.</span><span class="n">get_centile_position</span><span class="p">(</span>
     <span class="n">df_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="n">sample_idx</span><span class="p">]],</span> <span class="n">df_train</span><span class="p">,</span>
     <span class="n">observed_values</span><span class="o">=</span><span class="n">sample_centile_values</span><span class="p">,</span>
-    <span class="n">func_name</span><span class="o">=</span><span class="s1">&#39;SHASH&#39;</span><span class="p">,</span>
     <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;matrix&#39;</span>  <span class="c1"># Since we&#39;re giving multiple values</span>
 <span class="p">)</span>
 

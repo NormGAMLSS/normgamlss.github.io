@@ -427,7 +427,7 @@ document.write(`
 <p>        <strong>affected</strong> : <em><strong>array-like</strong></em>, <em>optional</em> <br>
             Array indicating affected status for evaluation. If None, assumes all subjects are healthy. It must have one value per row of eval_data (checked before anything is fitted)</p>
 <p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
-            Distribution family name for evaluation (auto-detected if None)</p>
+            Not needed; leave it out (the model’s own family is always used). Still accepted so that older code keeps working (a different family raises an error); passing it shows a FutureWarning and it will be removed in the next version</p>
 <p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Returns:</strong></span></p>
 <p>        <strong>comparison_df</strong> : <em><strong>pandas.DataFrame</strong></em> <br>
             AIC and BIC values for each formula and y-value</p>
@@ -1857,7 +1857,7 @@ Using 370 healthy subjects out of 470 total subjects for evaluation
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The loaded model can now be used like any other -- for example, to calculate z-scores</span>
-<span class="n">z_scores</span> <span class="o">=</span> <span class="n">loaded_model</span><span class="o">.</span><span class="n">z_score</span><span class="p">(</span><span class="n">train_data1</span><span class="p">,</span><span class="n">train_data1</span><span class="p">,</span> <span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;SHASH&#39;</span><span class="p">)</span>
+<span class="n">z_scores</span> <span class="o">=</span> <span class="n">loaded_model</span><span class="o">.</span><span class="n">z_score</span><span class="p">(</span><span class="n">train_data1</span><span class="p">,</span><span class="n">train_data1</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Z-score:&#39;</span><span class="p">,</span> <span class="n">z_scores</span><span class="p">)</span>
 </pre></div>
 </div>

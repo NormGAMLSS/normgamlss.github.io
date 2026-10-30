@@ -401,7 +401,7 @@ document.write(`
 <p>        <strong>centiles</strong> : <em><strong>list</strong></em>, <em>default=[3, 10, 25, 50, 75, 90, 97]</em> <br>
             List of centiles to calculate, in percent: between 0 and 100, not 0 or 100 themselves (e.g. 2.5 or 97.5). If all values are below 1 (e.g. 0.03), a warning reminds you that the 3rd centile is 3</p>
 <p>        <strong>func_name</strong> : <em><strong>str</strong></em>, <em>optional</em> <br>
-            Distribution family name. If None (default), the model’s own family is used; a different family raises an error</p>
+            Not needed; leave it out (the model’s own family is always used). Still accepted so that older code keeps working (a different family raises an error); passing it shows a FutureWarning and it will be removed in the next version</p>
 <p>    <span style="background-color: #f5f5f5; padding: 4px 8px; display: inline-block; width: 90%;"><strong>Returns:</strong></span></p>
 <p>        <strong>centile_values</strong> : <em><strong>numpy.ndarray</strong></em> <br>
             Array of shape (n_samples, n_centiles) with centile values</p>
@@ -410,7 +410,7 @@ document.write(`
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Centile calculation</span>
-<span class="n">centile_score</span> <span class="o">=</span> <span class="n">gamlss_model</span><span class="o">.</span><span class="n">centiles</span><span class="p">(</span><span class="n">df_test</span><span class="p">,</span><span class="n">df_train</span><span class="p">,</span><span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;SHASH&#39;</span><span class="p">,</span> <span class="n">centiles</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">97</span><span class="p">])</span>
+<span class="n">centile_score</span> <span class="o">=</span> <span class="n">gamlss_model</span><span class="o">.</span><span class="n">centiles</span><span class="p">(</span><span class="n">df_test</span><span class="p">,</span><span class="n">df_train</span><span class="p">,</span> <span class="n">centiles</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">97</span><span class="p">])</span>
 <span class="c1"># Output is (n_samples, n_centiles)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of centile scores: </span><span class="si">{</span><span class="n">centile_score</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">centile_score</span><span class="p">)</span>
