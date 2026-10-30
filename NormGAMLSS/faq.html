@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=04637fd3" />
@@ -495,9 +495,11 @@ full model. See <em>Sharing a model without the training data</em> in
 </pre></div>
 </div>
 <p>See the function’s docstring for the sampling strategy, <code class="docutils literal notranslate"><span class="pre">params_to_adjust</span></code> and <code class="docutils literal notranslate"><span class="pre">adjustment_covariates</span></code> options.
-With a numeric adjustment covariate and a small calibration sample (e.g. 40 people), put
-the covariate on the location only, <code class="docutils literal notranslate"><span class="pre">covariate_params=['mu']</span></code>: by default it goes into
-every adjusted parameter, which can overfit and widen the z-scores.</p>
+With an adjustment covariate, <code class="docutils literal notranslate"><span class="pre">covariate_params</span></code> chooses which parameters get it (by
+default, every adjusted parameter). With a small calibration sample (e.g. 20 people), try
+adjusting the location only, <code class="docutils literal notranslate"><span class="pre">covariate_params=['mu']</span></code>: fewer terms to estimate, so less
+risk of overfitting and of widened z-scores. With more people, the default (all adjusted
+parameters) usually gives the bigger benefit.</p>
 </section>
 <section id="model-selection">
 <h2>Model Selection<a class="headerlink" href="#model-selection" title="Link to this heading">#</a></h2>

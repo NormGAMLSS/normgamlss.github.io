@@ -126,9 +126,11 @@ result = site_transfer(main_model_path, main_traindata, new_data, new_site,
                        selected_site, sample_size=20, y_val=y_val, x_vals=x_vals)
 ```
 See the function's docstring for the sampling strategy, `params_to_adjust` and `adjustment_covariates` options.
-With a numeric adjustment covariate and a small calibration sample (e.g. 40 people), put
-the covariate on the location only, `covariate_params=['mu']`: by default it goes into
-every adjusted parameter, which can overfit and widen the z-scores.
+With an adjustment covariate, `covariate_params` chooses which parameters get it (by
+default, every adjusted parameter). With a small calibration sample (e.g. 20 people), try
+adjusting the location only, `covariate_params=['mu']`: fewer terms to estimate, so less
+risk of overfitting and of widened z-scores. With more people, the default (all adjusted
+parameters) usually gives the bigger benefit.
 
 ## Model Selection
 
