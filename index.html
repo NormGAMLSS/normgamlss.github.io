@@ -2,9 +2,26 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>NormGAMLSS | Normative modeling for neuroimaging</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NormGAMLSS</title>
+<meta name="description" content="NormGAMLSS is a Python package for normative modeling with GAMLSS: fit the full distribution of a measure across age, sex and site, score new individuals, and transfer reference models to new scanners." />
+<link rel="icon" type="image/png" href="images/logo-mark.png" />
 <style>
+  /* Plan: cool white canvas, navy ink, teal for actions and reference curves, orange reserved for flagged
+     observations. IBM Plex (self-hosted) for everything; mono carries code, labels and eyebrows.
+     One 1120px column; hero splits text / interactive chart; sections alternate white and a cool band. */
+  :root{
+    --bg:#FFFFFF; --bg-2:#F3F6F6; --bg-3:#E9EFEF;
+    --ink:#10212B; --ink-2:#4A5B66; --ink-3:#7C8B94;
+    --line:#DFE6E8; --line-2:#CBD5D8;
+    --teal:#0B8A7E; --teal-ink:#076D63; --teal-wash:#E4F3F1; --teal-band:rgba(11,138,126,0.16);
+    --orange:#E8632F; --orange-wash:#FDEEE6;
+    --code-bg:#0F1A20; --code-fg:#D7E0E4; --code-cm:#7E929C; --code-str:#9FD8CB; --code-kw:#F2B06D; --code-fn:#8EC9F0;
+    --font-sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --radius:10px; --radius-lg:14px;
+    color-scheme:light;
+  }
   @font-face{font-family:'IBM Plex Sans';src:url('fonts/IBMPlexSans-Regular.woff2') format('woff2');font-weight:400;font-display:swap;}
   @font-face{font-family:'IBM Plex Sans';src:url('fonts/IBMPlexSans-Medium.woff2') format('woff2');font-weight:500;font-display:swap;}
   @font-face{font-family:'IBM Plex Sans';src:url('fonts/IBMPlexSans-SemiBold.woff2') format('woff2');font-weight:600;font-display:swap;}
@@ -13,482 +30,743 @@
   @font-face{font-family:'IBM Plex Mono';src:url('fonts/IBMPlexMono-Medium.woff2') format('woff2');font-weight:500;font-display:swap;}
   @font-face{font-family:'IBM Plex Mono';src:url('fonts/IBMPlexMono-SemiBold.woff2') format('woff2');font-weight:600;font-display:swap;}
 
-  :root{
-    --paper:#FBFAF7; --paper-2:#F3F1EA;
-    --ink:#1C1C1A; --muted:rgba(28,28,26,0.62); --faint:rgba(28,28,26,0.38);
-    --teal:#00897B; --teal-wash:rgba(0,137,123,0.08);
-    --coral:#E2542C;
-    --border:rgba(28,28,26,0.10); --border-soft:rgba(28,28,26,0.06);
-  }
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{margin:0; background:var(--paper); color:var(--ink);
-    font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    -webkit-font-smoothing:antialiased;}
-  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;}
-  .wrap{max-width:1080px; margin:0 auto; padding:0 24px;}
-  a{color:inherit;}
+  html{scroll-behavior:smooth; -webkit-text-size-adjust:100%;}
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *,*::before,*::after{animation:none !important; transition:none !important;} }
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-sans); font-size:16px; line-height:1.6;
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
   img{max-width:100%; display:block;}
+  a{color:var(--teal-ink); text-decoration-thickness:1px; text-underline-offset:2px;}
+  a:hover{color:var(--teal);}
+  :focus-visible{outline:2px solid var(--teal); outline-offset:3px; border-radius:4px;}
+  h1,h2,h3,h4{margin:0; line-height:1.15; letter-spacing:-0.01em; text-wrap:balance;}
+  p{margin:0;}
+  code,pre,.mono{font-family:var(--font-mono);}
+  code{font-size:0.92em; background:var(--bg-2); border:1px solid var(--line); border-radius:5px; padding:1px 5px;}
+  pre code{background:none; border:0; padding:0; font-size:inherit;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
+  .num{font-variant-numeric:tabular-nums;}
+  .sr-only{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap;}
 
-  /* nav */
-  nav{position:sticky; top:0; z-index:50; background:rgba(251,250,247,0.93);
-    backdrop-filter:blur(10px); border-bottom:1px solid var(--border-soft);}
-  nav .wrap{display:flex; align-items:center; justify-content:space-between; height:96px;}
-  .brand img{height:54px; width:auto;}
-  .navlinks{display:flex; font-size:14.5px; color:var(--muted);}
-  .navlinks a{margin-left:34px; text-decoration:none;}
+  /* brand hairline + nav */
+  .brandline{height:3px; background:linear-gradient(90deg,#1F6FB2 0%,#0B8A7E 38%,#8DB83A 66%,#E8632F 100%);}
+  nav.top{position:sticky; top:0; z-index:40; background:rgba(255,255,255,0.92); backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--line);}
+  nav.top .wrap{display:flex; align-items:center; justify-content:space-between; height:72px; gap:24px;}
+  .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--ink);}
+  .brand img{height:44px; width:auto;}
+  .navlinks{display:flex; gap:28px; font-size:14.5px; font-weight:500;}
+  .navlinks a{color:var(--ink-2); text-decoration:none; padding:6px 0;}
   .navlinks a:hover{color:var(--ink);}
   .navcta{display:flex; gap:10px; align-items:center;}
-  .btn{font-size:14px; font-weight:500; padding:10px 17px; border-radius:9px;
-    border:1px solid var(--border); text-decoration:none; display:inline-flex;
-    align-items:center; gap:6px; cursor:pointer; white-space:nowrap;}
-  .btn-dark{background:var(--ink); color:var(--paper); border-color:var(--ink);}
-  .btn-dark:hover{background:#000;}
-  .btn-ghost{background:transparent; color:var(--ink);}
-  .btn-ghost:hover{background:var(--paper-2);}
-  .btn-disabled{background:var(--paper-2); color:var(--faint); cursor:default;}
-  @media (max-width:860px){ .navlinks{display:none;} }
+  .btn{display:inline-flex; align-items:center; gap:8px; font-family:var(--font-sans); font-size:14.5px; font-weight:500;
+    padding:10px 16px; border-radius:var(--radius); border:1px solid var(--line-2); background:var(--bg); color:var(--ink);
+    text-decoration:none; cursor:pointer; white-space:nowrap; line-height:1.2; transition:background .15s,border-color .15s;}
+  .btn:hover{background:var(--bg-2); color:var(--ink);}
+  .btn-primary{background:var(--teal); border-color:var(--teal); color:#fff;}
+  .btn-primary:hover{background:var(--teal-ink); border-color:var(--teal-ink); color:#fff;}
+  .btn-ink{background:var(--ink); border-color:var(--ink); color:#fff;}
+  .btn-ink:hover{background:#000; color:#fff;}
+  .btn svg{width:16px; height:16px; flex:0 0 16px;}
+  @media (max-width:900px){ .navlinks{display:none;} }
 
-  /* hero + ghost curves */
-  header.hero{position:relative; padding:80px 0 56px; overflow:hidden;}
-  .ghost{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0;}
-  .ghost .gc path{fill:none; stroke-width:2.6; vector-effect:non-scaling-stroke;}
-  .ghost .gc1 path{stroke:#00897B;} .ghost .gc1{opacity:.22; animation:drift1 34s linear infinite;}
-  .ghost .gc2 path{stroke:#2563EB;} .ghost .gc2{opacity:.16; animation:drift2 46s linear infinite;}
-  .ghost .gc3 path{stroke:#43a047;} .ghost .gc3{opacity:.17; animation:drift3 29s linear infinite;}
-  .ghost .gc4 path{stroke:#E2542C;} .ghost .gc4{opacity:.13; animation:drift4 40s linear infinite;}
-  @keyframes drift1{from{transform:translateY(0)} to{transform:translateY(-115%)}}
-  @keyframes drift2{from{transform:translateY(20%)} to{transform:translateY(-125%)}}
-  @keyframes drift3{from{transform:translateY(10%)} to{transform:translateY(-120%)}}
-  @keyframes drift4{from{transform:translateY(30%)} to{transform:translateY(-130%)}}
-  @media (prefers-reduced-motion: reduce){ .ghost .gc{animation:none !important;} }
-  .hero-inner{position:relative; z-index:1;}
+  /* hero */
+  .hero{padding:72px 0 64px;}
+  .hero-grid{display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:56px; align-items:center;}
+  @media (max-width:960px){ .hero-grid{grid-template-columns:1fr; gap:40px;} }
+  .eyebrow{font-family:var(--font-mono); font-size:12px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--teal-ink);}
+  .hero h1{font-size:clamp(34px,4.6vw,52px); font-weight:700; margin:18px 0 20px; letter-spacing:-0.02em; line-height:1.08;}
+  .hero h1 em{font-style:normal; color:var(--teal);}
+  .lede{font-size:18px; color:var(--ink-2); max-width:34em; margin-bottom:28px;}
+  .install{display:flex; align-items:center; gap:0; border:1px solid var(--line-2); border-radius:var(--radius); background:var(--bg-2);
+    max-width:460px; overflow:hidden; margin-bottom:12px;}
+  .install .cmd{flex:1 1 auto; min-width:0; font-family:var(--font-mono); font-size:14.5px; padding:12px 16px; white-space:nowrap; overflow-x:auto;}
+  .install .cmd .dollar{color:var(--ink-3); margin-right:8px; user-select:none;}
+  .copy{flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:12.5px; font-weight:500;
+    padding:12px 14px; border:0; border-left:1px solid var(--line-2); background:var(--bg); color:var(--ink-2); cursor:pointer;}
+  .copy:hover{color:var(--ink); background:var(--bg-2);}
+  .copy svg{width:14px; height:14px;}
+  .release-note{font-size:13px; color:var(--ink-3); display:flex; align-items:center; gap:8px; margin-bottom:28px;}
+  .release-note .dot{width:8px; height:8px; border-radius:50%; background:var(--orange); flex:0 0 8px;}
+  .cta-row{display:flex; flex-wrap:wrap; gap:12px;}
 
-  .hero-grid{display:flex; gap:52px; align-items:center;}
-  .hero-grid > div:first-child{flex:1.05 1 0; min-width:0;}
-  .hero-grid > div:last-child{flex:0.95 1 0; min-width:0;}
-  @media (max-width:880px){ .hero-grid{flex-direction:column; align-items:stretch;} }
-  .sideline{display:inline-flex; align-items:center; gap:8px; font-size:12.5px; color:var(--muted);
-    border:1px solid var(--border); border-radius:20px; padding:7px 15px; margin-bottom:28px;
-    background:rgba(251,250,247,0.75);}
-  .sideline b{color:var(--ink); font-weight:600;}
-  h1.title{font-size:46px; line-height:1.07; font-weight:700; margin:0 0 18px; letter-spacing:-0.6px;}
-  h1.title .accent{color:var(--teal);}
-  .subtitle{font-size:17px; color:var(--muted); line-height:1.62; max-width:490px; margin:0 0 30px;}
-  .cta-row{display:flex; flex-wrap:wrap; gap:12px; align-items:center;}
-  .status-pill{display:inline-flex; align-items:center; gap:9px; padding:11px 17px; border-radius:9px;
-    background:rgba(0,137,123,0.07); border:1px solid rgba(0,137,123,0.25); font-size:14px;}
-  .status-pill .dot{width:7px; height:7px; border-radius:50%; background:var(--teal); flex:0 0 7px;}
-  .hero-visual{border:1px solid var(--border); border-radius:16px; background:#fff; padding:10px;
-    box-shadow:0 1px 3px rgba(28,28,26,0.04);}
-  .hero-visual img{border-radius:10px;}
+  .chart-card{border:1px solid var(--line); border-radius:var(--radius-lg); background:var(--bg); box-shadow:0 1px 2px rgba(16,33,43,0.04),0 12px 32px -16px rgba(16,33,43,0.18);
+    padding:18px 18px 14px;}
+  .chart-head{display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:6px;}
+  .chart-head .t{font-size:14px; font-weight:600;}
+  .chart-head .s{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-3);}
+  .chart-wrap{position:relative;}
+  #centileChart{width:100%; height:auto; display:block;}
+  .tip{position:absolute; pointer-events:none; background:var(--ink); color:#fff; font-family:var(--font-mono); font-size:11.5px; line-height:1.5;
+    padding:7px 9px; border-radius:6px; white-space:nowrap; transform:translate(-50%,-115%); opacity:0; transition:opacity .12s;}
+  .tip.on{opacity:1;}
+  .legend{display:flex; flex-wrap:wrap; gap:14px 18px; font-family:var(--font-mono); font-size:11.5px; color:var(--ink-2); margin-top:8px;}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .sw{width:14px; height:10px; border-radius:2px; display:inline-block;}
+  .sw.band{background:var(--teal-band);} .sw.median{background:var(--teal); height:2px;}
+  .sw.pt{width:9px; height:9px; border-radius:50%; background:var(--ink-3);} .sw.flag{width:9px; height:9px; border-radius:50%; background:var(--orange);}
 
-  /* stats */
-  .stats{border-top:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft); background:var(--paper-2);}
-  .stats .wrap{display:flex; flex-wrap:wrap; padding:34px 24px;}
-  .stat{flex:1 1 0; min-width:140px; text-align:center; padding:8px 12px;}
-  .stat .num{font-size:29px; font-weight:700; font-family:"IBM Plex Mono",monospace; color:var(--teal);}
-  .stat .label{font-size:13px; color:var(--muted); margin-top:5px;}
+  /* facts strip */
+  .facts{border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--bg-2);}
+  .facts .wrap{display:grid; grid-template-columns:repeat(4,1fr); gap:24px; padding:30px 24px;}
+  @media (max-width:800px){ .facts .wrap{grid-template-columns:repeat(2,1fr);} }
+  .fact .v{font-family:var(--font-mono); font-size:26px; font-weight:600; color:var(--ink); line-height:1.1;}
+  .fact .k{font-size:13.5px; color:var(--ink-2); margin-top:6px;}
 
-  .eyebrow{font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:1.6px;
-    text-transform:uppercase; color:var(--teal); font-weight:600; margin-bottom:11px;}
-  .section-title{font-size:31px; font-weight:700; margin:0 0 9px; letter-spacing:-0.4px;}
-  .section-sub{color:var(--muted); font-size:15px; max-width:580px; margin:0 0 46px;}
-  section{padding:78px 0;}
+  /* sections */
+  section{padding:96px 0;}
+  section.band{background:var(--bg-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .sec-head{max-width:640px; margin-bottom:48px;}
+  .sec-head h2{font-size:clamp(26px,3vw,34px); font-weight:700; margin:12px 0 12px;}
+  .sec-head p{color:var(--ink-2); font-size:16.5px;}
 
-  /* modalities strip */
-  .modgrid{display:flex; flex-wrap:wrap; gap:16px;}
-  .modcard{flex:1 1 150px; min-width:140px; border:1px solid var(--border); border-radius:12px;
-    background:#fff; padding:22px 14px; text-align:center;}
-  .modcard.more{background:transparent; border-style:dashed;}
-  .modicon{width:46px; height:46px; margin:0 auto 14px; border-radius:11px; background:var(--teal-wash);
-    display:flex; align-items:center; justify-content:center;}
-  .modcard.more .modicon{background:transparent;}
-  .modicon img{width:26px; height:26px;}
-  .modname{font-size:14.5px; font-weight:600; margin-bottom:4px;}
-  .modcard.more .modname{color:var(--teal);}
-  .moddesc{font-size:12px; color:var(--muted);}
+  /* workflow */
+  .steps{display:grid; grid-template-columns:repeat(4,1fr); gap:20px;}
+  @media (max-width:960px){ .steps{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .steps{grid-template-columns:1fr;} }
+  .step{border:1px solid var(--line); border-radius:var(--radius-lg); background:var(--bg); padding:22px 22px 18px; display:flex; flex-direction:column; gap:12px; min-width:0;}
+  .step .n{font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--teal-ink); letter-spacing:0.08em;}
+  .step h3{font-size:17px; font-weight:600;}
+  .step p{font-size:14px; color:var(--ink-2); flex:1 1 auto;}
+  .step pre{margin:0; background:var(--code-bg); color:var(--code-fg); border-radius:8px; padding:14px 16px; font-size:12.5px; line-height:1.7; overflow-x:auto;}
+  .step .link{font-family:var(--font-mono); font-size:12.5px; font-weight:500; text-decoration:none;}
 
-  /* features — 2-col card grid */
-  .fgrid{display:flex; flex-wrap:wrap; gap:20px;}
-  .fcard{flex:1 1 460px; min-width:0; border:1px solid var(--border); border-radius:14px;
-    background:#fff; padding:22px 22px 18px; display:flex; flex-direction:column;}
-  .fhead{display:flex; gap:14px; align-items:flex-start; margin-bottom:14px;}
-  .ficon{flex:0 0 46px; width:46px; height:46px; border-radius:11px; background:var(--teal-wash);
-    display:flex; align-items:center; justify-content:center;}
-  .ficon img{width:25px; height:25px;}
-  .ftitle{font-size:16.5px; font-weight:600; margin:1px 0 5px; line-height:1.25;}
-  .fdesc{color:var(--muted); font-size:13.5px; line-height:1.55;}
-  .fig{margin-top:auto; border:1px solid var(--border-soft); border-radius:9px; overflow:hidden;
-    background:#fff;}
-  .fig img{width:100%; display:block;}
-  /* full-width card: text beside the figure, stacked on narrow screens */
-  .fcard.fwide{flex:1 1 100%; flex-direction:row; flex-wrap:wrap; align-items:center; gap:22px;}
-  .fwide .fhead{flex:1 1 300px; margin-bottom:0;}
-  .fwide .fig{flex:0 1 460px; margin-top:0;}
-  .more-note{margin-top:34px; padding:22px 24px; border:1px dashed var(--border);
-    border-radius:12px; background:var(--paper-2); font-size:14px; color:var(--muted); line-height:1.6;}
-  .more-note b{color:var(--ink); font-weight:600;}
+  /* features */
+  .fgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:20px;}
+  @media (max-width:860px){ .fgrid{grid-template-columns:1fr;} }
+  .fcard{border:1px solid var(--line); border-radius:var(--radius-lg); background:var(--bg); padding:22px; display:flex; flex-direction:column; gap:14px; min-width:0;}
+  .fhead{display:flex; gap:14px; align-items:flex-start;}
+  .ficon{flex:0 0 44px; width:44px; height:44px; border-radius:10px; background:var(--teal-wash); display:flex; align-items:center; justify-content:center;}
+  .ficon img{width:24px; height:24px;}
+  .fcard h3{font-size:17px; font-weight:600; margin-bottom:4px;}
+  .fcard .d{font-size:14px; color:var(--ink-2);}
+  .fcard .d code{font-size:12.5px;}
+  .fig{margin-top:auto; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:#fff;}
+  .fig img{width:100%;}
+  .fcard.wide{grid-column:1 / -1; flex-direction:row; align-items:center; gap:28px;}
+  .fcard.wide .fhead{flex:1 1 320px;}
+  .fcard.wide .fig{flex:0 1 480px; margin-top:0;}
+  @media (max-width:860px){ .fcard.wide{flex-direction:column; align-items:stretch;} .fcard.wide .fhead{flex:0 0 auto;} .fcard.wide .fig{flex:0 0 auto;} }
 
-  /* papers */
-  .paper-grid{display:flex; flex-wrap:wrap; gap:16px;}
-  .paper-grid .paper-card{flex:1 1 460px; min-width:0;}
-  .paper-card{border:1px solid var(--border); border-radius:12px; padding:23px; background:#fff;}
-  .tag{display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:10.5px; font-weight:600;
-    text-transform:uppercase; letter-spacing:0.5px; padding:4px 9px; border-radius:5px; margin:0 6px 11px 0;}
-  .tag-prep{background:rgba(226,84,44,0.09); color:var(--coral); border:1px solid rgba(226,84,44,0.2);}
-  .tag-preprint{background:rgba(0,137,123,0.09); color:var(--teal); border:1px solid rgba(0,137,123,0.2);}
-  .tag-ohbm{background:var(--paper-2); color:var(--muted); border:1px solid var(--border);}
-  .paper-title{font-size:15px; font-weight:600; line-height:1.4; margin:0 0 6px;}
-  .paper-meta{font-size:12px; color:var(--faint); font-family:"IBM Plex Mono",monospace; margin-bottom:13px;}
-  .paper-links{display:flex; gap:8px; flex-wrap:wrap;}
-  .paper-links a{font-size:12px; font-family:"IBM Plex Mono",monospace; text-decoration:none;
-    color:var(--teal); border:1px solid rgba(0,137,123,0.3); padding:5px 10px; border-radius:6px;}
-  .paper-links a:hover{background:var(--teal-wash);}
-  .paper-links span{font-size:12px; font-family:"IBM Plex Mono",monospace; color:var(--faint);
-    border:1px solid var(--border); padding:5px 10px; border-radius:6px;}
+  /* documentation groups */
+  .docs{display:grid; grid-template-columns:repeat(4,1fr); gap:20px;}
+  @media (max-width:1000px){ .docs{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .docs{grid-template-columns:1fr;} }
+  .dgroup{border:1px solid var(--line); border-radius:var(--radius-lg); background:var(--bg); padding:20px 20px 16px; min-width:0;}
+  .dgroup .dn{font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--teal-ink); letter-spacing:0.08em; margin-bottom:6px;}
+  .dgroup h3{font-size:15.5px; font-weight:600; margin-bottom:10px;}
+  .dgroup ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px;}
+  .dgroup li a{font-size:13.5px; color:var(--ink-2); text-decoration:none; display:block;}
+  .dgroup li a:hover{color:var(--teal-ink); text-decoration:underline;}
+  .dgroup.dall{background:var(--teal-wash); border-color:rgba(11,138,126,0.3); text-decoration:none; color:var(--ink); display:flex; flex-direction:column; justify-content:center;}
+  .dgroup.dall h3{color:var(--teal-ink);}
+  .dgroup.dall p{font-size:13.5px; color:var(--ink-2);}
+  .dgroup.dall:hover{background:#D5ECE8;}
 
-  /* ack */
-  .ack-grid{display:flex; flex-wrap:wrap; gap:18px;}
-  .ack-grid .ack-card{flex:1 1 260px; min-width:0;}
-  .ack-card{border:1px solid var(--border); border-radius:12px; padding:23px; background:var(--paper-2);}
-  .ack-label{font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase;
-    letter-spacing:1px; color:var(--muted); margin-bottom:11px;}
-  .ack-body{font-size:14px; line-height:1.6; margin-bottom:11px;}
-  .ack-link{font-size:13px; color:var(--teal); text-decoration:none;}
+  /* example tabs */
+  .ex{display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); gap:24px; align-items:start;}
+  @media (max-width:960px){ .ex{grid-template-columns:1fr;} }
+  .codebox{max-width:860px; background:var(--code-bg); border-radius:var(--radius-lg); overflow:hidden; border:1px solid #1E2C34;}
+  .tabs{display:flex; align-items:center; gap:2px; padding:8px 10px 0; border-bottom:1px solid #223038; background:#0B141A; overflow-x:auto;}
+  .tab{font-family:var(--font-mono); font-size:12.5px; font-weight:500; color:#8FA2AC; background:transparent; border:0; border-bottom:2px solid transparent;
+    padding:9px 12px 10px; cursor:pointer; white-space:nowrap;}
+  .tab[aria-selected="true"]{color:#fff; border-bottom-color:var(--teal);}
+  .tab:hover{color:#fff;}
+  .tabs .copy{margin-left:auto; border:0; background:transparent; color:#8FA2AC; padding:8px 6px;}
+  .tabs .copy:hover{color:#fff; background:transparent;}
+  .panel{display:none; margin:0; padding:20px 22px 22px; color:var(--code-fg); font-size:13px; line-height:1.75; overflow-x:auto; white-space:pre; font-family:var(--font-mono);}
+  .panel[data-active="true"]{display:block;}
+  .cm{color:var(--code-cm);} .st{color:var(--code-str);} .kw{color:var(--code-kw);} .fn{color:var(--code-fn);}
+  .ex-side{display:flex; flex-direction:column; gap:16px;}
+  .ex-card{border:1px solid var(--line); border-radius:var(--radius-lg); background:var(--bg); padding:18px 20px;}
+  .ex-card h3{font-size:15px; font-weight:600; margin-bottom:8px;}
+  .ex-card p{font-size:14px; color:var(--ink-2);}
+  .ex-card table{width:100%; border-collapse:collapse; font-size:13px; margin-top:8px;}
+  .ex-card td{padding:6px 0; border-top:1px solid var(--line); vertical-align:top;}
+  .ex-card td:first-child{font-family:var(--font-mono); color:var(--ink); white-space:nowrap; padding-right:14px; width:1%;}
+  .ex-card td:last-child{color:var(--ink-2);}
 
-  footer{border-top:1px solid var(--border-soft); padding:48px 0; text-align:center;}
-  .footer-logo{display:flex; justify-content:center; margin-bottom:20px;}
-  .footer-logo img{height:88px; width:auto;}
-  .footer-links{display:flex; justify-content:center; font-size:13.5px; color:var(--muted); margin-bottom:16px;}
-  .footer-links a{text-decoration:none; margin:0 13px;}
-  .footer-links a:hover{color:var(--ink);}
-  .footer-note{font-size:12px; color:var(--faint); max-width:640px; margin:0 auto; line-height:1.6;}
+  /* publications */
+  .pubs{display:flex; flex-direction:column; border-top:1px solid var(--line);}
+  .pub{display:grid; grid-template-columns:52px minmax(0,1fr) auto; gap:20px; padding:22px 0; border-bottom:1px solid var(--line); align-items:start;}
+  @media (max-width:700px){ .pub{grid-template-columns:40px 1fr;} .pub .links{grid-column:2;} }
+  .pub .idx{font-family:var(--font-mono); font-size:13px; color:var(--ink-3); padding-top:3px;}
+  .pub h3{font-size:16.5px; font-weight:600; margin-bottom:6px;}
+  .pub .meta{font-size:13.5px; color:var(--ink-2); display:flex; flex-wrap:wrap; gap:6px 10px; align-items:center;}
+  .pub .meta .sep{color:var(--line-2);}
+  .status{font-family:var(--font-mono); font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; padding:3px 8px; border-radius:5px; border:1px solid;}
+  .status.preprint{color:var(--teal-ink); background:var(--teal-wash); border-color:rgba(11,138,126,0.3);}
+  .status.prep{color:#B5461B; background:var(--orange-wash); border-color:rgba(232,99,47,0.3);}
+  .status.main{color:var(--ink); background:var(--bg-2); border-color:var(--line-2);}
+  .pub .links{display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end;}
+  .pub .links a{font-family:var(--font-mono); font-size:12.5px; text-decoration:none; color:var(--ink); border:1px solid var(--line-2); border-radius:6px; padding:5px 10px; background:var(--bg); white-space:nowrap;}
+  .pub .links a:hover{background:var(--bg-2); color:var(--ink);}
+  .cite{margin-top:40px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.4fr); gap:24px; align-items:start;}
+  @media (max-width:860px){ .cite{grid-template-columns:1fr;} }
+  .cite h3{font-size:18px; font-weight:600; margin-bottom:8px;}
+  .cite p{font-size:14.5px; color:var(--ink-2);}
+  .bib{position:relative; background:var(--bg-2); border:1px solid var(--line); border-radius:var(--radius); padding:16px 18px; font-size:12.5px; line-height:1.65; overflow-x:auto; margin:0; white-space:pre;}
+  .bib .copy{position:absolute; top:8px; right:8px; border:1px solid var(--line-2); border-radius:6px; padding:5px 9px; background:var(--bg);}
 
-  @media (max-width:520px){
-    .btn-disabled{display:none;}
-    .navcta .btn{padding:8px 12px; font-size:13px;}
-    .status-pill{font-size:12.5px; padding:10px 14px; white-space:nowrap;}
-    #demo pre{white-space:pre-wrap !important; word-break:break-word; font-size:11.5px !important; line-height:1.75 !important;}
-    .cta-row{gap:10px;}
-    h1.title{font-size:33px;}
-    .subtitle{font-size:15.5px;}
-    nav .wrap{height:76px;}
-    .brand img{height:40px;}
-    .footer-logo img{height:64px;}
-    .section-title{font-size:25px;}
-  }
+  /* foundations */
+  .found{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  @media (max-width:860px){ .found{grid-template-columns:1fr;} }
+  .fcol{border:1px solid var(--line); border-radius:var(--radius-lg); padding:22px; background:var(--bg);}
+  .fcol .k{font-family:var(--font-mono); font-size:11.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-3); margin-bottom:10px;}
+  .fcol h3{font-size:16px; font-weight:600; margin-bottom:6px;}
+  .fcol p{font-size:14px; color:var(--ink-2); margin-bottom:12px;}
+  .fcol a{font-size:13.5px; font-weight:500; text-decoration:none;}
+  .req{margin-top:24px; border:1px dashed var(--line-2); border-radius:var(--radius); padding:16px 20px; font-size:14px; color:var(--ink-2); display:flex; flex-wrap:wrap; gap:8px 24px; align-items:center;}
+  .req b{color:var(--ink); font-weight:600;}
+
+  footer{border-top:1px solid var(--line); padding:48px 0 40px; background:var(--bg-2);}
+  .foot{display:grid; grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr)); gap:32px;}
+  @media (max-width:860px){ .foot{grid-template-columns:1fr 1fr;} }
+  @media (max-width:520px){ .foot{grid-template-columns:1fr;} }
+  .foot img{height:64px; width:auto; margin-bottom:12px;}
+  .foot p{font-size:13.5px; color:var(--ink-2); max-width:36em;}
+  .foot h4{font-size:12px; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-3); margin-bottom:12px;}
+  .foot ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px;}
+  .foot li a{font-size:14px; color:var(--ink-2); text-decoration:none;}
+  .foot li a:hover{color:var(--ink);}
+  .foot-bottom{margin-top:36px; padding-top:18px; border-top:1px solid var(--line); font-size:12.5px; color:var(--ink-3); display:flex; flex-wrap:wrap; gap:8px 20px; justify-content:space-between;}
 </style>
 </head>
 <body>
 
-<nav>
+<div class="brandline" aria-hidden="true"></div>
+<nav class="top" aria-label="Primary">
   <div class="wrap">
-    <div class="brand"><img src="images/logo-mark.png" alt="NormGAMLSS"/></div>
+    <a class="brand" href="#top" aria-label="NormGAMLSS home"><img src="images/logo-mark.png" alt="NormGAMLSS" /></a>
     <div class="navlinks">
-      <a href="#modalities">Modalities</a>
+      <a href="#workflow">Workflow</a>
       <a href="#features">Features</a>
-      <a href="#demo">Example</a>
-      <a href="#papers">Publications</a>
+      <a href="#api">Docs</a>
+      <a href="#example">Example</a>
+      <a href="#publications">Publications</a>
     </div>
     <div class="navcta">
-      <a class="btn btn-ghost" href="https://github.com/NormGAMLSS/NormGAMLSS" target="_blank" rel="noopener">GitHub &#8599;</a>
-      <a class="btn btn-dark" href="NormGAMLSS/">Documentation</a>
+      <a class="btn" href="https://github.com/NormGAMLSS/NormGAMLSS" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .2a8 8 0 0 0-2.5 15.6c.4 0 .5-.2.5-.4v-1.5c-2.2.5-2.7-1-2.7-1-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.3 1.9.9 2.4.7.1-.5.3-.9.5-1.1-1.8-.2-3.7-.9-3.7-4 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8a7.6 7.6 0 0 1 4 0c1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.6.8 1.3.8 2.1 0 3.1-1.9 3.8-3.7 4 .3.3.6.8.6 1.5v2.2c0 .2.1.5.6.4A8 8 0 0 0 8 .2Z"/></svg>
+        GitHub
+      </a>
+      <a class="btn btn-primary" href="https://normgamlss.github.io/NormGAMLSS/">Documentation</a>
     </div>
   </div>
 </nav>
 
-<header class="hero">
-  <svg class="ghost" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-      <g class="gc gc1"><path d="M0,665 L12,660 L24,653 L36,646 L48,638 L61,629 L73,620 L85,610 L97,599 L109,588 L121,576 L133,564 L145,552 L157,539 L169,527 L182,515 L194,502 L206,491 L218,480 L230,470 L242,460 L254,452 L266,445 L278,440 L290,436 L303,433 L315,432 L327,433 L339,435 L351,438 L363,443 L375,450 L387,457 L399,466 L411,476 L424,487 L436,498 L448,510 L460,522 L472,535 L484,547 L496,560 L508,572 L520,584 L532,595 L545,606 L557,616 L569,626 L581,635 L593,643 L605,650 L617,657 L629,663 L641,669 L653,674 L666,678 L678,682 L690,685 L702,688 L714,690 L726,692 L738,694 L750,696 L762,697 L774,698 L787,699 L799,699 L811,700 L823,700 L835,701 L847,701 L859,701 L871,701 L883,702 L895,702 L908,702 L920,702 L932,702 L944,702 L956,702 L968,702 L980,702 L992,702 L1004,702 L1016,702 L1029,702 L1041,702 L1053,702 L1065,702 L1077,702 L1089,702 L1101,702 L1113,702 L1125,702 L1137,702 L1150,702 L1162,702 L1174,702 L1186,702 L1198,702 L1210,702 L1222,702 L1234,702 L1246,702 L1258,702 L1271,702 L1283,702 L1295,702 L1307,702 L1319,702 L1331,702 L1343,702 L1355,702 L1367,702 L1379,702 L1392,702 L1404,702 L1416,702 L1428,702 L1440,702"/></g>
-      <g class="gc gc2"><path d="M0,914 L12,914 L24,913 L36,913 L48,912 L61,911 L73,910 L85,909 L97,907 L109,906 L121,904 L133,903 L145,901 L157,899 L169,896 L182,894 L194,891 L206,888 L218,885 L230,882 L242,878 L254,874 L266,870 L278,865 L290,860 L303,855 L315,849 L327,844 L339,838 L351,831 L363,825 L375,818 L387,811 L399,804 L411,796 L424,788 L436,780 L448,773 L460,765 L472,756 L484,748 L496,740 L508,732 L520,724 L532,717 L545,709 L557,702 L569,695 L581,688 L593,682 L605,676 L617,671 L629,666 L641,662 L653,658 L666,655 L678,652 L690,650 L702,649 L714,648 L726,648 L738,649 L750,650 L762,652 L774,655 L787,658 L799,662 L811,666 L823,671 L835,676 L847,682 L859,688 L871,695 L883,702 L895,709 L908,717 L920,724 L932,732 L944,740 L956,748 L968,756 L980,765 L992,773 L1004,780 L1016,788 L1029,796 L1041,804 L1053,811 L1065,818 L1077,825 L1089,831 L1101,838 L1113,844 L1125,849 L1137,855 L1150,860 L1162,865 L1174,870 L1186,874 L1198,878 L1210,882 L1222,885 L1234,888 L1246,891 L1258,894 L1271,896 L1283,899 L1295,901 L1307,903 L1319,904 L1331,906 L1343,907 L1355,909 L1367,910 L1379,911 L1392,912 L1404,913 L1416,913 L1428,914 L1440,914"/></g>
-      <g class="gc gc3"><path d="M0,810 L12,810 L24,810 L36,810 L48,810 L61,810 L73,810 L85,810 L97,810 L109,810 L121,810 L133,810 L145,810 L157,810 L169,810 L182,810 L194,810 L206,810 L218,810 L230,810 L242,810 L254,810 L266,810 L278,810 L290,810 L303,810 L315,810 L327,810 L339,810 L351,810 L363,810 L375,810 L387,810 L399,810 L411,810 L424,810 L436,810 L448,810 L460,810 L472,810 L484,810 L496,810 L508,810 L520,810 L532,810 L545,809 L557,809 L569,809 L581,809 L593,808 L605,808 L617,807 L629,806 L641,805 L653,804 L666,803 L678,801 L690,798 L702,796 L714,793 L726,789 L738,785 L750,780 L762,774 L774,767 L787,760 L799,752 L811,743 L823,733 L835,723 L847,711 L859,699 L871,686 L883,673 L895,660 L908,646 L920,632 L932,619 L944,605 L956,593 L968,581 L980,571 L992,562 L1004,554 L1016,548 L1029,543 L1041,541 L1053,540 L1065,541 L1077,544 L1089,549 L1101,556 L1113,564 L1125,574 L1137,584 L1150,596 L1162,609 L1174,622 L1186,636 L1198,649 L1210,663 L1222,677 L1234,690 L1246,702 L1258,714 L1271,725 L1283,736 L1295,745 L1307,754 L1319,762 L1331,769 L1343,775 L1355,781 L1367,786 L1379,790 L1392,793 L1404,797 L1416,799 L1428,801 L1440,803"/></g>
-      <g class="gc gc4"><path d="M0,1075 L12,1075 L24,1074 L36,1074 L48,1073 L61,1072 L73,1071 L85,1070 L97,1069 L109,1068 L121,1067 L133,1065 L145,1064 L157,1062 L169,1061 L182,1059 L194,1057 L206,1055 L218,1052 L230,1050 L242,1047 L254,1045 L266,1042 L278,1039 L290,1035 L303,1032 L315,1028 L327,1024 L339,1020 L351,1016 L363,1012 L375,1007 L387,1002 L399,997 L411,992 L424,987 L436,981 L448,975 L460,969 L472,963 L484,957 L496,951 L508,945 L520,938 L532,932 L545,925 L557,919 L569,912 L581,906 L593,899 L605,893 L617,887 L629,880 L641,874 L653,868 L666,862 L678,857 L690,851 L702,846 L714,841 L726,837 L738,832 L750,828 L762,825 L774,822 L787,819 L799,816 L811,814 L823,812 L835,811 L847,810 L859,810 L871,810 L883,811 L895,811 L908,813 L920,815 L932,817 L944,819 L956,822 L968,826 L980,829 L992,833 L1004,838 L1016,842 L1029,847 L1041,852 L1053,858 L1065,863 L1077,869 L1089,875 L1101,881 L1113,888 L1125,894 L1137,901 L1150,907 L1162,914 L1174,920 L1186,927 L1198,933 L1210,940 L1222,946 L1234,952 L1246,959 L1258,965 L1271,971 L1283,976 L1295,982 L1307,988 L1319,993 L1331,998 L1343,1003 L1355,1008 L1367,1012 L1379,1017 L1392,1021 L1404,1025 L1416,1029 L1428,1033 L1440,1036"/></g>
-    </svg>
-  <div class="wrap hero-inner hero-grid">
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
     <div>
-      <div class="sideline">Presented at OHBM 2026 <span style="opacity:.45">&middot;</span> <b>read the posters &darr;</b></div>
-      <h1 class="title">Go beyond the mean.<br>Model the <span class="accent">norm</span>.</h1>
-      <p class="subtitle">NormGAMLSS is a Python package for normative modeling with GAMLSS &mdash; fitting the full shape of your data (not just its average), transferring to new sites with minimal recalibration, and flagging true outliers with statistical rigor.</p>
+      <div class="eyebrow">Python package · built on R GAMLSS</div>
+      <h1>Normative modeling that fits the <em>whole distribution</em>, not just the mean.</h1>
+      <p class="lede">A Python package for normative modeling with GAMLSS. Fit a reference across age, sex and site, score new individuals against it, and transfer it to a new scanner from a handful of calibration subjects.</p>
+      <div class="install">
+        <div class="cmd"><span class="dollar">$</span>pip install normgamlss</div>
+        <button class="copy" type="button" data-copy="pip install normgamlss" aria-label="Copy install command">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.4" d="M5.5 5.5h7v8h-7zM3.5 10.5v-8h7"/></svg><span>Copy</span>
+        </button>
+      </div>
+      <div class="release-note"><span class="dot"></span>PyPI release in preparation. Install from the GitHub repository until then.</div>
       <div class="cta-row">
-        <span class="status-pill"><span class="dot"></span> <span class="mono">pip install normgamlss</span> &mdash; releasing soon</span>
-        <a class="btn btn-dark" href="NormGAMLSS/">Read the docs &rarr;</a>
-        <a class="btn btn-ghost" href="#features">See what it does &darr;</a>
+        <a class="btn btn-ink" href="https://normgamlss.github.io/NormGAMLSS/quick_start.html">Quick start (5 min)</a>
+        <a class="btn" href="#workflow">See the workflow</a>
       </div>
     </div>
-    <div class="hero-visual">
-      <img src="images/icon_hero_distribution.svg" alt="A distribution modeled in full, not reduced to a mean"/>
+    <div class="chart-card">
+      <div class="chart-head">
+        <div class="t">Cortical thickness reference, females</div>
+        <div class="s">SHASH · site A</div>
+      </div>
+      <div class="chart-wrap">
+        <svg id="centileChart" viewBox="0 0 560 340" role="img" aria-labelledby="chartTitle chartDesc">
+          <title id="chartTitle">Age-dependent centile bands with one flagged individual</title>
+          <desc id="chartDesc">Seven centile curves of cortical thickness from age 18 to 80, with scattered individuals. Most fall inside the 3rd to 97th centile band; one subject lies far outside and is flagged with a deviation score beyond 2.5.</desc>
+        </svg>
+        <div class="tip" id="chartTip" aria-hidden="true"></div>
+      </div>
+      <div class="legend">
+        <span><i class="sw band"></i>centile bands 3–97 / 10–90 / 25–75</span>
+        <span><i class="sw median"></i>median (50th)</span>
+        <span><i class="sw pt"></i>subject</span>
+        <span><i class="sw flag"></i>|z| &gt; 2.5, flagged</span>
+      </div>
     </div>
   </div>
 </header>
 
-<div class="stats">
+<div class="facts" aria-label="Key facts">
   <div class="wrap">
-    <div class="stat"><div class="num">5</div><div class="label">Modalities validated</div></div>
-    <div class="stat"><div class="num">100+</div><div class="label">Distribution families</div></div>
-    <div class="stat"><div class="num mono">μ σ ν τ</div><div class="label">Full shape modeled</div></div>
-    <div class="stat"><div class="num">6</div><div class="label">Publications in progress</div></div>
+    <div class="fact"><div class="v num">μ σ ν τ</div><div class="k">All four distribution parameters modeled jointly</div></div>
+    <div class="fact"><div class="v num">100+</div><div class="k">Distribution families available through GAMLSS</div></div>
+    <div class="fact"><div class="v num">27,000+</div><div class="k">Individuals across 158 sites in the largest validation cohort</div></div>
+    <div class="fact"><div class="v num">6</div><div class="k">Publications across structural MRI, fMRI and EEG</div></div>
   </div>
 </div>
 
-<section id="modalities" style="padding:56px 0 76px;">
+<section id="workflow">
   <div class="wrap">
-    <div class="eyebrow">Validation</div>
-    <h2 class="section-title">One model, several modalities</h2>
-    <p class="section-sub">Developed and validated with the <a href="https://mhm-lab.github.io/" target="_blank" rel="noopener" style="color:var(--teal);">Laboratory for Mental Health Mapping</a>, each modality backed by its own publication below.</p>
-    <div class="modgrid">
-      <div class="modcard">
-        <div class="modicon"><img src="images/icon_mri.svg" alt=""/></div>
-        <div class="modname">Structural MRI</div>
-        <div class="moddesc">Cortical thickness</div>
+    <div class="sec-head">
+      <div class="eyebrow">Workflow</div>
+      <h2>From a dataframe to deviation scores in four steps</h2>
+      <p>Each step is a Python call. The model itself is written in GAMLSS's own R formula syntax, so anything that works in <code>gamlss()</code> works here unchanged.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="n">01</div>
+        <h3>Prepare</h3>
+        <p>Check that every test site is known to the model and clean column names R would reject.</p>
+        <a class="link" href="https://normgamlss.github.io/NormGAMLSS/notebooks/data_preprocessing.html">check_test_sites, add_extra_site_data →</a>
       </div>
-      <div class="modcard">
-        <div class="modicon"><img src="images/icon_fmri.svg" alt=""/></div>
-        <div class="modname">fMRI</div>
-        <div class="moddesc">Network dynamics</div>
+      <div class="step">
+        <div class="n">02</div>
+        <h3>Fit</h3>
+        <p>Smooth age effects per sex, site as a random effect, any of the GAMLSS families.</p>
+        <a class="link" href="https://normgamlss.github.io/NormGAMLSS/notebooks/fitting_models.html">Gamlss.fit →</a>
       </div>
-      <div class="modcard">
-        <div class="modicon"><img src="images/icon_eeg.svg" alt=""/></div>
-        <div class="modname">EEG</div>
-        <div class="moddesc">Spectral power</div>
+      <div class="step">
+        <div class="n">03</div>
+        <h3>Evaluate</h3>
+        <p>Diagnostic panels and six calibration metrics, computed on healthy subjects only.</p>
+        <a class="link" href="https://normgamlss.github.io/NormGAMLSS/notebooks/model_evaluation.html">plot_diagnostics, evaluate →</a>
       </div>
-      <div class="modcard">
-        <div class="modicon"><img src="images/icon_csf.svg" alt=""/></div>
-        <div class="modname">CSF Dynamics</div>
-        <div class="moddesc">Glymphatic coupling</div>
-      </div>
-      <div class="modcard more">
-        <div class="modicon"><img src="images/icon_more.svg" alt=""/></div>
-        <div class="modname">In progress</div>
-        <div class="moddesc">Cognitive &amp; others, unpublished</div>
+      <div class="step">
+        <div class="n">04</div>
+        <h3>Deploy</h3>
+        <p>Z-scores and centiles for new subjects, a shareable slim model, transfer to unseen sites.</p>
+        <a class="link" href="https://normgamlss.github.io/NormGAMLSS/notebooks/z_score_calculation.html">z_score, plot_centiles, export_slim →</a>
       </div>
     </div>
   </div>
 </section>
 
-<section id="features">
+<section id="features" class="band">
   <div class="wrap">
-    <div class="eyebrow">Architecture</div>
-    <h2 class="section-title">Built for the real shape of your data</h2>
-    <p class="section-sub">Seven of the things the package does, most shown with output from its own tutorial.</p>
-
+    <div class="sec-head">
+      <div class="eyebrow">Capabilities</div>
+      <h2>Built for the real shape of neuroimaging data</h2>
+      <p>Figures are tutorial output on synthetic data.</p>
+    </div>
     <div class="fgrid">
       <div class="fcard">
         <div class="fhead">
-          <div class="ficon"><img src="images/icon_distribution.svg" alt=""/></div>
-          <div>
-            <div class="ftitle">Model the full distribution</div>
-            <div class="fdesc">Location, scale, skew and kurtosis (μ, σ, ν, τ) fitted jointly as smooth functions of age, sex and site, not collapsed to a single mean trend.</div>
-          </div>
+          <div class="ficon"><img src="images/icon_distribution.svg" alt="" /></div>
+          <div><h3>Model the full distribution</h3><div class="d">Location, scale, skew and kurtosis fitted jointly as smooth functions of age, sex and site, in any GAMLSS family.</div></div>
         </div>
-        <div class="fig"><img src="images/fig_distribution.svg" alt="Model the full distribution"/></div>
+        <div class="fig"><img src="images/fig_distribution.svg" alt="A skewed distribution annotated with its four parameters" /></div>
       </div>
       <div class="fcard">
         <div class="fhead">
-          <div class="ficon"><img src="images/icon_centiles.svg" alt=""/></div>
-          <div>
-            <div class="ftitle">Reference curves &amp; outlier detection</div>
-            <div class="fdesc">Continuous, age-dependent centile bands plus an exact deviation (Z-)score per individual, so outliers are judged against a proper reference, not a fixed cutoff.</div>
-          </div>
+          <div class="ficon"><img src="images/icon_centiles.svg" alt="" /></div>
+          <div><h3>Reference curves and deviation scores</h3><div class="d">Age-dependent centile bands with uncertainty, and a Z-score for every individual against the reference.</div></div>
         </div>
-        <div class="fig"><img src="images/fig_reference.svg" alt="Reference curves &amp; outlier detection"/></div>
+        <div class="fig"><img src="images/fig_reference.svg" alt="Centile bands beside the corresponding deviation Z-scores" /></div>
       </div>
       <div class="fcard">
         <div class="fhead">
-          <div class="ficon"><img src="images/icon_permutation.svg" alt=""/></div>
-          <div>
-            <div class="ftitle">Permutation testing</div>
-            <div class="fdesc">Non-parametric p-values that test whether a covariate genuinely improves the fit, not just whether AIC happened to move.</div>
-          </div>
+          <div class="ficon"><img src="images/icon_permutation.svg" alt="" /></div>
+          <div><h3>Permutation testing</h3><div class="d">Non-parametric p-values for whether a covariate improves the fit, from a permuted null of AIC differences.</div></div>
         </div>
-        <div class="fig"><img src="images/fig_permutation.svg" alt="Permutation testing"/></div>
+        <div class="fig"><img src="images/fig_permutation.svg" alt="A permuted null distribution of AIC differences with the observed value far outside it" /></div>
       </div>
       <div class="fcard">
         <div class="fhead">
-          <div class="ficon"><img src="images/icon_brain.svg" alt=""/></div>
-          <div>
-            <div class="ftitle">Model comparison, mapped onto the brain</div>
-            <div class="fdesc">Run base-vs-target comparison across every parcel in parallel, then project the AIC differences straight onto a cortical surface.</div>
-          </div>
+          <div class="ficon"><img src="images/icon_brain.svg" alt="" /></div>
+          <div><h3>Model comparison, mapped onto the brain</h3><div class="d">Compare formulas across every parcel in parallel and project the result onto a cortical surface.</div></div>
         </div>
-        <div class="fig"><img src="images/fig_brain.png" alt="Model comparison, mapped onto the brain"/></div>
+        <div class="fig"><img src="images/fig_brain.png" alt="AIC differences projected onto a cortical surface" /></div>
       </div>
       <div class="fcard">
         <div class="fhead">
-          <div class="ficon"><img src="images/icon_site_transfer.svg" alt=""/></div>
-          <div>
-            <div class="ftitle">Zero-shot site transfer</div>
-            <div class="fdesc">Recalibrate a reference model onto an entirely new scanner from a small calibration sample. The curves shift to the site without a full retrain.</div>
-          </div>
+          <div class="ficon"><img src="images/icon_site_transfer.svg" alt="" /></div>
+          <div><h3>Site transfer without retraining</h3><div class="d">Recalibrate a reference model onto a new scanner from a small calibration sample, one site or several at once.</div></div>
         </div>
-        <div class="fig"><img src="images/fig_transfer.svg" alt="Zero-shot site transfer"/></div>
+        <div class="fig"><img src="images/fig_transfer.svg" alt="Centile curves before and after site transfer, on a shared scale" /></div>
       </div>
       <div class="fcard">
         <div class="fhead">
-          <div class="ficon"><img src="images/icon_diagnostics.svg" alt=""/></div>
-          <div>
-            <div class="ftitle">Diagnostics after every fit</div>
-            <div class="fdesc">Residual and Q–Q checks, worm plots, and per-parameter summaries, so you can see whether the fitted distribution actually describes your data.</div>
-          </div>
+          <div class="ficon"><img src="images/icon_diagnostics.svg" alt="" /></div>
+          <div><h3>Diagnostics after every fit</h3><div class="d">Residual and Q–Q panels, R's worm plots and convergence checks after every fit.</div></div>
         </div>
-        <div class="fig"><img src="images/fig_diagnostics.svg" alt="Diagnostics after every fit"/></div>
+        <div class="fig"><img src="images/fig_diagnostics.svg" alt="A Q–Q plot of quantile residuals lying on the identity line" /></div>
       </div>
-      <div class="fcard fwide">
+      <div class="fcard wide">
         <div class="fhead">
-          <div class="ficon"><img src="images/icon_share.svg" alt=""/></div>
-          <div>
-            <div class="ftitle">Share models, not data</div>
-            <div class="fdesc">Export a slim copy of a fitted model with no participant data in it. Anyone can use it for centiles and z-scores without the training data, with practically the same results. For a large cohort it is about 500&#215; smaller and 10&#215; faster.</div>
-          </div>
+          <div class="ficon"><img src="images/icon_share.svg" alt="" /></div>
+          <div><h3>Share models, not data</h3><div class="d">Export a copy of a fitted model with no participant data in it. Anyone can compute centiles and Z-scores from it; for a large cohort it is about 500× smaller and 10× faster.</div></div>
         </div>
-        <div class="fig"><img src="images/fig_share.svg" alt="Share models, not data"/></div>
-      </div>
-    </div>
-
-    <div class="more-note">
-      <b>Beyond the highlights.</b> The package also handles data preprocessing and structuring, multiple-formula model comparison, evaluation metrics, continuous centiles with uncertainty, centile-position lookup, saving and reloading fitted models, transfer across several new sites at once, and parallel batch fitting with caching, each <a href="NormGAMLSS/">documented in full</a>.
-    </div>
-  </div>
-</section>
-
-<section id="demo" style="background:var(--paper-2); border-top:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft);">
-  <div class="wrap">
-    <div class="eyebrow">Example</div>
-    <h2 class="section-title">Fit, predict, flag — in a few lines</h2>
-    <p class="section-sub">The same workflow behind every figure on this page.</p>
-    <div style="display:flex; gap:24px; flex-wrap:wrap; align-items:stretch;">
-      <div style="flex:1.3 1 460px; min-width:0; background:#0c0c14; border-radius:12px; padding:24px 28px;">
-        <pre class="mono" style="margin:0; color:#d8d8e0; font-size:12.5px; line-height:1.8; white-space:pre; overflow-x:auto;">from normgamlss import Gamlss
-from normgamlss.site_transfer_utils import site_transfer
-
-<span style="color:#7a7a94;"># fit once: location, scale, skew and kurtosis jointly</span>
-model = Gamlss(<span style="color:#f0b46a;">"m1"</span>, [<span style="color:#a3d9c9;">"age"</span>, <span style="color:#a3d9c9;">"sex"</span>, <span style="color:#a3d9c9;">"site"</span>], <span style="color:#a3d9c9;">"thickness"</span>)
-model.fit(<span style="color:#a3d9c9;">"model &lt;- gamlss(y ~ pvc(age) + "</span>
-          <span style="color:#a3d9c9;">"re(random=~1|as.factor(site)), family=SHASH())"</span>, train)
-model.export_slim(train, <span style="color:#a3d9c9;">"m1_slim.rds"</span>)  <span style="color:#7a7a94;"># no participant data in it</span>
-
-<span style="color:#7a7a94;"># share the slim model, no training data needed from here on</span>
-slim = Gamlss.load_model(<span style="color:#a3d9c9;">"m1_slim.rds"</span>)
-z = slim.z_score(test, None)
-slim.plot_centiles(test, None)
-
-<span style="color:#7a7a94;"># adapt to a new scanner from 20 people, no retraining</span>
-adj = site_transfer(<span style="color:#a3d9c9;">"m1_slim.rds"</span>, None, new_data,
-                    new_site=<span style="color:#a3d9c9;">"S7"</span>, selected_site=<span style="color:#a3d9c9;">"S1"</span>,
-                    sample_size=20, y_val=<span style="color:#a3d9c9;">"thickness"</span>,
-                    x_vals=[<span style="color:#a3d9c9;">"age"</span>, <span style="color:#a3d9c9;">"sex"</span>, <span style="color:#a3d9c9;">"site"</span>])</pre>
-      </div>
-      <div style="flex:0.9 1 300px; min-width:280px; background:#fff; border:1px solid var(--border); border-radius:12px; padding:14px; display:flex; align-items:center; justify-content:center;">
-        <img src="images/demo_anim.svg" alt="Centile bands drawn, with one individual flagged" style="width:100%;height:auto;"/>
+        <div class="fig"><img src="images/fig_share.svg" alt="A full model with participant data exported to a slim model with fitted curves only" /></div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="papers">
+<section id="api">
   <div class="wrap">
-    <div class="eyebrow">Publications — please cite</div>
-    <h2 class="section-title">Validated across five modalities</h2>
-    <p class="section-sub">Presented at OHBM 2026 (Jun 14–18). Status is shown per paper; some are still in preparation.</p>
-
-    <div class="paper-grid">
-      <div class="paper-card">
-        <span class="tag tag-preprint">Preprint</span><span class="tag tag-ohbm">OHBM #2032</span>
-        <div class="paper-title">Transferable conditional brain charts link cortico-subcortical structure to Alzheimer's disease progression</div>
-        <div class="paper-meta">Sharma N. et al. · Main package paper</div>
-        <div class="paper-links">
-          <a href="https://arxiv.org/abs/2610.21660" target="_blank" rel="noopener">Preprint ↗</a>
-          <a href="https://drive.google.com/file/d/1r8XrgnYnO-utuMqDfXJWv0J0gT0tvG6u/view?usp=drive_link" target="_blank" rel="noopener">View poster ↗</a>
-        </div>
+    <div class="sec-head">
+      <div class="eyebrow">Documentation</div>
+      <h2>Follow the tutorial from setup to site transfer</h2>
+      <p>The documentation is one worked tutorial, organised in the order you would run it. Every page below is a section of it.</p>
+    </div>
+    <div class="docs">
+      <div class="dgroup">
+        <div class="dn">01</div>
+        <h3>Getting started</h3>
+        <ul>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/installation.html">Installation</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/quick_start.html">Quick start</a></li>
+        </ul>
       </div>
-
-      <div class="paper-card">
-        <span class="tag tag-prep">In preparation</span><span class="tag tag-ohbm">OHBM #2072</span>
-        <div class="paper-title">From Lifespan to Dayspan: Does Time-of-Day Play a Role in Normative Modeling of Brain Structure</div>
-        <div class="paper-meta">Dai S. et al. · Structural MRI · Site transfer methodology</div>
-        <div class="paper-links">
-          <span>Paper in preparation</span>
-          <a href="https://drive.google.com/file/d/15lnOCdeS6i96LvuDPQFtcBYvGI1gAN5h/view?usp=sharing" target="_blank" rel="noopener">View poster ↗</a>
-        </div>
+      <div class="dgroup">
+        <div class="dn">02</div>
+        <h3>Data setup and preprocessing</h3>
+        <ul>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/setup_imports.html">Setup and imports</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/data_and_setup_theory.html">R integration and external packages</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/structuring_data.html">Structuring data</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/data_preprocessing.html">Data preprocessing</a></li>
+        </ul>
       </div>
-
-      <div class="paper-card">
-        <span class="tag tag-preprint">Preprint</span><span class="tag tag-ohbm">OHBM #2627</span>
-        <div class="paper-title">Characterizing Human Brain Network Dynamics Across Populations with NeuroLex</div>
-        <div class="paper-meta">Yang Y. et al. · fMRI · Brain network dynamics</div>
-        <div class="paper-links">
-          <a href="https://www.biorxiv.org/content/10.64898/2026.03.06.710057v1.abstract" target="_blank" rel="noopener">Preprint ↗</a>
-          <a href="https://drive.google.com/file/d/1dRLzhd9yPKkVK05vAcTWOzXGtgFaa4pB/view?usp=drive_link" target="_blank" rel="noopener">View poster ↗</a>
-        </div>
+      <div class="dgroup">
+        <div class="dn">03</div>
+        <h3>Model specification and fitting</h3>
+        <ul>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/gamlss_theory.html">GAMLSS theory and concepts</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/formulas_and_syntax.html">Formula reference and syntax</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/fitting_models.html">Fitting GAMLSS models</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/model_diagnostics.html">Model diagnostics and summary</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/diagnostics_summary.html">Diagnostics interpretation</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/diagnostic_plot_summary.html">Diagnostic plots interpretation</a></li>
+        </ul>
       </div>
-
-      <div class="paper-card">
-        <span class="tag tag-preprint">Preprint</span><span class="tag tag-ohbm">OHBM #2415</span>
-        <div class="paper-title">A Lifespan Normative Reference for Spectral Signatures of Brain Activity</div>
-        <div class="paper-meta">Mallus F. et al. · EEG · Spectral biomarkers</div>
-        <div class="paper-links">
-          <a href="https://doi.org/10.21203/rs.3.rs-9544150/v1" target="_blank" rel="noopener">Preprint ↗</a>
-          <a href="https://drive.google.com/file/d/1qvBAidtEK13KQK1uvUecOZopx30iVXqh/view?usp=drive_link" target="_blank" rel="noopener">View poster ↗</a>
-        </div>
+      <div class="dgroup">
+        <div class="dn">04</div>
+        <h3>Model evaluation and predictions</h3>
+        <ul>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/model_predictions.html">Model predictions</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/model_evaluation.html">Evaluation metrics</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/z_score_calculation.html">Z-score calculation</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/z_score_plotting.html">Z-score plotting</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/centiles_calculation.html">Centiles calculation</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/centiles_plotting.html">Centiles plotting</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/continuous_centiles.html">Continuous centiles with uncertainty</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/centile_positions.html">Centile position calculation</a></li>
+        </ul>
       </div>
-
-      <div class="paper-card">
-        <span class="tag tag-prep">In preparation</span><span class="tag tag-ohbm">OHBM #2782</span>
-        <div class="paper-title">Normative Modelling of Glymphatic Dynamics: A Multi-Site fMRI Study of gBOLD-CSF Coupling</div>
-        <div class="paper-meta">Kand A. et al. · fMRI · Glymphatic dynamics</div>
-        <div class="paper-links">
-          <span>Paper in preparation</span>
-          <a href="https://drive.google.com/file/d/1HpSk7WjRPAjWs_tyk_dep4KummCraDKl/view?usp=drive_link" target="_blank" rel="noopener">View poster ↗</a>
-        </div>
+      <div class="dgroup">
+        <div class="dn">05</div>
+        <h3>Comparing models and groups</h3>
+        <ul>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/multiple_formula_comparison.html">Multiple formula comparison</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/base_target_comparison.html">Base vs target comparison</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/base_target_visualization.html">Visualization of results</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/permutation_testing.html">Permutation testing</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/brain_surface_visualization.html">Brain surface visualization</a></li>
+        </ul>
       </div>
-
-      <div class="paper-card">
-        <span class="tag tag-preprint">Preprint</span>
-        <div class="paper-title">Lamellar Normative Modelling of the Hippocampus Across the Human Lifespan</div>
-        <div class="paper-meta">Yang Y. et al. · Structural MRI · 27,000+ individuals · 158 sites</div>
-        <div class="paper-links">
-          <a href="https://www.biorxiv.org/content/10.64898/2026.05.02.722431v2.abstract" target="_blank" rel="noopener">Preprint ↗</a>
-        </div>
+      <div class="dgroup">
+        <div class="dn">06</div>
+        <h3>Saving, sharing and transfer</h3>
+        <ul>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/saving_loading_models.html">Saving and loading models</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/deleting_model.html">Deleting a model</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/notebooks/multisite_transfer.html">Multisite model transfer</a></li>
+        </ul>
       </div>
+      <div class="dgroup">
+        <div class="dn">07</div>
+        <h3>Reference and troubleshooting</h3>
+        <ul>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/r_integration_reference.html">R integration reference</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/troubleshooting.html">Troubleshooting and common issues</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/convergence_problems.html">Convergence problems</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/faq.html">FAQ</a></li>
+        </ul>
+      </div>
+      <a class="dgroup dall" href="https://normgamlss.github.io/NormGAMLSS/">
+        <h3>Open the full documentation →</h3>
+        <p>Installation, the 5-minute quick start, the complete tutorial and the reference pages.</p>
+      </a>
     </div>
   </div>
 </section>
 
-<section>
+<section id="example" class="band">
   <div class="wrap">
-    <div class="eyebrow">Built on the shoulders of giants</div>
-    <div class="ack-grid">
-      <div class="ack-card">
-        <div class="ack-label">Statistical engine</div>
-        <div class="ack-body"><b>GAMLSS (R package)</b><br/>Rigby R.A. &amp; Stasinopoulos D.M. (2005). Generalized additive models for location, scale and shape. <i>Applied Statistics</i>.</div>
-        <a class="ack-link" href="https://www.gamlss.com" target="_blank" rel="noopener">gamlss.com ↗</a>
+    <div class="sec-head">
+      <div class="eyebrow">Example</div>
+      <h2>Fit once. Score, share and transfer from there.</h2>
+    </div>
+    <div class="codebox">
+      <div class="tabs" role="tablist" aria-label="Example code">
+        <button class="tab" role="tab" aria-selected="true" aria-controls="p-fit" id="t-fit" type="button">Fit</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="p-score" id="t-score" type="button">Score</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="p-transfer" id="t-transfer" type="button">Share &amp; transfer</button>
+        <button class="copy" type="button" data-copy-panel aria-label="Copy code">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.4" d="M5.5 5.5h7v8h-7zM3.5 10.5v-8h7"/></svg><span>Copy</span>
+        </button>
       </div>
-      <div class="ack-card">
-        <div class="ack-label">R–Python bridge</div>
-        <div class="ack-body"><b>rpy2</b><br/>Fitting, prediction, centiles, and model saving all run inside R sessions managed transparently from Python.</div>
-        <a class="ack-link" href="https://rpy2.github.io" target="_blank" rel="noopener">rpy2.github.io ↗</a>
+<pre class="panel" id="p-fit" role="tabpanel" aria-labelledby="t-fit" data-active="true"><span class="kw">from</span> normgamlss <span class="kw">import</span> Gamlss
+
+model = Gamlss(<span class="st">"m1"</span>, [<span class="st">"age"</span>, <span class="st">"sex"</span>, <span class="st">"site"</span>], <span class="st">"thickness"</span>)
+model.<span class="fn">fit</span>(r_code=<span class="st">"""
+model &lt;- gamlss(y ~ pvc(age, by = as.factor(sex)) + re(random = ~1 | as.factor(site)),
+                sigma.formula = ~ pvc(age),
+                family = SHASH(), method = mixed(10, 100))
+"""</span>, data=train)
+
+model.<span class="fn">plot_diagnostics</span>()
+model.<span class="fn">evaluate</span>(test, train, affected=test[<span class="st">"affected"</span>])</pre>
+<pre class="panel" id="p-score" role="tabpanel" aria-labelledby="t-score">z = model.<span class="fn">z_score</span>(test, train)
+c = model.<span class="fn">centiles</span>(test, train, centiles=[3, 10, 25, 50, 75, 90, 97])
+
+model.<span class="fn">plot_centiles</span>(test, train, affected=test[<span class="st">"affected"</span>])
+model.<span class="fn">plot_z_scores</span>(test, train, affected=test[<span class="st">"affected"</span>])</pre>
+<pre class="panel" id="p-transfer" role="tabpanel" aria-labelledby="t-transfer"><span class="cm"># a copy of the model with no participant data in it</span>
+model.<span class="fn">export_slim</span>(train, <span class="st">"m1_slim.rds"</span>)
+slim = Gamlss.<span class="fn">load_model</span>(<span class="st">"m1_slim.rds"</span>)
+z = slim.<span class="fn">z_score</span>(new_subjects, <span class="kw">None</span>)
+
+<span class="cm"># recalibrate onto a new scanner from 20 healthy subjects</span>
+<span class="kw">from</span> normgamlss.site_transfer_utils <span class="kw">import</span> site_transfer
+adj = <span class="fn">site_transfer</span>(<span class="st">"m1_slim.rds"</span>, <span class="kw">None</span>, new_site_data,
+                    new_site=<span class="st">"S7"</span>, selected_site=<span class="st">"S1"</span>, sample_size=20,
+                    y_val=<span class="st">"thickness"</span>, x_vals=[<span class="st">"age"</span>, <span class="st">"sex"</span>, <span class="st">"site"</span>])</pre>
+    </div>
+  </div>
+</section>
+
+<section id="publications">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Publications</div>
+      <h2>Validated in published and in-preparation work</h2>
+      <p>Developed with the <a href="https://mhm-lab.github.io/" target="_blank" rel="noopener">Laboratory for Mental Health Mapping</a>; five were presented at OHBM 2026.</p>
+    </div>
+    <div class="pubs">
+      <div class="pub">
+        <div class="idx">01</div>
+        <div>
+          <h3>Transferable conditional brain charts link cortico-subcortical structure to Alzheimer's disease progression</h3>
+          <div class="meta"><span>Sharma N. et al.</span><span class="sep">·</span><span>Structural MRI</span><span class="sep">·</span><span class="status main">Main package paper</span><span class="status preprint">Preprint</span></div>
+        </div>
+        <div class="links"><a href="https://arxiv.org/abs/2610.21660" target="_blank" rel="noopener">arXiv ↗</a><a href="https://drive.google.com/file/d/1r8XrgnYnO-utuMqDfXJWv0J0gT0tvG6u/view?usp=drive_link" target="_blank" rel="noopener">Poster #2032 ↗</a></div>
       </div>
-      <div class="ack-card">
-        <div class="ack-label">Lab</div>
-        <div class="ack-body"><b>Laboratory for Mental Health Mapping</b><br/>Developed and validated across MRI, EEG, fMRI, PET, and cognitive data, multiple sites, clinical populations.</div>
-        <a class="ack-link" href="https://mhm-lab.github.io/" target="_blank" rel="noopener">mhm-lab.github.io ↗</a>
+      <div class="pub">
+        <div class="idx">02</div>
+        <div>
+          <h3>Lamellar normative modelling of the hippocampus across the human lifespan</h3>
+          <div class="meta"><span>Yang Y. et al.</span><span class="sep">·</span><span>Structural MRI</span><span class="sep">·</span><span>27,000+ individuals, 158 sites</span><span class="status preprint">Preprint</span></div>
+        </div>
+        <div class="links"><a href="https://www.biorxiv.org/content/10.64898/2026.05.02.722431v2.abstract" target="_blank" rel="noopener">bioRxiv ↗</a></div>
+      </div>
+      <div class="pub">
+        <div class="idx">03</div>
+        <div>
+          <h3>Characterizing human brain network dynamics across populations with NeuroLex</h3>
+          <div class="meta"><span>Yang Y. et al.</span><span class="sep">·</span><span>fMRI</span><span class="status preprint">Preprint</span></div>
+        </div>
+        <div class="links"><a href="https://www.biorxiv.org/content/10.64898/2026.03.06.710057v1.abstract" target="_blank" rel="noopener">bioRxiv ↗</a><a href="https://drive.google.com/file/d/1dRLzhd9yPKkVK05vAcTWOzXGtgFaa4pB/view?usp=drive_link" target="_blank" rel="noopener">Poster #2627 ↗</a></div>
+      </div>
+      <div class="pub">
+        <div class="idx">04</div>
+        <div>
+          <h3>A lifespan normative reference for spectral signatures of brain activity</h3>
+          <div class="meta"><span>Mallus F. et al.</span><span class="sep">·</span><span>EEG</span><span class="status preprint">Preprint</span></div>
+        </div>
+        <div class="links"><a href="https://doi.org/10.21203/rs.3.rs-9544150/v1" target="_blank" rel="noopener">Preprint ↗</a><a href="https://drive.google.com/file/d/1qvBAidtEK13KQK1uvUecOZopx30iVXqh/view?usp=drive_link" target="_blank" rel="noopener">Poster #2415 ↗</a></div>
+      </div>
+      <div class="pub">
+        <div class="idx">05</div>
+        <div>
+          <h3>From lifespan to dayspan: does time-of-day play a role in normative modeling of brain structure?</h3>
+          <div class="meta"><span>Dai S. et al.</span><span class="sep">·</span><span>Structural MRI</span><span class="status prep">In preparation</span></div>
+        </div>
+        <div class="links"><a href="https://drive.google.com/file/d/15lnOCdeS6i96LvuDPQFtcBYvGI1gAN5h/view?usp=sharing" target="_blank" rel="noopener">Poster #2072 ↗</a></div>
+      </div>
+      <div class="pub">
+        <div class="idx">06</div>
+        <div>
+          <h3>Normative modelling of glymphatic dynamics: a multi-site fMRI study of gBOLD–CSF coupling</h3>
+          <div class="meta"><span>Kand A. et al.</span><span class="sep">·</span><span>fMRI</span><span class="status prep">In preparation</span></div>
+        </div>
+        <div class="links"><a href="https://drive.google.com/file/d/1HpSk7WjRPAjWs_tyk_dep4KummCraDKl/view?usp=drive_link" target="_blank" rel="noopener">Poster #2782 ↗</a></div>
       </div>
     </div>
+
+    <div class="cite">
+      <div>
+        <h3>Citing NormGAMLSS</h3>
+        <p>Please cite the main package paper. A software citation will follow the PyPI release.</p>
+      </div>
+      <pre class="bib" id="bibtex">@article{sharma2026normgamlss,
+  title   = {Transferable conditional brain charts link
+             cortico-subcortical structure to Alzheimer's
+             disease progression},
+  author  = {Sharma, N. and others},
+  journal = {arXiv preprint arXiv:2610.21660},
+  year    = {2026},
+  url     = {https://arxiv.org/abs/2610.21660}
+}<button class="copy" type="button" data-copy-target="bibtex" aria-label="Copy BibTeX"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.4" d="M5.5 5.5h7v8h-7zM3.5 10.5v-8h7"/></svg><span>Copy</span></button></pre>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Foundations</div>
+      <h2>Built on established tools</h2>
+    </div>
+    <div class="found">
+      <div class="fcol">
+        <div class="k">Statistical engine</div>
+        <h3>GAMLSS (R)</h3>
+        <p>Rigby &amp; Stasinopoulos (2005), <i>Applied Statistics</i>. Every fit runs in the original implementation.</p>
+        <a href="https://www.gamlss.com" target="_blank" rel="noopener">gamlss.com ↗</a>
+      </div>
+      <div class="fcol">
+        <div class="k">R–Python bridge</div>
+        <h3>rpy2</h3>
+        <p>The R session is managed for you; the fitted R object stays reachable when you need it.</p>
+        <a href="https://rpy2.github.io" target="_blank" rel="noopener">rpy2.github.io ↗</a>
+      </div>
+      <div class="fcol">
+        <div class="k">Visualization</div>
+        <h3>matplotlib and nilearn</h3>
+        <p>Every plot is a matplotlib figure you can compose into your own grid; surface maps use nilearn.</p>
+        <a href="https://nilearn.github.io" target="_blank" rel="noopener">nilearn.github.io ↗</a>
+      </div>
+    </div>
+    <div class="req"><b>Requirements</b><span>Python with pandas, numpy and matplotlib</span><span>R with the <code>gamlss</code> package</span><span><code>rpy2</code> linking the two</span><span>nilearn for brain surface plots (optional)</span></div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <div class="footer-logo"><img src="images/logo.png" alt="NormGAMLSS"/></div>
-    <div class="footer-links">
-      <a href="https://github.com/NormGAMLSS/NormGAMLSS" target="_blank" rel="noopener">GitHub</a>
-      <a href="NormGAMLSS/">Documentation</a>
-      <a href="https://mhm-lab.github.io/" target="_blank" rel="noopener">MHM-Lab</a>
-      <a href="#papers">Publications</a>
+    <div class="foot">
+      <div>
+        <img src="images/logo.png" alt="NormGAMLSS, normative modeling with GAMLSS" />
+        <p>A Python package for normative modeling with GAMLSS, developed at the Laboratory for Mental Health Mapping.</p>
+      </div>
+      <div>
+        <h4>Package</h4>
+        <ul>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/">Documentation</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/installation.html">Installation</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/quick_start.html">Quick start</a></li>
+          <li><a href="https://github.com/NormGAMLSS/NormGAMLSS" target="_blank" rel="noopener">Source on GitHub</a></li>
+          <li><a href="https://github.com/NormGAMLSS/NormGAMLSS/issues" target="_blank" rel="noopener">Report an issue</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Reference</h4>
+        <ul>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/formulas_and_syntax.html">Formula syntax</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/convergence_problems.html">Convergence problems</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/troubleshooting.html">Troubleshooting</a></li>
+          <li><a href="https://normgamlss.github.io/NormGAMLSS/faq.html">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Research</h4>
+        <ul>
+          <li><a href="#publications">Publications</a></li>
+          <li><a href="https://mhm-lab.github.io/" target="_blank" rel="noopener">MHM Lab</a></li>
+          <li><a href="https://www.gamlss.com" target="_blank" rel="noopener">GAMLSS</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="footer-note">Full API reference, tutorials and worked examples live in the <a href="NormGAMLSS/">documentation</a>.</div>
+    <div class="foot-bottom">
+      <span>© 2026 NormGAMLSS contributors</span>
+      <span>Figures on this page are tutorial output on synthetic data.</span>
+    </div>
   </div>
 </footer>
 
+<script>
+(function(){
+  /* ---------- hero chart: centile bands as functions of age ---------- */
+  var svg = document.getElementById('centileChart');
+  if (svg) {
+    var W=560, H=340, L=52, R=16, T=18, B=40;
+    var pw=W-L-R, ph=H-T-B;
+    var a0=18, a1=80, y0=2.0, y1=3.4;
+    function mu(a){ return 2.55 + 0.55*Math.exp(-(a-18)/28); }
+    function sg(a){ return 0.085 + 0.0011*(a-18); }
+    function X(a){ return L + (a-a0)/(a1-a0)*pw; }
+    function Y(v){ return T + (y1-v)/(y1-y0)*ph; }
+    var zq={3:-1.881,10:-1.282,25:-0.674,50:0,75:0.674,90:1.282,97:1.881};
+    function q(a,c){ return mu(a)+zq[c]*sg(a); }
+    var ns='http://www.w3.org/2000/svg';
+    function el(n,at){ var e=document.createElementNS(ns,n); for(var k in at) e.setAttribute(k,at[k]); return e; }
+    function path(c){ var d=''; for(var a=a0;a<=a1;a+=1){ d+=(a===a0?'M':'L')+X(a).toFixed(1)+','+Y(q(a,c)).toFixed(1); } return d; }
+    function band(lo,hi){ var d=''; for(var a=a0;a<=a1;a+=1){ d+=(a===a0?'M':'L')+X(a).toFixed(1)+','+Y(q(a,hi)).toFixed(1);} for(var b=a1;b>=a0;b-=1){ d+='L'+X(b).toFixed(1)+','+Y(q(b,lo)).toFixed(1);} return d+'Z'; }
+    var g=el('g',{});
+    // grid + axes
+    for(var v=2.2; v<=3.4; v+=0.4){ g.appendChild(el('line',{x1:L,x2:W-R,y1:Y(v),y2:Y(v),stroke:'#E6ECEE','stroke-width':1}));
+      var t=el('text',{x:L-8,y:Y(v)+4,'text-anchor':'end','font-family':'IBM Plex Mono, monospace','font-size':'10.5','fill':'#7C8B94'}); t.textContent=v.toFixed(1); g.appendChild(t); }
+    for(var a=20; a<=80; a+=10){ var tx=el('text',{x:X(a),y:H-B+18,'text-anchor':'middle','font-family':'IBM Plex Mono, monospace','font-size':'10.5','fill':'#7C8B94'}); tx.textContent=a; g.appendChild(tx); }
+    var xl=el('text',{x:L+pw/2,y:H-6,'text-anchor':'middle','font-family':'IBM Plex Mono, monospace','font-size':'10.5','fill':'#4A5B66'}); xl.textContent='age (years)'; g.appendChild(xl);
+    var yl=el('text',{x:12,y:T+ph/2,'text-anchor':'middle','font-family':'IBM Plex Mono, monospace','font-size':'10.5','fill':'#4A5B66',transform:'rotate(-90 12 '+(T+ph/2)+')'}); yl.textContent='thickness (mm)'; g.appendChild(yl);
+    g.appendChild(el('path',{d:band(3,97),fill:'rgba(11,138,126,0.10)'}));
+    g.appendChild(el('path',{d:band(10,90),fill:'rgba(11,138,126,0.12)'}));
+    g.appendChild(el('path',{d:band(25,75),fill:'rgba(11,138,126,0.16)'}));
+    [3,10,25,75,90,97].forEach(function(c){ g.appendChild(el('path',{d:path(c),fill:'none',stroke:'#0B8A7E','stroke-width':0.8,'stroke-opacity':0.55})); });
+    g.appendChild(el('path',{d:path(50),fill:'none',stroke:'#0B8A7E','stroke-width':2}));
+    [3,97].forEach(function(c){ var lb=el('text',{x:W-R-2,y:Y(q(a1,c))+(c===3?11:-5),'text-anchor':'end','font-family':'IBM Plex Mono, monospace','font-size':'10','fill':'#076D63'}); lb.textContent=c+'th'; g.appendChild(lb); });
+    // seeded subjects
+    var seed=7; function rnd(){ seed=(seed*16807)%2147483647; return (seed-1)/2147483646; }
+    function gauss(){ var u=1-rnd(), v=rnd(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+    var pts=[]; for(var i=0;i<70;i++){ var ag=Math.round(18+rnd()*62); var z=gauss()*0.95; pts.push({a:ag,z:z,v:mu(ag)+z*sg(ag),flag:false}); }
+    pts.push({a:63,z:-3.1,v:mu(63)-3.1*sg(63),flag:true});
+    pts.push({a:41,z:2.7,v:mu(41)+2.7*sg(41),flag:true});
+    var tip=document.getElementById('chartTip');
+    pts.forEach(function(p){
+      var c=el('circle',{cx:X(p.a).toFixed(1),cy:Y(p.v).toFixed(1),r:p.flag?5:3.2,fill:p.flag?'#E8632F':'#7C8B94','fill-opacity':p.flag?1:0.75,stroke:p.flag?'#fff':'none','stroke-width':1.5,tabindex:'0',role:'img'});
+      var pct=Math.round(100*(0.5*(1+erf(p.z/Math.SQRT2))));
+      var label='age '+p.a+' · '+p.v.toFixed(2)+' mm · z = '+(p.z>=0?'+':'')+p.z.toFixed(2)+' · centile '+pct+(p.flag?' · flagged':'');
+      c.setAttribute('aria-label',label);
+      function show(){ var r=svg.getBoundingClientRect(); tip.textContent=label; tip.style.left=(X(p.a)/W*r.width)+'px'; tip.style.top=(Y(p.v)/H*r.height)+'px'; tip.classList.add('on'); }
+      function hide(){ tip.classList.remove('on'); }
+      c.addEventListener('mouseenter',show); c.addEventListener('mouseleave',hide); c.addEventListener('focus',show); c.addEventListener('blur',hide);
+      g.appendChild(c);
+    });
+    // callout for the flagged subject
+    var f=pts[pts.length-2];
+    g.appendChild(el('line',{x1:X(f.a)-7,y1:Y(f.v)+5,x2:X(f.a)-40,y2:Y(f.v)+26,stroke:'#E8632F','stroke-width':1}));
+    var ct=el('text',{x:X(f.a)-44,y:Y(f.v)+30,'text-anchor':'end','font-family':'IBM Plex Mono, monospace','font-size':'11','fill':'#E8632F'}); ct.textContent='z = −3.1, flagged'; g.appendChild(ct);
+    svg.appendChild(g);
+  }
+  function erf(x){ var s=x<0?-1:1; x=Math.abs(x); var t=1/(1+0.3275911*x); var y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x); return s*y; }
+
+  /* ---------- tabs ---------- */
+  var tabs=document.querySelectorAll('.tab');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click',function(){
+      tabs.forEach(function(t){ t.setAttribute('aria-selected','false'); document.getElementById(t.getAttribute('aria-controls')).removeAttribute('data-active'); });
+      tab.setAttribute('aria-selected','true'); document.getElementById(tab.getAttribute('aria-controls')).setAttribute('data-active','true');
+    });
+    tab.addEventListener('keydown',function(e){
+      var list=Array.prototype.slice.call(tabs), i=list.indexOf(tab);
+      if(e.key==='ArrowRight'){ list[(i+1)%list.length].focus(); list[(i+1)%list.length].click(); }
+      if(e.key==='ArrowLeft'){ list[(i-1+list.length)%list.length].focus(); list[(i-1+list.length)%list.length].click(); }
+    });
+  });
+
+  /* ---------- copy buttons ---------- */
+  function flash(btn){ var s=btn.querySelector('span'); if(!s) return; var o=s.textContent; s.textContent='Copied'; setTimeout(function(){ s.textContent=o; },1400); }
+  document.querySelectorAll('.copy').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var text='';
+      if(btn.hasAttribute('data-copy')) text=btn.getAttribute('data-copy');
+      else if(btn.hasAttribute('data-copy-panel')){ var p=document.querySelector('.panel[data-active="true"]'); text=p?p.textContent:''; }
+      else if(btn.hasAttribute('data-copy-target')){ var n=document.getElementById(btn.getAttribute('data-copy-target')); if(n){ var clone=n.cloneNode(true); var b=clone.querySelector('button'); if(b) b.remove(); text=clone.textContent.trim(); } }
+      try{ navigator.clipboard.writeText(text).then(function(){ flash(btn); },function(){ fallback(text,btn); }); }catch(e){ fallback(text,btn); }
+    });
+  });
+  function fallback(text,btn){ try{ var ta=document.createElement('textarea'); ta.value=text; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); flash(btn); }catch(e){} }
+})();
+</script>
 </body>
 </html>
